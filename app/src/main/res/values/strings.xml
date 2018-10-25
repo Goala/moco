@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MoCoQuizer</string>
+    <string name="btNewButton">Neues Spiel</string>
+    <string name="btLoadGame">Spiel Laden</string>
+    <string name="btSearchGame">Spiel Suchen</string>
+    <string name="headline">MoCo Quizer</string>
 </resources>
