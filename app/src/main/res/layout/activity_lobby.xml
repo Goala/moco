@@ -10,7 +10,7 @@
         android:id="@+id/player2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/player2"
+        android:text="@string/btPlayer2"
         tools:layout_editor_absoluteX="280dp"
         tools:layout_editor_absoluteY="253dp" />
 
@@ -18,7 +18,7 @@
         android:id="@+id/player3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/player3"
+        android:text="@string/btPlayer3"
         tools:layout_editor_absoluteX="148dp"
         tools:layout_editor_absoluteY="379dp" />
 
@@ -26,7 +26,7 @@
         android:id="@+id/player4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Player 4"
+        android:text="@string/btPlayer4"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="253dp" />
 
@@ -42,7 +42,7 @@
         android:id="@+id/player1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/player1"
+        android:text="@string/btPlayer1"
         tools:layout_editor_absoluteX="148dp"
         tools:layout_editor_absoluteY="144dp" />
 
@@ -50,7 +50,7 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/invitation"
+        android:text="@string/btInvitation"
         tools:layout_editor_absoluteX="110dp"
         tools:layout_editor_absoluteY="447dp" />
 </android.support.constraint.ConstraintLayout>

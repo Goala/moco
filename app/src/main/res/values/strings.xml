@@ -4,4 +4,9 @@
     <string name="btLoadGame">Spiel Laden</string>
     <string name="btSearchGame">Spiel Suchen</string>
     <string name="headline">Electric Quizer</string>
+    <string name="btPlayer1">Spieler 1</string>
+    <string name="btPlayer2">Spieler 2</string>
+    <string name="btPlayer3">Spieler 3</string>
+    <string name="btPlayer4">Spieler 4</string>
+    <string name="btInvitation">Spieler einladen</string>
 </resources>
