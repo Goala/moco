@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "27610714058",
+    "firebase_url": "https://electric-quizer.firebaseio.com",
+    "project_id": "electric-quizer",
+    "storage_bucket": "electric-quizer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:27610714058:android:fa9495548589cb7b",
+        "android_client_info": {
+          "package_name": "topgrost.mocoquizer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "27610714058-28hjtrscclckfcs8ur3jc0ilcdfc6lr9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCluZyYQdyzCXUM7JoXp1PHLFrr-y7uZFU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
