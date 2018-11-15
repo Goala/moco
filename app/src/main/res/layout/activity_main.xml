@@ -16,7 +16,7 @@
         android:layout_marginBottom="64dp"
         android:text="@string/headline"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/btNewGame"
+        app:layout_constraintBottom_toTopOf="@+id/btnNewGame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +24,7 @@
         app:layout_constraintVertical_chainStyle="spread" />
 
     <Button
-        android:id="@+id/btNewGame"
+        android:id="@+id/btnNewGame"
         style="@android:style/Widget.Material.Button"
         android:layout_width="0dp"
         android:layout_height="100dp"
@@ -33,13 +33,13 @@
         android:layout_marginBottom="32dp"
         android:background="@drawable/roundedbutton"
         android:text="@string/btNewButton"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/btnLoadGame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headline" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btnLoadGame"
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginStart="64dp"
@@ -47,14 +47,14 @@
         android:layout_marginBottom="32dp"
         android:background="@drawable/roundedbutton"
         android:text="@string/btLoadGame"
-        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintBottom_toTopOf="@+id/btnSearchGame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btNewGame" />
+        app:layout_constraintTop_toBottomOf="@+id/btnNewGame" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/btnSearchGame"
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginStart="64dp"
@@ -66,6 +66,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintTop_toBottomOf="@+id/btnLoadGame" />
 
 </android.support.constraint.ConstraintLayout>
