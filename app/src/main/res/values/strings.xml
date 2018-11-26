@@ -9,4 +9,5 @@
     <string name="btPlayer3">Spieler 3</string>
     <string name="btPlayer4">Spieler 4</string>
     <string name="btInvitation">Spieler einladen</string>
+    <string name="tvLogin">Login</string>
 </resources>
