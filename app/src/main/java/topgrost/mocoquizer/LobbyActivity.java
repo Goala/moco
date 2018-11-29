@@ -3,7 +3,7 @@ package topgrost.mocoquizer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class Lobby extends AppCompatActivity {
+public class LobbyActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
