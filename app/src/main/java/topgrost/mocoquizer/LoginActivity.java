@@ -128,7 +128,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
     private boolean validateForm() {
         boolean valid = true;
 
@@ -150,7 +149,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         return valid;
     }
-
 
 
     @Override
