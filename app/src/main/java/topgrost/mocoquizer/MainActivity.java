@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
         coordinatorLayout = findViewById(R.id.coordinatorLayout);
 
-        Button newGame = findViewById(R.id.btnNewGame);
+        Button newGame = findViewById(R.id.btnCreateQuiz);
         newGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button loadGame = findViewById(R.id.btnLoadGame);
+        Button loadGame = findViewById(R.id.btnHostQuiz);
         loadGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
