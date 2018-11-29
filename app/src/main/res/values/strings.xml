@@ -10,8 +10,9 @@
     <string name="btPlayer4">Spieler 4</string>
     <string name="btInvitation">Spieler einladen</string>
     <string name="tvLogin">Login</string>
-    <string name="btCreateAcc">Create Account</string>
+    <string name="btCreateAcc">Account erstellen</string>
     <string name="auth_failed">Authentifizierung fehlgeschlagen!</string>
     <string name="emailpassword_status_fmt">Email User: %1$s (verified: %2$b)</string>
     <string name="firebase_status_fmt">Firebase User: %s</string>
+    <string name="lobby_headline">Wähle deinen Platz</string>
 </resources>
