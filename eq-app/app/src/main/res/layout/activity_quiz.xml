@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/quizLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center">
 
@@ -11,22 +11,22 @@
         android:id="@+id/quizName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight=".90"
         android:inputType="textPersonName"
+        android:gravity="top"
         android:text="Name"/>
 
     <LinearLayout
         android:id="@+id/quizContentLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="top">
     </LinearLayout>
 
     <Button
-        android:id="@+id/quizBtnAddQuiz"
+        android:id="@+id/quizBtnAddQuestion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:gravity="center"
         android:text="Frage hinzufügen" />
 </LinearLayout>

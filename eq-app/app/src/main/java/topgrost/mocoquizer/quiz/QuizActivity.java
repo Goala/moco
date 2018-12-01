@@ -28,7 +28,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void init() {
-        Button btnAddQuestion = findViewById(R.id.quizBtnAddQuiz);
+        Button btnAddQuestion = findViewById(R.id.quizBtnAddQuestion);
         btnAddQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
