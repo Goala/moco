@@ -9,14 +9,26 @@
         android:id="@+id/quizQuestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight=".90"
         android:inputType="textPersonName"
         android:text="Frage" />
 
-    <EditText
-        android:id="@+id/quizTimeSeconds"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="number" />
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/editText3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:text="Zeit [Sec]" />
+
+        <NumberPicker
+            android:id="@+id/quizTimeSeconds"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:inputType="number" />
+
+    </LinearLayout>
 </LinearLayout>

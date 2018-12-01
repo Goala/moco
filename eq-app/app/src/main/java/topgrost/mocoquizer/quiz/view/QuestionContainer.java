@@ -2,7 +2,6 @@ package topgrost.mocoquizer.quiz.view;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +26,11 @@ public class QuestionContainer extends RelativeLayout {
 
     private void init(Context context) {
         rootView = inflate(context, R.layout.quiz_question, this);
+
+        NumberPicker timeSeconds = findViewById(R.id.quizTimeSeconds);
+        timeSeconds.setMinValue(10);
+        timeSeconds.setMaxValue(60);
+        timeSeconds.setValue(30);
     }
 
     public Question getQuestion() {
