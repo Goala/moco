@@ -2,6 +2,7 @@ package topgrost.mocoquizer.quiz.view;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,9 +15,7 @@ import topgrost.mocoquizer.quiz.model.Question;
 
 public class QuestionContainer extends RelativeLayout {
 
-    private View rootView;
-
-    private List<AnswerView> answerViews = new LinkedList<>();
+    private List<AnswerContainer> answerContainers = new LinkedList<>();
 
     public QuestionContainer(Context context) {
         super(context);
@@ -25,17 +24,33 @@ public class QuestionContainer extends RelativeLayout {
     }
 
     private void init(Context context) {
-        rootView = inflate(context, R.layout.quiz_question, this);
+        inflate(context, R.layout.quiz_question, this);
 
         NumberPicker timeSeconds = findViewById(R.id.quizTimeSeconds);
         timeSeconds.setMinValue(10);
         timeSeconds.setMaxValue(60);
         timeSeconds.setValue(30);
+
+        Button btnAddAnswer = findViewById(R.id.quizBtnAddAnswer);
+        btnAddAnswer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AnswerContainer containerToAdd = new AnswerContainer(getContext());
+                answerContainers.add(containerToAdd);
+
+                QuestionContainer.this.addView(containerToAdd);
+                QuestionContainer.this.invalidate();
+            }
+        });
     }
 
     public Question getQuestion() {
         final Question question = new Question();
         question.setText(((TextView)findViewById(R.id.quizQuestion)).getText().toString());
+
+        for (AnswerContainer answerContainer : answerContainers) {
+            question.getAnswers().add(answerContainer.getAnswer());
+        }
         return question;
     }
 }
