@@ -1,12 +1,15 @@
-package topgrost.mocoquizer;
+package topgrost.mocoquizer.login;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,14 +20,19 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import topgrost.mocoquizer.MainActivity;
+import topgrost.mocoquizer.R;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "EmailPassword";
 
-    private TextView mStatusTextView;
-    private TextView mDetailTextView;
     private EditText mEmailField;
     private EditText mPasswordField;
+    private TabAdapter adapter;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private Button btnLogin;
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -35,15 +43,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        viewPager = findViewById(R.id.viewPager);
+        tabLayout = findViewById(R.id.tabLayout);
+        adapter = new TabAdapter(getSupportFragmentManager());
+        adapter.addFragment(new LoginFragment(), "Login");
+        adapter.addFragment(new RegisterFragment(), "Register");
+
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+
         // Views
-        mStatusTextView = findViewById(R.id.status);
-        mDetailTextView = findViewById(R.id.detail);
         mEmailField = findViewById(R.id.etEmail);
         mPasswordField = findViewById(R.id.etPassword);
 
         // Buttons
-        findViewById(R.id.btnLogin).setOnClickListener(this);
-        findViewById(R.id.btnCreateAcc).setOnClickListener(this);
+        btnLogin = findViewById(R.id.btnLogin);
 
         // [START initialize_auth]
         // Initialize Firebase Auth
@@ -57,6 +71,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
+
+
     }
     // [END on_start_check_user]
 
@@ -114,10 +131,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     Toast.LENGTH_SHORT).show();
                         }
 
-                        // [START_EXCLUDE]
-                        if (!task.isSuccessful()) {
-                            mStatusTextView.setText(R.string.auth_failed);
-                        }
+
                     }
                 });
         // [END sign_in_with_email]
@@ -154,9 +168,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if (i == R.id.btnCreateAcc) {
-            createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
-        } else if (i == R.id.btnLogin) {
+        if (i == R.id.btnLogin) {
             signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
         }
     }

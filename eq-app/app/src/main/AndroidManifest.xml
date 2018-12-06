@@ -11,6 +11,8 @@
         android:theme="@style/AppTheme">
         <activity android:name=".quiz.QuizActivity"
             android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
