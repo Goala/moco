@@ -5,28 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="top">
 
     <EditText
-        android:id="@+id/quizName"
+        android:id="@+id/quizEditorName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:gravity="top"
-        android:text="Name"/>
+        android:hint="Name"/>
 
-    <LinearLayout
-        android:id="@+id/quizContentLayout"
+    <RelativeLayout
+        android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="top">
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
     <Button
-        android:id="@+id/quizBtnAddQuestion"
-        android:layout_width="wrap_content"
+        android:id="@+id/quizEditorAddQuestion"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:text="Frage hinzufügen" />
 </LinearLayout>

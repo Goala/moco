@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/quizEditorQuestionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".70"
+            android:inputType="textPersonName"
+            android:hint="Frage" />
+
+        <TextView
+            android:id="@+id/quizEditorTimeSecondsText"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:text="Zeit [Sec]" />
+
+        <NumberPicker
+            android:id="@+id/quizEditorTimeSeconds"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:inputType="number" />
+    </LinearLayout>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/quizEditorQuestionAnswer1"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".20"/>
+
+        <EditText
+            android:id="@+id/quizEditorAnswerText1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="Antwort 1"
+            android:layout_weight=".70"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/quizEditorQuestionAnswer2"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".20"/>
+
+        <EditText
+            android:id="@+id/quizEditorAnswerText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="Antwort 2"
+            android:layout_weight=".70"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/quizEditorQuestionAnswer3"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".20"/>
+
+        <EditText
+            android:id="@+id/quizEditorAnswerText3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="Antwort 3"
+            android:layout_weight=".70"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/quizEditorSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Speichern" />
+</LinearLayout>
