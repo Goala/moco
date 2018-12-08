@@ -17,12 +17,13 @@
     <ScrollView
         android:id="@+id/quizEditorScrollContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="0.8">
 
         <LinearLayout
             android:id="@+id/quizEditorContentContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -63,4 +64,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Frage hinzufügen" />
+
+    <Button
+        android:id="@+id/quizEditorSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quiz Speichern" />
+
+    <Button
+        android:id="@+id/quizEditorReset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quiz Verwerfen" />
 </LinearLayout>
