@@ -26,7 +26,7 @@ public class QuizEditorActivity extends AppCompatActivity {
                 FragmentManager fm = getFragmentManager();
                 final FragmentTransaction transaction = fm.beginTransaction();
                 transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-                transaction.replace(R.id.fragmentContainer, new QuestionEditorFragment());
+                transaction.replace(R.id.quizEditorFragmentContainer, new QuestionEditorFragment());
                 transaction.commit();
             }
         });
