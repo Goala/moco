@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <RadioButton
+        <CheckBox
             android:id="@+id/quizEditorQuestionAnswer1"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <RadioButton
+        <CheckBox
             android:id="@+id/quizEditorQuestionAnswer2"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <RadioButton
+        <CheckBox
             android:id="@+id/quizEditorQuestionAnswer3"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
