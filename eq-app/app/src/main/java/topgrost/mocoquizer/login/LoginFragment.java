@@ -15,15 +15,15 @@ import topgrost.mocoquizer.R;
 
 public class LoginFragment extends Fragment {
     private EditText mEmailField;
-    EditText mPasswordField;
+    private EditText mPasswordField;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login,
                 container, false);
 
-        mEmailField = view.findViewById(R.id.etEmail);
-        mPasswordField  = view.findViewById(R.id.etPassword);
+        mEmailField = view.findViewById(R.id.etEmail_R);
+        mPasswordField  = view.findViewById(R.id.etPassword_R);
 
 
         Button button = view.findViewById(R.id.btnLogin);

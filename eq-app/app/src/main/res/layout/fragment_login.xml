@@ -17,7 +17,7 @@
         android:text="@string/app_name"
         android:textColor="@color/colorElectricYellow"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/tvEmail"
+        app:layout_constraintBottom_toTopOf="@+id/tvEmail_R"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,7 +25,7 @@
 
 
     <EditText
-        android:id="@+id/etEmail"
+        android:id="@+id/etEmail_R"
         android:layout_width="335dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -33,7 +33,7 @@
         android:layout_marginBottom="40dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/etPassword"
+        app:layout_constraintBottom_toTopOf="@+id/etPassword_R"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.515"
         app:layout_constraintStart_toStartOf="parent" />
@@ -41,7 +41,7 @@
 
 
     <EditText
-        android:id="@+id/etPassword"
+        android:id="@+id/etPassword_R"
         android:layout_width="340dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -66,18 +66,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword_R"
         app:layout_constraintVertical_bias="0.448" />
 
     <TextView
-        android:id="@+id/tvEmail"
+        android:id="@+id/tvEmail_R"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
         android:text="@string/email"
-        app:layout_constraintBottom_toTopOf="@+id/etEmail"
+        app:layout_constraintBottom_toTopOf="@+id/etEmail_R"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.041"
         app:layout_constraintStart_toStartOf="parent" />
