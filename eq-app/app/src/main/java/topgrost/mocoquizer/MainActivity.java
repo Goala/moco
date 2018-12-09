@@ -7,22 +7,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+import topgrost.mocoquizer.quiz.QuizEditorActivity;
 
-    CoordinatorLayout coordinatorLayout;
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        coordinatorLayout = findViewById(R.id.coordinatorLayout);
-
         Button newGame = findViewById(R.id.btnCreateQuiz);
         newGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), LobbyActivity.class);
+                Intent intent = new Intent(v.getContext(), QuizEditorActivity.class);
                 startActivity(intent);
             }
         });
