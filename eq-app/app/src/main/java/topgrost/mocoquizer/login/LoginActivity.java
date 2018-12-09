@@ -6,12 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,19 +15,16 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import topgrost.mocoquizer.MainActivity;
 import topgrost.mocoquizer.R;
+import topgrost.mocoquizer.quiz.QuizActivity;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "EmailPassword";
 
-    private EditText mEmailField;
-    private EditText mPasswordField;
     private TabAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private Button btnLogin;
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -52,12 +44,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        // Views
-        mEmailField = findViewById(R.id.etEmail);
-        mPasswordField = findViewById(R.id.etPassword);
-
-        // Buttons
-        btnLogin = findViewById(R.id.btnLogin);
 
         // [START initialize_auth]
         // Initialize Firebase Auth
@@ -78,12 +64,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // [END on_start_check_user]
 
     private void createAccount(String email, String password) {
-        Log.d(TAG, "createAccount:" + email);
-        if (!validateForm()) {
-            return;
-        }
-
-
         // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -106,13 +86,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // [END create_user_with_email]
     }
 
-    private void signIn(String email, String password) {
-        Log.d(TAG, "signIn:" + email);
-        if (!validateForm()) {
-            return;
-        }
-
-
+    void signIn(String email, String password) {
         // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -122,12 +96,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+                            Intent myIntent = new Intent(getApplicationContext(), QuizActivity.class);
                             startActivity(myIntent);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.makeText(LoginActivity.this, "Anmeldung fehlgeschlagen. Bitte überprüfen Sie ihre E-Mail und Ihr Passwort!",
                                     Toast.LENGTH_SHORT).show();
                         }
 
@@ -142,34 +116,4 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private boolean validateForm() {
-        boolean valid = true;
-
-        String email = mEmailField.getText().toString();
-        if (TextUtils.isEmpty(email)) {
-            mEmailField.setError("Required.");
-            valid = false;
-        } else {
-            mEmailField.setError(null);
-        }
-
-        String password = mPasswordField.getText().toString();
-        if (TextUtils.isEmpty(password)) {
-            mPasswordField.setError("Required.");
-            valid = false;
-        } else {
-            mPasswordField.setError(null);
-        }
-
-        return valid;
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.btnLogin) {
-            signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
-        }
-    }
 }
