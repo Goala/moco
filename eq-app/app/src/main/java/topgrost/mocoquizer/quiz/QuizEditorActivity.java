@@ -2,6 +2,7 @@ package topgrost.mocoquizer.quiz;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import com.google.gson.Gson;
 import java.util.LinkedList;
 import java.util.List;
 
+import topgrost.mocoquizer.MainActivity;
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.quiz.model.Question;
 import topgrost.mocoquizer.quiz.model.Quiz;
@@ -74,7 +76,7 @@ public class QuizEditorActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void restQuiz(){
-
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     public void addQuestion(Question questionToAdd){
