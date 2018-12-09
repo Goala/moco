@@ -6,18 +6,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.quiz.model.Question;
+import topgrost.mocoquizer.quiz.model.Quiz;
 import topgrost.mocoquizer.quiz.view.QuestionEditorFragment;
 
-public class QuizEditorActivity extends AppCompatActivity {
+public class QuizEditorActivity extends AppCompatActivity implements View.OnClickListener {
 
     private List<Question> questions = new LinkedList<>();
 
@@ -27,17 +30,51 @@ public class QuizEditorActivity extends AppCompatActivity {
 
         setContentView(R.layout.quiz_editor);
 
-        Button btnAddQuestion = findViewById(R.id.quizEditorAddQuestion);
-        btnAddQuestion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getFragmentManager();
-                final FragmentTransaction transaction = fm.beginTransaction();
-                transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-                transaction.add(R.id.quizEditorFragmentContainer, new QuestionEditorFragment());
-                transaction.commit();
-            }
-        });
+        ImageView btnAddQuestion = findViewById(R.id.quizEditorAddQuestion);
+        btnAddQuestion.setOnClickListener(this);
+
+        ImageView btnSave = findViewById(R.id.quizEditorSave);
+        btnSave.setOnClickListener(this);
+
+        ImageView btnReset = findViewById(R.id.quizEditorReset);
+        btnReset.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.quizEditorAddQuestion:
+                showQuestionEditor();
+                break;
+            case R.id.quizEditorSave:
+                saveQuiz();
+                break;
+            case R.id.quizEditorReset:
+                restQuiz();
+                break;
+        }
+    }
+
+    private void showQuestionEditor(){
+        FragmentManager fm = getFragmentManager();
+        final FragmentTransaction transaction = fm.beginTransaction();
+        transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+        transaction.add(R.id.quizEditorFragmentContainer, new QuestionEditorFragment());
+        transaction.commit();
+    }
+
+    private void saveQuiz(){
+        final Quiz quiz = new Quiz();
+        quiz.setName(((TextView) findViewById(R.id.quizEditorName)).getText().toString());
+        quiz.setQuestions(new LinkedList<>(questions));
+
+        Gson gson = new Gson();
+        String json = gson.toJson(quiz);
+        // TODO send to firebase
+    }
+
+    private void restQuiz(){
+
     }
 
     public void addQuestion(Question questionToAdd){

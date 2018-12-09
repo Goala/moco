@@ -18,7 +18,7 @@
         android:id="@+id/quizEditorScrollContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_weight="1.2">
 
         <LinearLayout
             android:id="@+id/quizEditorContentContainer"
@@ -35,21 +35,38 @@
         android:layout_weight="0.5">
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/quizEditorAddQuestion"
+    <LinearLayout
+        android:id="@+id/quizEditorButtonBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Frage hinzufügen" />
+        android:orientation="horizontal"
+        android:gravity="center">
 
-    <Button
-        android:id="@+id/quizEditorSave"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Quiz Speichern" />
+        <ImageView
+            android:id="@+id/quizEditorAddQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:padding="8dp"
+            android:background="@drawable/roundedbutton"
+            android:src="@drawable/icons8_plus_48" />
 
-    <Button
-        android:id="@+id/quizEditorReset"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Quiz Verwerfen" />
+        <ImageView
+            android:id="@+id/quizEditorSave"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:padding="8dp"
+            android:background="@drawable/roundedbutton"
+            android:src="@drawable/icons8_save_48" />
+
+        <ImageView
+            android:id="@+id/quizEditorReset"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:padding="8dp"
+            android:background="@drawable/roundedbutton"
+            android:src="@drawable/icons8_close_window_48" />
+    </LinearLayout>
 </LinearLayout>

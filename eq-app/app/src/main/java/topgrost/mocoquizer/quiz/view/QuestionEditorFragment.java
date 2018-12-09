@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -18,9 +19,6 @@ import topgrost.mocoquizer.quiz.model.Answer;
 import topgrost.mocoquizer.quiz.model.Question;
 
 public class QuestionEditorFragment extends Fragment implements View.OnClickListener {
-
-    public static String QUESTION_RESULT_KEY = "questionResultKey";
-    private static String TITLE = "Frage hinzufügen";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,7 +37,7 @@ public class QuestionEditorFragment extends Fragment implements View.OnClickList
         final TextView questionTextView = view.findViewById(R.id.quizEditorQuestionText);
         questionTextView.requestFocus();
 
-        final Button btnSave = view.findViewById(R.id.quizEditorSave);
+        final ImageView btnSave = view.findViewById(R.id.quizEditorApply);
         btnSave.setOnClickListener(this);
     }
 
