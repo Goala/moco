@@ -1,10 +1,11 @@
 package topgrost.mocoquizer.quiz.model;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-public class Quiz {
+public class Quiz implements Serializable {
 
     private String name;
     private List<Question> questions = new LinkedList<>();

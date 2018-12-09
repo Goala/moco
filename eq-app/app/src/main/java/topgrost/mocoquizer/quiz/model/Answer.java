@@ -1,8 +1,9 @@
 package topgrost.mocoquizer.quiz.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Answer {
+public class Answer implements Serializable {
 
     private String Text;
     private Boolean correct;
