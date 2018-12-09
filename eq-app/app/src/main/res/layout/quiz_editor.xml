@@ -17,38 +17,14 @@
     <ScrollView
         android:id="@+id/quizEditorScrollContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.8">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
         <LinearLayout
             android:id="@+id/quizEditorContentContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:text="Frage 1: Was ist der Unterschied zwischen einem Bäcker und einem Teppich?"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:text="Frage 2: Wer lebt von der Hand in den Mund?"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:text="Frage 3: Wer hört alles und sagt nichts?"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:text="Frage 4: Welcher Mann hat kein Gehör?"/>
         </LinearLayout>
     </ScrollView>
 
@@ -56,7 +32,7 @@
         android:id="@+id/quizEditorFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_weight="0.5">
     </RelativeLayout>
 
     <Button

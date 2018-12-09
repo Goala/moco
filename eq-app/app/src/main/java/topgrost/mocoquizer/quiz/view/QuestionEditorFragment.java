@@ -1,6 +1,8 @@
 package topgrost.mocoquizer.quiz.view;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -11,11 +13,13 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import topgrost.mocoquizer.R;
+import topgrost.mocoquizer.quiz.QuizEditorActivity;
 import topgrost.mocoquizer.quiz.model.Answer;
 import topgrost.mocoquizer.quiz.model.Question;
 
 public class QuestionEditorFragment extends Fragment implements View.OnClickListener {
 
+    public static String QUESTION_RESULT_KEY = "questionResultKey";
     private static String TITLE = "Frage hinzufügen";
 
     @Override
@@ -41,25 +45,38 @@ public class QuestionEditorFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onClick(View v) {
+        // Close and remove fragment
+        FragmentManager fm = getFragmentManager();
+        final FragmentTransaction transaction = fm.beginTransaction();
+        transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+        transaction.remove(this);
+        transaction.commit();
+
+        // Add question data
+        ((QuizEditorActivity) getActivity()).addQuestion(getQuestionData());
+    }
+
+    private Question getQuestionData(){
         final Question question = new Question();
-        question.setText(((TextView)v).getText().toString());
+        question.setText(((TextView)getView().findViewById(R.id.quizEditorQuestionText)).getText().toString());
+        question.setTime_seconds(((NumberPicker)getView().findViewById(R.id.quizEditorTimeSeconds)).getValue());
 
         final Answer answerOne = new Answer();
-        answerOne.setText(((TextView)v.findViewById(R.id.quizEditorAnswerText1)).getText().toString());
-        answerOne.setCorrect(v.findViewById(R.id.quizEditorQuestionAnswer1).isSelected());
+        answerOne.setText(((TextView)getView().findViewById(R.id.quizEditorAnswerText1)).getText().toString());
+        answerOne.setCorrect(getView().findViewById(R.id.quizEditorQuestionAnswer1).isSelected());
 
         final Answer answerTwo = new Answer();
-        answerTwo.setText(((TextView)v.findViewById(R.id.quizEditorAnswerText2)).getText().toString());
-        answerTwo.setCorrect(v.findViewById(R.id.quizEditorQuestionAnswer2).isSelected());
+        answerTwo.setText(((TextView)getView().findViewById(R.id.quizEditorAnswerText2)).getText().toString());
+        answerTwo.setCorrect(getView().findViewById(R.id.quizEditorQuestionAnswer2).isSelected());
 
         final Answer answerThree = new Answer();
-        answerThree.setText(((TextView)v.findViewById(R.id.quizEditorAnswerText3)).getText().toString());
-        answerThree.setCorrect(v.findViewById(R.id.quizEditorQuestionAnswer3).isSelected());
+        answerThree.setText(((TextView)getView().findViewById(R.id.quizEditorAnswerText3)).getText().toString());
+        answerThree.setCorrect(getView().findViewById(R.id.quizEditorQuestionAnswer3).isSelected());
 
         question.getAnswers().add(answerOne);
         question.getAnswers().add(answerTwo);
         question.getAnswers().add(answerThree);
 
-        // TODO write bundle
+        return question;
     }
 }
