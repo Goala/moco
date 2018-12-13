@@ -74,7 +74,6 @@ public class QuestionEditorFragment extends Fragment implements View.OnClickList
         question.getAnswers().add(answerOne);
         question.getAnswers().add(answerTwo);
         question.getAnswers().add(answerThree);
-
         return question;
     }
 }

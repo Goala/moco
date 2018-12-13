@@ -21,6 +21,7 @@ import java.util.List;
 
 import topgrost.mocoquizer.MainActivity;
 import topgrost.mocoquizer.R;
+import topgrost.mocoquizer.lobby.LobbyActivity;
 import topgrost.mocoquizer.quiz.model.Question;
 import topgrost.mocoquizer.quiz.model.Quiz;
 import topgrost.mocoquizer.quiz.view.QuestionEditorFragment;
@@ -76,6 +77,8 @@ public class QuizEditorActivity extends AppCompatActivity implements View.OnClic
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference quizRef = database.getReference(Quiz.class.getSimpleName().toLowerCase());
         quizRef.push().setValue(quiz);
+
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
     private void restQuiz() {
@@ -95,14 +98,13 @@ public class QuizEditorActivity extends AppCompatActivity implements View.OnClic
     private String formatQuestionText(Question question) {
         String questionText = question.getText();
         if (questionText == null) {
-            return questionText;
+            return null;
         }
 
         final StringBuilder sb = new StringBuilder();
         sb.append("Frage ");
         sb.append(questions.size());
         sb.append(": ");
-
         if (questionText.length() > 30) {
             questionText = questionText.substring(0, 30) + "...";
         }
