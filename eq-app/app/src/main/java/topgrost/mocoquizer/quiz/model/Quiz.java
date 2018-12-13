@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Quiz implements Serializable {
 
     private String name;
+    private final String id = UUID.randomUUID().toString();
     private List<Question> questions = new LinkedList<>();
 
     public Quiz() {
@@ -24,6 +26,11 @@ public class Quiz implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    public String getId() {
+        return id;
     }
 
     public List<Question> getQuestions() {
@@ -57,4 +64,6 @@ public class Quiz implements Serializable {
         sb.append('}');
         return sb.toString();
     }
+
+
 }
