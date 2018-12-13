@@ -39,43 +39,60 @@ public class LobbySetupActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void loadAndSetDeviceList() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference deviceRef = database.getReference(Device.class.getSimpleName().toLowerCase());
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        database.child(Device.class.getSimpleName().toLowerCase() + "s").addValueEventListener(new ValueEventListener() {
 
-        Spinner spinner = findViewById(R.id.lobbySetupDevice);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(),
-                android.R.layout.simple_spinner_dropdown_item, new String[]{"wer23489_Arduino Mega"});
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final ArrayList<String> devices = new ArrayList<>();
 
+                for (DataSnapshot deviceDataSnapshot : dataSnapshot.getChildren()) {
+                    Device device = deviceDataSnapshot.getValue(Device.class);
+                    devices.add(device.getName());
+                }
+
+                String[] primDevices = new String[devices.size()];
+                primDevices = devices.toArray(primDevices);
+
+                setDeviceSpinnerData(primDevices);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        setDeviceSpinnerData(new String[]{"Loading..."});
     }
 
     private void loadAndSetQuizList() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference quizRef = database.getReference(Quiz.class.getSimpleName().toLowerCase());
-        
-//        final ArrayList<Quiz> quizzes = new ArrayList<>();
-//        quizRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-//                    Quiz quiz = postSnapshot.getValue(Quiz.class);
-//                    quizzes.add(quiz);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Log.e("The read failed: ", databaseError.getMessage());
-//            }
-//        });
-//        quizzes.size();
 
-        Spinner spinner = findViewById(R.id.lobbySetupQuiz);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(),
-                android.R.layout.simple_spinner_dropdown_item, new String[]{"df234ert_Quiz 1"});
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        database.child(Quiz.class.getSimpleName().toLowerCase() + "s").addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final ArrayList<String> quizzes = new ArrayList<>();
+
+                for (DataSnapshot quizDataSnapshot : dataSnapshot.getChildren()) {
+                    Quiz quiz = quizDataSnapshot.getValue(Quiz.class);
+                    quizzes.add(quiz.getName());
+                }
+
+                String[] primQuizzes = new String[quizzes.size()];
+                primQuizzes = quizzes.toArray(primQuizzes);
+
+                setQuizSpinnerData(primQuizzes);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        setQuizSpinnerData(new String[]{"Loading..."});
     }
 
     @Override
@@ -93,5 +110,22 @@ public class LobbySetupActivity extends AppCompatActivity implements View.OnClic
         gameRef.push().setValue(game);
 
         startActivity(new Intent(getApplicationContext(), LobbyActivity.class));
+    }
+
+    private void setQuizSpinnerData(String[] quizzes) {
+        Spinner spinner = findViewById(R.id.lobbySetupQuiz);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(),
+                android.R.layout.simple_spinner_dropdown_item, quizzes);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+    }
+
+    private void setDeviceSpinnerData(String[] devices) {
+        Spinner spinner = findViewById(R.id.lobbySetupDevice);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(),
+                android.R.layout.simple_spinner_dropdown_item, devices);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
     }
 }
