@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import java.util.LinkedList;
@@ -44,7 +47,7 @@ public class QuizEditorActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()) {
+        switch (v.getId()) {
             case R.id.quizEditorAddQuestion:
                 showQuestionEditor();
                 break;
@@ -57,7 +60,7 @@ public class QuizEditorActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    private void showQuestionEditor(){
+    private void showQuestionEditor() {
         FragmentManager fm = getFragmentManager();
         final FragmentTransaction transaction = fm.beginTransaction();
         transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
@@ -65,21 +68,21 @@ public class QuizEditorActivity extends AppCompatActivity implements View.OnClic
         transaction.commit();
     }
 
-    private void saveQuiz(){
+    private void saveQuiz() {
         final Quiz quiz = new Quiz();
         quiz.setName(((TextView) findViewById(R.id.quizEditorName)).getText().toString());
         quiz.setQuestions(new LinkedList<>(questions));
 
-        Gson gson = new Gson();
-        String json = gson.toJson(quiz);
-        // TODO send to firebase
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference quizRef = database.getReference(Quiz.class.getSimpleName().toLowerCase());
+        quizRef.push().setValue(quiz);
     }
 
-    private void restQuiz(){
+    private void restQuiz() {
         startActivity(new Intent(this, MainActivity.class));
     }
 
-    public void addQuestion(Question questionToAdd){
+    public void addQuestion(Question questionToAdd) {
         questions.add(questionToAdd);
 
         final TextView tvQuestionAdded = new TextView(getBaseContext());
@@ -89,9 +92,9 @@ public class QuizEditorActivity extends AppCompatActivity implements View.OnClic
         lyContentContainer.addView(tvQuestionAdded);
     }
 
-    private String formatQuestionText(Question question){
+    private String formatQuestionText(Question question) {
         String questionText = question.getText();
-        if(questionText == null){
+        if (questionText == null) {
             return questionText;
         }
 
@@ -100,7 +103,7 @@ public class QuizEditorActivity extends AppCompatActivity implements View.OnClic
         sb.append(questions.size());
         sb.append(": ");
 
-        if(questionText.length() > 30) {
+        if (questionText.length() > 30) {
             questionText = questionText.substring(0, 30) + "...";
         }
         sb.append(questionText);
