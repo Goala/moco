@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.*;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.lobby.model.Device;
 import topgrost.mocoquizer.lobby.model.Game;
@@ -57,11 +58,11 @@ public class LobbySetupActivity extends AppCompatActivity implements View.OnClic
         game.setRunning(false);
         game.setName(((TextView) findViewById(R.id.lobbySetupName)).getText().toString());
         game.setPassword(((TextView) findViewById(R.id.lobbySetupPassword)).getText().toString());
-        game.setDeviceId(((Spinner) findViewById(R.id.lobbySetupDevice)).getSelectedItem().toString());
-        game.setQuizId(((Spinner) findViewById(R.id.lobbySetupQuiz)).getSelectedItem().toString());
+//        game.setDeviceId(((Spinner) findViewById(R.id.lobbySetupDevice)).getSelectedItem().toString());
+        //      game.setQuizId(((Spinner) findViewById(R.id.lobbySetupQuiz)).getSelectedItem().toString());
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase());
+        DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s");
         gameRef.push().setValue(game);
 
         startActivity(new Intent(getApplicationContext(), LobbyActivity.class));

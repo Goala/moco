@@ -10,8 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".quiz.QuizEditorActivity" />
-        <activity android:name=".LobbyActivity" />
-        <activity android:name=".MainActivity"
+        <activity android:name=".lobby.LobbyActivity" />
+        <activity android:name=".lobby.LobbySetupActivity" />
+        <activity
+            android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

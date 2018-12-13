@@ -75,7 +75,7 @@ public class QuizEditorActivity extends AppCompatActivity implements View.OnClic
         quiz.setQuestions(new LinkedList<>(questions));
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference quizRef = database.getReference(Quiz.class.getSimpleName().toLowerCase());
+        DatabaseReference quizRef = database.getReference(Quiz.class.getSimpleName().toLowerCase() + "s");
         quizRef.push().setValue(quiz);
 
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
