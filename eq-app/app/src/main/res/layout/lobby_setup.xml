@@ -66,10 +66,10 @@
     </ScrollView>
 
     <Button
-            android:id="@+id/lobbySetupStartGame"
+            android:id="@+id/lobbySetupCreate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Spiel starten"
+            android:text="Lobby erstellen"
             android:background="@drawable/roundedbutton" />
 </LinearLayout>
