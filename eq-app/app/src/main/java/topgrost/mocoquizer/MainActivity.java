@@ -9,6 +9,8 @@ import android.widget.Button;
 
 import topgrost.mocoquizer.quiz.QuizEditorActivity;
 
+import topgrost.mocoquizer.lobby.LobbyActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
