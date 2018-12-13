@@ -1,6 +1,8 @@
 package topgrost.mocoquizer.lobby.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Game implements Serializable {
@@ -10,6 +12,8 @@ public class Game implements Serializable {
     private String deviceId;
     private String quizId;
     private boolean running;
+    private ArrayList<String> userIds;
+    private ArrayList<String> feedbackToUserIds;
 
     public Game() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -55,21 +59,20 @@ public class Game implements Serializable {
         this.running = running;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Game game = (Game) o;
-        return running == game.running &&
-                Objects.equals(name, game.name) &&
-                Objects.equals(password, game.password) &&
-                Objects.equals(deviceId, game.deviceId) &&
-                Objects.equals(quizId, game.quizId);
+    public ArrayList<String> getUserIds() {
+        return userIds;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, password, deviceId, quizId, running);
+    public void setUserIds(ArrayList<String> userIds) {
+        this.userIds = userIds;
+    }
+
+    public ArrayList<String> getFeedbackToUserIds() {
+        return feedbackToUserIds;
+    }
+
+    public void setFeedbackToUserIds(ArrayList<String> feedbackToUserIds) {
+        this.feedbackToUserIds = feedbackToUserIds;
     }
 
     @Override
@@ -80,6 +83,28 @@ public class Game implements Serializable {
                 ", deviceId='" + deviceId + '\'' +
                 ", quizId='" + quizId + '\'' +
                 ", running=" + running +
+                ", userIds=" + userIds +
+                ", feedbackToUserIds=" + feedbackToUserIds +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Game game = (Game) o;
+        return running == game.running &&
+                Objects.equals(name, game.name) &&
+                Objects.equals(password, game.password) &&
+                Objects.equals(deviceId, game.deviceId) &&
+                Objects.equals(quizId, game.quizId) &&
+                Objects.equals(userIds, game.userIds) &&
+                Objects.equals(feedbackToUserIds, game.feedbackToUserIds);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(name, password, deviceId, quizId, running, userIds, feedbackToUserIds);
     }
 }
