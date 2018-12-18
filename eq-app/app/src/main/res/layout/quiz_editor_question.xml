@@ -92,11 +92,9 @@
             android:layout_weight=".70"/>
     </LinearLayout>
 
-    <ImageView
+    <Button
         android:id="@+id/quizEditorApply"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:background="@drawable/roundedbutton"
-        android:src="@drawable/icons8_checkmark_48" />
+        android:layout_height="50dp"
+        android:text="Änderungen übernehmen" />
 </LinearLayout>

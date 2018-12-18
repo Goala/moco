@@ -35,38 +35,25 @@
         android:layout_weight="0.5">
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/quizEditorButtonBar"
+
+    <Button
+        android:id="@+id/quizEditorAddQuestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:padding="8px"
+        android:text="Frage hinzufügen" />
 
-        <ImageView
-            android:id="@+id/quizEditorAddQuestion"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.3"
-            android:padding="8dp"
-            android:background="@drawable/roundedbutton"
-            android:src="@drawable/icons8_plus_48" />
+    <Button
+        android:id="@+id/quizEditorSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8px"
+        android:text="Quiz speichern" />
 
-        <ImageView
-            android:id="@+id/quizEditorSave"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.3"
-            android:padding="8dp"
-            android:background="@drawable/roundedbutton"
-            android:src="@drawable/icons8_save_48" />
-
-        <ImageView
-            android:id="@+id/quizEditorReset"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.3"
-            android:padding="8dp"
-            android:background="@drawable/roundedbutton"
-            android:src="@drawable/icons8_close_window_48" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/quizEditorReset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8px"
+        android:text="Quiz verwerfen" />
 </LinearLayout>

@@ -7,21 +7,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.Gson;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import topgrost.mocoquizer.MainActivity;
 import topgrost.mocoquizer.R;
-import topgrost.mocoquizer.lobby.LobbyActivity;
 import topgrost.mocoquizer.quiz.model.Question;
 import topgrost.mocoquizer.quiz.model.Quiz;
 import topgrost.mocoquizer.quiz.view.QuestionEditorFragment;
@@ -36,13 +33,13 @@ public class QuizEditorActivity extends AppCompatActivity implements View.OnClic
 
         setContentView(R.layout.quiz_editor);
 
-        ImageView btnAddQuestion = findViewById(R.id.quizEditorAddQuestion);
+        Button btnAddQuestion = findViewById(R.id.quizEditorAddQuestion);
         btnAddQuestion.setOnClickListener(this);
 
-        ImageView btnSave = findViewById(R.id.quizEditorSave);
+        Button btnSave = findViewById(R.id.quizEditorSave);
         btnSave.setOnClickListener(this);
 
-        ImageView btnReset = findViewById(R.id.quizEditorReset);
+        Button btnReset = findViewById(R.id.quizEditorReset);
         btnReset.setOnClickListener(this);
     }
 
