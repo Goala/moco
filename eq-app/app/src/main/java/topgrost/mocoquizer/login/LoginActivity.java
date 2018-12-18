@@ -25,6 +25,8 @@ public class LoginActivity extends AppCompatActivity {
     private TabAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private FirebaseUser user;
+
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -45,6 +47,8 @@ public class LoginActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
 
+
+
         // [START initialize_auth]
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -57,6 +61,16 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (user != null) {
+            // User is signed in
+            Intent i = new Intent(LoginActivity.this, QuizActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        } else {
+            // User is signed out
+            Log.d(TAG, "onAuthStateChanged:signed_out");
+        }
 
 
 
@@ -89,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         // [END create_user_with_email]
     }
 
-    void signIn(String email, String password) {
+    void signIn(String email, String password, Boolean rememberMe) {
         // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -98,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            user = mAuth.getCurrentUser();
                             Intent myIntent = new Intent(getApplicationContext(), QuizActivity.class);
                             startActivity(myIntent);
                         } else {
