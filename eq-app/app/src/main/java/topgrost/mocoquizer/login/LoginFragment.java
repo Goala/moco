@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ToggleButton;
 
 import topgrost.mocoquizer.R;
 
@@ -16,6 +17,7 @@ import topgrost.mocoquizer.R;
 public class LoginFragment extends Fragment {
     private EditText mEmailField;
     private EditText mPasswordField;
+    private ToggleButton rememberMe;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class LoginFragment extends Fragment {
 
         mEmailField = view.findViewById(R.id.etEmail_R);
         mPasswordField  = view.findViewById(R.id.etPassword_R);
+        rememberMe = view.findViewById(R.id.togRememberMe);
 
 
         Button button = view.findViewById(R.id.btnLogin);
@@ -35,7 +38,7 @@ public class LoginFragment extends Fragment {
                 boolean valid = validateForm();
                 if (valid) {
                     LoginActivity login = (LoginActivity) getActivity();
-                    login.signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
+                    login.signIn(mEmailField.getText().toString(), mPasswordField.getText().toString(), rememberMe.isChecked());
                 }
             }
         });
