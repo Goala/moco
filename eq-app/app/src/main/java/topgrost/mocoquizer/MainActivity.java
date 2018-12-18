@@ -15,8 +15,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button newGame = findViewById(R.id.btnCreateQuiz);
-        newGame.setOnClickListener(new View.OnClickListener() {
+        Button btnCreateQuiz = findViewById(R.id.btnCreateQuiz);
+        btnCreateQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), QuizEditorActivity.class);
@@ -24,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button loadGame = findViewById(R.id.btnHostQuiz);
-        loadGame.setOnClickListener(new View.OnClickListener() {
+        Button btnHostQuiz = findViewById(R.id.btnHostQuiz);
+        btnHostQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), LobbySetupActivity.class);
