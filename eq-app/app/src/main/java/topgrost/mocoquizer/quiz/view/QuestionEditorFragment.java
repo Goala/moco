@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -22,6 +21,7 @@ public class QuestionEditorFragment extends Fragment implements View.OnClickList
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        updateToolbarVisibility(View.GONE);
         return inflater.inflate(R.layout.quiz_editor_question, container, false);
     }
 
@@ -39,6 +39,19 @@ public class QuestionEditorFragment extends Fragment implements View.OnClickList
 
         final ImageView btnSave = view.findViewById(R.id.quizEditorApply);
         btnSave.setOnClickListener(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        updateToolbarVisibility(View.VISIBLE);
+    }
+
+    private void updateToolbarVisibility(int visibility) {
+        getActivity().findViewById(R.id.quizEditorAddQuestion).setVisibility(visibility);
+        getActivity().findViewById(R.id.quizEditorReset).setVisibility(visibility);
+        getActivity().findViewById(R.id.quizEditorSave).setVisibility(visibility);
     }
 
     @Override
