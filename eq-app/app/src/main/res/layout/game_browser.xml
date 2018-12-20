@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:orientation="horizontal"
+    android:gravity="center">
+
+    <de.codecrafters.tableview.SortableTableView
+        xmlns:table="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/gameBrowserTable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        table:tableView_columnCount="3"
+        table:tableView_headerElevation="10"/>
+</RelativeLayout>

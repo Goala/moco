@@ -1,21 +1,96 @@
 package topgrost.mocoquizer.browser;
 
-import android.app.ListActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.View;
-import android.widget.ListView;
+import android.support.v7.app.AppCompatActivity;
 
-public class GameBrowserActivity extends ListActivity {
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import de.codecrafters.tableview.SortableTableView;
+import de.codecrafters.tableview.listeners.TableDataClickListener;
+import de.codecrafters.tableview.model.TableColumnWeightModel;
+import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
+import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
+import topgrost.mocoquizer.R;
+import topgrost.mocoquizer.browser.view.GameBrowserListAdapter;
+import topgrost.mocoquizer.browser.view.GameNameComparator;
+import topgrost.mocoquizer.browser.view.GamePlayersComparator;
+import topgrost.mocoquizer.browser.view.GameRunningComparator;
+import topgrost.mocoquizer.model.Game;
+
+public class GameBrowserActivity extends AppCompatActivity implements TableDataClickListener<Game> {
+
+    private static final String[] TABLE_HEADERS = {"Name", "Status", "Spieler"};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.game_browser);
+
+        setupGameBrowserTable();
+        loadGames();
+    }
+
+    void setupGameBrowserTable() {
+        final SortableTableView<Game> tableView = (SortableTableView<Game>) findViewById(R.id.gameBrowserTable);
+        tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(this, TABLE_HEADERS));
+
+        TableColumnWeightModel columnModel = new TableColumnWeightModel(TABLE_HEADERS.length);
+        columnModel.setColumnWeight(0, 3);
+        columnModel.setColumnWeight(1, 1);
+        columnModel.setColumnWeight(2, 1);
+        tableView.setColumnModel(columnModel);
+
+        // setup coloring of rows
+        int colorEvenRows = getResources().getColor(R.color.colorPrimaryDark);
+        int colorOddRows = getResources().getColor(R.color.colorPrimary);
+        tableView.setDataRowBackgroundProvider(TableDataRowBackgroundProviders.alternatingRowColors(colorEvenRows, colorOddRows));
+
+        // Set comparators to allow sorting
+        tableView.setColumnComparator(0, new GameNameComparator());
+        tableView.setColumnComparator(1, new GameRunningComparator());
+        tableView.setColumnComparator(2, new GamePlayersComparator());
+
+        tableView.addDataClickListener(this);
+    }
+
+    private void loadGames() {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        database.child(Game.class.getSimpleName().toLowerCase() + "s").addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final List<Game> games = new LinkedList<>();
+
+                for (DataSnapshot deviceDataSnapshot : dataSnapshot.getChildren()) {
+                    games.add(deviceDataSnapshot.getValue(Game.class));
+                }
+
+                final SortableTableView<Game> tableView = (SortableTableView<Game>) findViewById(R.id.gameBrowserTable);
+                tableView.setDataAdapter(new GameBrowserListAdapter(getBaseContext(), games));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        final SortableTableView<Game> tableView = (SortableTableView<Game>) findViewById(R.id.gameBrowserTable);
+        tableView.setDataAdapter(new GameBrowserListAdapter(getBaseContext(), new LinkedList<Game>()));
     }
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
+    public void onDataClicked(int rowIndex, Game clickedData) {
+        // TODO join game
     }
 }

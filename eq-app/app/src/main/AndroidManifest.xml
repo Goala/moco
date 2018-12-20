@@ -11,6 +11,7 @@
         android:windowSoftInputMode="adjustResize"
         android:theme="@style/Theme.AppCompat">
         <activity android:name=".browser.GameBrowserActivity" />
+        <activity android:name=".quiz.QuizActivity" />
         <activity android:name=".quiz.QuizEditorActivity" />
         <activity android:name=".lobby.LobbyActivity" />
         <activity android:name=".lobby.LobbySetupActivity" />
