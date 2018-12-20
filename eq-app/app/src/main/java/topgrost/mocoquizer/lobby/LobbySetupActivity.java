@@ -20,6 +20,7 @@ import java.util.Arrays;
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.model.Device;
 import topgrost.mocoquizer.model.Game;
+import topgrost.mocoquizer.model.Player;
 import topgrost.mocoquizer.model.Quiz;
 
 public class LobbySetupActivity extends AppCompatActivity implements View.OnClickListener {
@@ -102,7 +103,7 @@ public class LobbySetupActivity extends AppCompatActivity implements View.OnClic
         game.setPassword(((TextView) findViewById(R.id.lobbySetupPassword)).getText().toString());
         game.setDeviceId(((Spinner) findViewById(R.id.lobbySetupDevice)).getSelectedItem().toString());
         game.setQuizId(((Spinner) findViewById(R.id.lobbySetupQuiz)).getSelectedItem().toString());
-        game.setUserIds(new ArrayList<>(Arrays.asList("currentUser (todo tobi)", "", "", "")));
+        game.setPlayers(new ArrayList<Player>(Arrays.asList(new Player("currentUser (todo tobi)", false))));
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s");

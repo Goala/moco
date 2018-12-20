@@ -3,15 +3,15 @@ package topgrost.mocoquizer.browser.view;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import de.codecrafters.tableview.TableDataAdapter;
+import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.model.Game;
+import topgrost.mocoquizer.model.Player;
 
 public class GameBrowserListAdapter extends TableDataAdapter<Game> {
 
@@ -35,7 +35,9 @@ public class GameBrowserListAdapter extends TableDataAdapter<Game> {
             case 1:
                 return renderRunning(game.isRunning());
             case 2:
-                return renderPlayers(game.getUserIds());
+                return renderPlayers(game.getPlayers());
+            case 3:
+                return renderPassword(game.getPassword());
         }
         return null;
     }
@@ -56,18 +58,29 @@ public class GameBrowserListAdapter extends TableDataAdapter<Game> {
         return view;
     }
 
-    private TextView renderPlayers(ArrayList<String> userIds) {
-        int players = 0;
-        for (String userId : userIds) {
-            if(userId != null && !userId.trim().isEmpty()) {
-                players++;
+    private TextView renderPlayers(List<Player> players) {
+        int playerCount = 0;
+        for (Player player : players) {
+            if(player != null && !player.getName().trim().isEmpty()) {
+                playerCount++;
             }
         }
 
         TextView view = new TextView(getContext());
-        view.setText(players + PLAYERS_SUFFIX);
+        view.setText(playerCount + PLAYERS_SUFFIX);
         view.setMinHeight(DEFAULT_MIN_HEIGHT);
         view.setPadding(DEFAULT_PAD_LEFT, DEFAULT_PAD_TOP, DEFAULT_PAD_RIGHT, DEFAULT_PAD_BOTTOM);
+        return view;
+    }
+
+    private View renderPassword(String password) {
+        ImageView view = new ImageView(getContext());
+        if (password != null && !password.trim().isEmpty()) {
+            view.setImageResource(R.mipmap.icons8_sperren_32);
+        } else  {
+            view.setImageResource(R.mipmap.icons8_entsperren_32);
+        }
+        view.setPadding(DEFAULT_PAD_LEFT, DEFAULT_PAD_TOP, DEFAULT_PAD_RIGHT, DEFAULT_PAD_TOP);
         return view;
     }
 }

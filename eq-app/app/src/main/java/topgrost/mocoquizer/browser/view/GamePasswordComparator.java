@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import topgrost.mocoquizer.model.Game;
 
-public class GamePlayersComparator implements Comparator<Game> {
+public class GamePasswordComparator implements Comparator<Game> {
 
     @Override
     public int compare(Game o1, Game o2) {
@@ -13,7 +13,7 @@ public class GamePlayersComparator implements Comparator<Game> {
         } else if (o2 == null) {
             return 1;
         } else {
-            return o1.getPlayers().size() > (o2.getPlayers().size()) ? 0 : 1 ;
+            return o1.getPassword().compareTo(o2.getPassword());
         }
     }
 }

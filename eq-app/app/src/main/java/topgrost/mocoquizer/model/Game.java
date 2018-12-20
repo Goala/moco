@@ -11,8 +11,7 @@ public class Game implements Serializable {
     private String deviceId;
     private String quizId;
     private boolean running;
-    private ArrayList<String> userIds;
-    private ArrayList<String> feedbackToUserIds;
+    private ArrayList<Player> players;
 
     public Game() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -58,33 +57,12 @@ public class Game implements Serializable {
         this.running = running;
     }
 
-    public ArrayList<String> getUserIds() {
-        return userIds;
+    public ArrayList<Player> getPlayers() {
+        return players;
     }
 
-    public void setUserIds(ArrayList<String> userIds) {
-        this.userIds = userIds;
-    }
-
-    public ArrayList<String> getFeedbackToUserIds() {
-        return feedbackToUserIds;
-    }
-
-    public void setFeedbackToUserIds(ArrayList<String> feedbackToUserIds) {
-        this.feedbackToUserIds = feedbackToUserIds;
-    }
-
-    @Override
-    public String toString() {
-        return "Game{" +
-                "name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", deviceId='" + deviceId + '\'' +
-                ", quizId='" + quizId + '\'' +
-                ", running=" + running +
-                ", userIds=" + userIds +
-                ", feedbackToUserIds=" + feedbackToUserIds +
-                '}';
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
     }
 
     @Override
@@ -97,13 +75,24 @@ public class Game implements Serializable {
                 Objects.equals(password, game.password) &&
                 Objects.equals(deviceId, game.deviceId) &&
                 Objects.equals(quizId, game.quizId) &&
-                Objects.equals(userIds, game.userIds) &&
-                Objects.equals(feedbackToUserIds, game.feedbackToUserIds);
+                Objects.equals(players, game.players);
     }
 
     @Override
     public int hashCode() {
+        return Objects.hash(name, password, deviceId, quizId, running, players);
+    }
 
-        return Objects.hash(name, password, deviceId, quizId, running, userIds, feedbackToUserIds);
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Game{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", password='").append(password).append('\'');
+        sb.append(", deviceId='").append(deviceId).append('\'');
+        sb.append(", quizId='").append(quizId).append('\'');
+        sb.append(", running=").append(running);
+        sb.append(", players=").append(players);
+        sb.append('}');
+        return sb.toString();
     }
 }

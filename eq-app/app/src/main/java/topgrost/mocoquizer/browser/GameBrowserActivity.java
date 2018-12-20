@@ -22,13 +22,14 @@ import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.browser.view.GameBrowserListAdapter;
 import topgrost.mocoquizer.browser.view.GameNameComparator;
+import topgrost.mocoquizer.browser.view.GamePasswordComparator;
 import topgrost.mocoquizer.browser.view.GamePlayersComparator;
 import topgrost.mocoquizer.browser.view.GameRunningComparator;
 import topgrost.mocoquizer.model.Game;
 
 public class GameBrowserActivity extends AppCompatActivity implements TableDataClickListener<Game> {
 
-    private static final String[] TABLE_HEADERS = {"Name", "Status", "Spieler"};
+    private static final String[] TABLE_HEADERS = {"Name", "Status", "Spieler", "Passwort"};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,8 +47,9 @@ public class GameBrowserActivity extends AppCompatActivity implements TableDataC
 
         TableColumnWeightModel columnModel = new TableColumnWeightModel(TABLE_HEADERS.length);
         columnModel.setColumnWeight(0, 3);
-        columnModel.setColumnWeight(1, 1);
-        columnModel.setColumnWeight(2, 1);
+        columnModel.setColumnWeight(1, 2);
+        columnModel.setColumnWeight(2, 2);
+        columnModel.setColumnWeight(3,2);
         tableView.setColumnModel(columnModel);
 
         // setup coloring of rows
@@ -59,6 +61,7 @@ public class GameBrowserActivity extends AppCompatActivity implements TableDataC
         tableView.setColumnComparator(0, new GameNameComparator());
         tableView.setColumnComparator(1, new GameRunningComparator());
         tableView.setColumnComparator(2, new GamePlayersComparator());
+        tableView.setColumnComparator(3, new GamePasswordComparator());
 
         tableView.addDataClickListener(this);
     }
