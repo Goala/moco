@@ -1,6 +1,9 @@
 package topgrost.mocoquizer.login;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -95,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference userRef = database.getReference(User.class.getSimpleName().toLowerCase() + "s");
                             userRef.push().setValue(mUser);
-
+                            setSharedPrefs(alias);
                             Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(myIntent);
                         } else {
@@ -121,7 +124,6 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             user = mAuth.getCurrentUser();
-
                             Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(myIntent);
                         } else {
@@ -135,5 +137,12 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
         // [END sign_in_with_email]
+    }
+
+    public void setSharedPrefs(String user){
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("user", user);
+        editor.commit();
     }
 }
