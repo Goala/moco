@@ -76,9 +76,7 @@ public class GameBrowserListAdapter extends TableDataAdapter<Game> {
     private View renderPassword(String password) {
         ImageView view = new ImageView(getContext());
         if (password != null && !password.trim().isEmpty()) {
-            view.setImageResource(R.mipmap.icons8_sperren_32);
-        } else  {
-            view.setImageResource(R.mipmap.icons8_entsperren_32);
+            view.setImageResource(R.mipmap.icons8_schluessel_2_32);
         }
         view.setPadding(DEFAULT_PAD_LEFT, DEFAULT_PAD_TOP, DEFAULT_PAD_RIGHT, DEFAULT_PAD_TOP);
         return view;
