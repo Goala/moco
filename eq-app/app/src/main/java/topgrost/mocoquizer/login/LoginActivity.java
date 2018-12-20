@@ -14,9 +14,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import topgrost.mocoquizer.MainActivity;
 import topgrost.mocoquizer.R;
-import topgrost.mocoquizer.quiz.QuizActivity;
+import topgrost.mocoquizer.model.Game;
+import topgrost.mocoquizer.model.User;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -47,8 +51,6 @@ public class LoginActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
 
-
-
         // [START initialize_auth]
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -60,24 +62,24 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        user = mAuth.getCurrentUser();
 
         if (user != null) {
             // User is signed in
-            Intent i = new Intent(LoginActivity.this, QuizActivity.class);
+            Intent i = new Intent(LoginActivity.this, MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
+            this.finish();
         } else {
             // User is signed out
             Log.d(TAG, "onAuthStateChanged:signed_out");
         }
 
 
-
     }
     // [END on_start_check_user]
 
-    void createAccount(String email, String password) {
+    void createAccount(final String email, final String password, final String alias) {
         // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -86,10 +88,16 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Intent myIntent = new Intent(getApplicationContext(), QuizActivity.class);
-                            startActivity(myIntent);
+                            user = mAuth.getCurrentUser();
+                            User mUser = new User();
+                            mUser.setName(alias);
+                            mUser.setEmail(email);
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference userRef = database.getReference(User.class.getSimpleName().toLowerCase() + "s");
+                            userRef.push().setValue(mUser);
 
+                            Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(myIntent);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -103,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
         // [END create_user_with_email]
     }
 
-    void signIn(String email, String password, Boolean rememberMe) {
+    void signIn(String email, String password) {
         // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -113,7 +121,8 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             user = mAuth.getCurrentUser();
-                            Intent myIntent = new Intent(getApplicationContext(), QuizActivity.class);
+
+                            Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(myIntent);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -127,10 +136,4 @@ public class LoginActivity extends AppCompatActivity {
                 });
         // [END sign_in_with_email]
     }
-
-    private void signOut() {
-        mAuth.signOut();
-    }
-
-
 }
