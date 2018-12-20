@@ -1,5 +1,7 @@
 package topgrost.mocoquizer.model;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -12,6 +14,8 @@ public class Game implements Serializable {
     private String quizId;
     private boolean running;
     private ArrayList<Player> players;
+
+    private String firebaseKey;
 
     public Game() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -65,6 +69,15 @@ public class Game implements Serializable {
         this.players = players;
     }
 
+    @Exclude
+    public String getFirebaseKey() {
+        return firebaseKey;
+    }
+
+    public void setFirebaseKey(String firebaseKey) {
+        this.firebaseKey = firebaseKey;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,12 +88,14 @@ public class Game implements Serializable {
                 Objects.equals(password, game.password) &&
                 Objects.equals(deviceId, game.deviceId) &&
                 Objects.equals(quizId, game.quizId) &&
-                Objects.equals(players, game.players);
+                Objects.equals(players, game.players) &&
+                Objects.equals(firebaseKey, game.firebaseKey);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, password, deviceId, quizId, running, players);
+
+        return Objects.hash(name, password, deviceId, quizId, running, players, firebaseKey);
     }
 
     @Override
@@ -92,6 +107,7 @@ public class Game implements Serializable {
         sb.append(", quizId='").append(quizId).append('\'');
         sb.append(", running=").append(running);
         sb.append(", players=").append(players);
+        sb.append(", firebaseKey='").append(firebaseKey).append('\'');
         sb.append('}');
         return sb.toString();
     }
