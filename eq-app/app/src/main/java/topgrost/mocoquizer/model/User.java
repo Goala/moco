@@ -1,9 +1,7 @@
-package topgrost.mocoquizer.login.model;
+package topgrost.mocoquizer.model;
 
 import java.io.Serializable;
 import java.util.Objects;
-
-import topgrost.mocoquizer.lobby.model.Game;
 
 
 public class User implements Serializable {

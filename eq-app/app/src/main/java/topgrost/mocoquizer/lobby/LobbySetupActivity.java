@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
@@ -19,9 +18,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import topgrost.mocoquizer.R;
-import topgrost.mocoquizer.lobby.model.Device;
-import topgrost.mocoquizer.lobby.model.Game;
-import topgrost.mocoquizer.quiz.model.Quiz;
+import topgrost.mocoquizer.model.Device;
+import topgrost.mocoquizer.model.Game;
+import topgrost.mocoquizer.model.Quiz;
 
 public class LobbySetupActivity extends AppCompatActivity implements View.OnClickListener {
 

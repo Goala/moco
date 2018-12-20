@@ -19,8 +19,8 @@ import java.util.List;
 
 import topgrost.mocoquizer.MainActivity;
 import topgrost.mocoquizer.R;
-import topgrost.mocoquizer.quiz.model.Question;
-import topgrost.mocoquizer.quiz.model.Quiz;
+import topgrost.mocoquizer.model.Question;
+import topgrost.mocoquizer.model.Quiz;
 import topgrost.mocoquizer.quiz.view.QuestionEditorFragment;
 
 public class QuizEditorActivity extends AppCompatActivity implements View.OnClickListener {

@@ -16,8 +16,8 @@ import android.widget.TextView;
 
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.quiz.QuizEditorActivity;
-import topgrost.mocoquizer.quiz.model.Answer;
-import topgrost.mocoquizer.quiz.model.Question;
+import topgrost.mocoquizer.model.Answer;
+import topgrost.mocoquizer.model.Question;
 
 public class QuestionEditorFragment extends Fragment implements View.OnClickListener {
 

@@ -1,4 +1,4 @@
-package topgrost.mocoquizer.quiz.model;
+package topgrost.mocoquizer.model;
 
 import java.io.Serializable;
 import java.util.Objects;

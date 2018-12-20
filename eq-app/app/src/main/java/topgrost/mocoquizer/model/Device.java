@@ -1,4 +1,4 @@
-package topgrost.mocoquizer.lobby.model;
+package topgrost.mocoquizer.model;
 
 import java.io.Serializable;
 import java.util.Objects;
