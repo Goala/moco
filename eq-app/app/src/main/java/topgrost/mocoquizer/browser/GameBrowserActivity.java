@@ -1,5 +1,6 @@
 package topgrost.mocoquizer.browser;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,7 +26,11 @@ import topgrost.mocoquizer.browser.view.GameNameComparator;
 import topgrost.mocoquizer.browser.view.GamePasswordComparator;
 import topgrost.mocoquizer.browser.view.GamePlayersComparator;
 import topgrost.mocoquizer.browser.view.GameRunningComparator;
+import topgrost.mocoquizer.lobby.LobbyActivity;
+import topgrost.mocoquizer.lobby.LobbySetupActivity;
 import topgrost.mocoquizer.model.Game;
+import topgrost.mocoquizer.model.Player;
+import topgrost.mocoquizer.model.Quiz;
 
 public class GameBrowserActivity extends AppCompatActivity implements TableDataClickListener<Game> {
 
@@ -73,9 +78,10 @@ public class GameBrowserActivity extends AppCompatActivity implements TableDataC
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 final List<Game> games = new LinkedList<>();
-
-                for (DataSnapshot deviceDataSnapshot : dataSnapshot.getChildren()) {
-                    games.add(deviceDataSnapshot.getValue(Game.class));
+                for (DataSnapshot gameDataSnapshot : dataSnapshot.getChildren()) {
+                    final Game gameToAdd = gameDataSnapshot.getValue(Game.class);
+                    gameToAdd.setFirebaseKey(gameDataSnapshot.getKey());
+                    games.add(gameToAdd);
                 }
 
                 final SortableTableView<Game> tableView = (SortableTableView<Game>) findViewById(R.id.gameBrowserTable);
@@ -94,6 +100,13 @@ public class GameBrowserActivity extends AppCompatActivity implements TableDataC
 
     @Override
     public void onDataClicked(int rowIndex, Game clickedData) {
-        // TODO join game
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s");
+        // TOBO set logged in user alias
+        clickedData.getPlayers().add(new Player("Lukas", false));
+        gameRef.child(clickedData.getFirebaseKey()).child(Player.class.getSimpleName().toLowerCase() + "s").setValue(clickedData.getPlayers());
+
+        Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
+        startActivity(intent);
     }
 }
