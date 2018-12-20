@@ -54,6 +54,7 @@ public class GameBrowserListAdapter extends TableDataAdapter<Game> {
         TextView view = new TextView(getContext());
         view.setText(running ? "Im Spiel" : "In Lobby");
         view.setMinHeight(DEFAULT_MIN_HEIGHT);
+        view.setMaxHeight(DEFAULT_MIN_HEIGHT);
         view.setPadding(DEFAULT_PAD_LEFT, DEFAULT_PAD_TOP, DEFAULT_PAD_RIGHT, DEFAULT_PAD_BOTTOM);
         return view;
     }
@@ -69,6 +70,7 @@ public class GameBrowserListAdapter extends TableDataAdapter<Game> {
         TextView view = new TextView(getContext());
         view.setText(playerCount + PLAYERS_SUFFIX);
         view.setMinHeight(DEFAULT_MIN_HEIGHT);
+        view.setMaxHeight(DEFAULT_MIN_HEIGHT);
         view.setPadding(DEFAULT_PAD_LEFT, DEFAULT_PAD_TOP, DEFAULT_PAD_RIGHT, DEFAULT_PAD_BOTTOM);
         return view;
     }
@@ -78,7 +80,10 @@ public class GameBrowserListAdapter extends TableDataAdapter<Game> {
         if (password != null && !password.trim().isEmpty()) {
             view.setImageResource(R.mipmap.icons8_schluessel_2_32);
         }
-        view.setPadding(DEFAULT_PAD_LEFT, DEFAULT_PAD_TOP, DEFAULT_PAD_RIGHT, DEFAULT_PAD_TOP);
+        view.setScaleType(ImageView.ScaleType.CENTER);
+        view.setMinimumHeight(DEFAULT_MIN_HEIGHT);
+        view.setMaxHeight(DEFAULT_MIN_HEIGHT);
+        view.setPadding(DEFAULT_PAD_LEFT, 0, DEFAULT_PAD_RIGHT, 0);
         return view;
     }
 }
