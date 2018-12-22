@@ -40,12 +40,12 @@ void setup() {
   
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
 
-  Device device2 = Device("A2:A3:...","Ich bin NodeMCU");  
+  Device device = Device(WiFi.macAddress(),"Ich bin NodeMCU");  
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& deviceJSON = jsonBuffer.createObject();
-  deviceJSON["available"] = device2.is_available();
-  deviceJSON["name"] = device2.get_name();
-  deviceJSON["mac"] = device2.get_mac();
+  deviceJSON["available"] = device.is_available();
+  deviceJSON["name"] = device.get_name();
+  deviceJSON["mac"] = device.get_mac();
   
   String name = Firebase.push("devices", deviceJSON);
   // handle error
