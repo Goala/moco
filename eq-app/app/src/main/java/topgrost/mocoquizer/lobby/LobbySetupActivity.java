@@ -103,13 +103,19 @@ public class LobbySetupActivity extends AppCompatActivity implements View.OnClic
         game.setPassword(((TextView) findViewById(R.id.lobbySetupPassword)).getText().toString());
         game.setDeviceId(((Spinner) findViewById(R.id.lobbySetupDevice)).getSelectedItem().toString());
         game.setQuizId(((Spinner) findViewById(R.id.lobbySetupQuiz)).getSelectedItem().toString());
-        game.setPlayers(new ArrayList<Player>(Arrays.asList(new Player("currentUser (todo tobi)", false))));
+        game.setPlayers(new ArrayList<>(Arrays.asList(new Player("currentUser (todo tobi)", false))));
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s");
-        gameRef.push().setValue(game);
 
-        startActivity(new Intent(getApplicationContext(), LobbyActivity.class));
+        String gameID = gameRef.push().getKey();
+        game.setFirebaseKey(gameID);
+        gameRef.child(gameID).setValue(game);
+
+
+        Intent lobbyIntent = new Intent(getApplicationContext(), LobbyActivity.class);
+        lobbyIntent.putExtra("game", game);
+        startActivity(lobbyIntent);
     }
 
     private void setQuizSpinnerData(String[] quizzes) {

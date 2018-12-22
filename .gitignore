@@ -1,2 +1,6 @@
 
 \.idea/
+
+eq-device-app/\.vscode/arduino\.json
+
+eq-device-app/\.vscode/c_cpp_properties\.json

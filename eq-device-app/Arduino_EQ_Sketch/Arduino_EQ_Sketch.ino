@@ -1,111 +1,68 @@
-#include <WiFi.h>
-#include <WiFiUdp.h>
-#include <WiFiClient.h>
-#include <WiFiServer.h>
+#include <ESP8266WiFi.h>
+#include <FirebaseArduino.h>
 
-char ssid[] = "FuenfGHerzen";     //  your network SSID (name)
-char pass[] = "CDQNGYBC";  // your network password
-int status = WL_IDLE_STATUS; 
+// Set these to run example.
+#define FIREBASE_HOST "electric-quizer.firebaseio.com"
+#define FIREBASE_AUTH "get_your_auth"
+#define WIFI_SSID "iMäks"
+#define WIFI_PASSWORD "get_your_pass"
 
-const char *ssid2 = "FuenfGHerzen";
-const char *password2 = "CDQNGYBC";
+class Device {
+  private:
+    boolean available = true;
+    String mac;
+    String name;
+  public:
+    Device(String mac, String name) {
+      this->mac = mac;
+      this->name = name;
+    }
+    String get_name() {return (name);}
+    String get_mac() {return (mac);}
+    boolean is_available() {return (available);}
+};
 
-void setup()
-{
- Serial.begin(9600);
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB port only
+
+
+void setup() {
+  Serial.begin(9600);
+
+  // connect to wifi.
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("connecting");
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(".");
+    delay(500);
   }
-// check for the presence of the shield:
-  if (WiFi.status() == WL_NO_SHIELD) {
-    Serial.println("WiFi shield not present");
-    // don't continue:
-    while (true);
+  Serial.println();
+  Serial.print("connected: ");
+  Serial.println(WiFi.localIP());
+  
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+
+  Device device2 = Device("A2:A3:...","Ich bin NodeMCU");  
+  StaticJsonBuffer<200> jsonBuffer;
+  JsonObject& deviceJSON = jsonBuffer.createObject();
+  deviceJSON["available"] = device2.is_available();
+  deviceJSON["name"] = device2.get_name();
+  deviceJSON["mac"] = device2.get_mac();
+  
+  String name = Firebase.push("devices", deviceJSON);
+  // handle error
+  if (Firebase.failed()) {
+      Serial.print("pushing /logs failed:");
+      Serial.println(Firebase.error());  
+      return;
   }
+  
+  Serial.print("pushed: /logs/");
+  Serial.println(name);
+  
+  delay(1000);
+}
 
-  String fv = WiFi.firmwareVersion();
-  if (fv != "1.1.0") {
-    Serial.println("Please upgrade the firmware");
-  }
+int n = 0;
 
-  // attempt to connect to Wifi network:
-  while (status != WL_CONNECTED) {
-    Serial.print("Attempting to connect to WPA SSID: ");
-    Serial.println(ssid);
-    // Connect to WPA/WPA2 network:
-    status = WiFi.begin(ssid, pass);
-
-    // wait 10 seconds for connection:
-    delay(10000);
-  }
-
-  // you're connected now, so print out the data:
-  Serial.print("You're connected to the network");
-  printCurrentNet();
-  printWifiData();
-
+void loop() {
   
 }
-
-void loop()
-{
-}
-
-void printWifiData() {
-  // print your WiFi shield's IP address:
-  IPAddress ip = WiFi.localIP();
-  Serial.print("IP Address: ");
-  Serial.println(ip);
-  Serial.println(ip);
-
-  // print your MAC address:
-  byte mac[6];
-  WiFi.macAddress(mac);
-  Serial.print("MAC address: ");
-  Serial.print(mac[5], HEX);
-  Serial.print(":");
-  Serial.print(mac[4], HEX);
-  Serial.print(":");
-  Serial.print(mac[3], HEX);
-  Serial.print(":");
-  Serial.print(mac[2], HEX);
-  Serial.print(":");
-  Serial.print(mac[1], HEX);
-  Serial.print(":");
-  Serial.println(mac[0], HEX);
-
-}
-
-void printCurrentNet() {
-  // print the SSID of the network you're attached to:
-  Serial.print("SSID: ");
-  Serial.println(WiFi.SSID());
-
-  // print the MAC address of the router you're attached to:
-  byte bssid[6];
-  WiFi.BSSID(bssid);
-  Serial.print("BSSID: ");
-  Serial.print(bssid[5], HEX);
-  Serial.print(":");
-  Serial.print(bssid[4], HEX);
-  Serial.print(":");
-  Serial.print(bssid[3], HEX);
-  Serial.print(":");
-  Serial.print(bssid[2], HEX);
-  Serial.print(":");
-  Serial.print(bssid[1], HEX);
-  Serial.print(":");
-  Serial.println(bssid[0], HEX);
-
-  // print the received signal strength:
-  long rssi = WiFi.RSSI();
-  Serial.print("signal strength (RSSI):");
-  Serial.println(rssi);
-
-  // print the encryption type:
-  byte encryption = WiFi.encryptionType();
-  Serial.print("Encryption Type:");
-  Serial.println(encryption, HEX);
-  Serial.println();
-}
-
