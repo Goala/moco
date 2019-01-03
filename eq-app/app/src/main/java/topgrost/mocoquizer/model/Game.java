@@ -11,6 +11,7 @@ public class Game implements Serializable {
     private String name;
     private String password;
     private String deviceId;
+    private int questionNr;
     private String quizId;
     private boolean running;
     private ArrayList<Player> players;
@@ -44,6 +45,15 @@ public class Game implements Serializable {
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
     }
+
+    public int getQuestionNr() {
+        return questionNr;
+    }
+
+    public void setQuestionNr(int questionNr) {
+        this.questionNr = questionNr;
+    }
+
 
     public String getQuizId() {
         return quizId;
@@ -83,7 +93,8 @@ public class Game implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
-        return running == game.running &&
+        return questionNr == game.questionNr &&
+                running == game.running &&
                 Objects.equals(name, game.name) &&
                 Objects.equals(password, game.password) &&
                 Objects.equals(deviceId, game.deviceId) &&
@@ -95,20 +106,20 @@ public class Game implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(name, password, deviceId, quizId, running, players, firebaseKey);
+        return Objects.hash(name, password, deviceId, questionNr, quizId, running, players, firebaseKey);
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Game{");
-        sb.append("name='").append(name).append('\'');
-        sb.append(", password='").append(password).append('\'');
-        sb.append(", deviceId='").append(deviceId).append('\'');
-        sb.append(", quizId='").append(quizId).append('\'');
-        sb.append(", running=").append(running);
-        sb.append(", players=").append(players);
-        sb.append(", firebaseKey='").append(firebaseKey).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return "Game{" +
+                "name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", deviceId='" + deviceId + '\'' +
+                ", questionNr=" + questionNr +
+                ", quizId='" + quizId + '\'' +
+                ", running=" + running +
+                ", players=" + players +
+                ", firebaseKey='" + firebaseKey + '\'' +
+                '}';
     }
 }

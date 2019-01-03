@@ -104,6 +104,7 @@ public class LobbySetupActivity extends AppCompatActivity implements View.OnClic
         game.setDeviceId(((Spinner) findViewById(R.id.lobbySetupDevice)).getSelectedItem().toString());
         game.setQuizId(((Spinner) findViewById(R.id.lobbySetupQuiz)).getSelectedItem().toString());
         game.setPlayers(new ArrayList<>(Arrays.asList(new Player("currentUser (todo tobi)", false))));
+        game.setQuestionNr(0);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s");
