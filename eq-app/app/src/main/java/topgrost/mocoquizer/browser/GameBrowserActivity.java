@@ -100,14 +100,15 @@ public class GameBrowserActivity extends AppCompatActivity implements TableDataC
     }
 
     @Override
-    public void onDataClicked(int rowIndex, Game clickedData) {
+    public void onDataClicked(int rowIndex, Game selectedGame) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s");
         // TOBO set logged in user alias
-        clickedData.getPlayers().add(new Player("Lukas", false));
-        gameRef.child(clickedData.getFirebaseKey()).child(Player.class.getSimpleName().toLowerCase() + "s").setValue(clickedData.getPlayers());
+        selectedGame.getPlayers().add(new Player("Lukas", false));
+        gameRef.child(selectedGame.getFirebaseKey()).child(Player.class.getSimpleName().toLowerCase() + "s").setValue(selectedGame.getPlayers());
 
         Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
+        intent.putExtra(Game.class.getSimpleName().toLowerCase(), selectedGame);
         startActivity(intent);
     }
 }
