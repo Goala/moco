@@ -22,8 +22,6 @@ class Device {
     boolean is_available() {return (available);}
 };
 
-
-
 void setup() {
   Serial.begin(9600);
 
@@ -40,7 +38,7 @@ void setup() {
   
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
 
-  Device device = Device(WiFi.macAddress(),"Ich bin NodeMCU");  
+  Device device = Device(WiFi.macAddress(), "NodeMCU");  
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& deviceJSON = jsonBuffer.createObject();
   deviceJSON["available"] = (device.is_available()) ? true : false;
@@ -50,6 +48,7 @@ void setup() {
 
   bool alreadyInBase = false;
   String deviceKey = "";
+  
   FirebaseObject child = Firebase.get("devices");
   JsonObject& obj = child.getJsonVariant();
 
@@ -65,28 +64,17 @@ void setup() {
   }
 
   if(!alreadyInBase) {
-    Firebase.push("devices", deviceJSON);
-//    String name = Firebase.push("devices", deviceJSON);
-//    // handle error
-//    if (Firebase.failed()) {
-//        Serial.print("pushing /logs failed:");
-//        Serial.println(Firebase.error());  
-//        return;
-//    }
-    
-    Serial.print("pushed: /device/");
-//    Serial.println(name);
+    Firebase.push("devices", deviceJSON);    
+    Serial.print("pushed: /device: ");
     Serial.print(device.get_name());
   } else {
-    Serial.println("need to update");
-    Serial.print(deviceKey);
+    Serial.print("need to update:");
+    Serial.println(deviceKey);
   }
-  
   
   delay(1000);
 }
 
-int n = 0;
 
 void loop() {
   
