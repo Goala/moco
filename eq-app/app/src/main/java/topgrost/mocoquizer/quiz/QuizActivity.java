@@ -46,9 +46,9 @@ public class QuizActivity extends AppCompatActivity implements ValueEventListene
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         try {
-            int questionNr = (int) dataSnapshot.getValue();
+            Long questionNr = (Long) dataSnapshot.getValue();
             Quiz quiz = (Quiz) getIntent().getSerializableExtra(Quiz.class.getSimpleName().toLowerCase());
-            final Question currentQuestion = quiz.getQuestions().get(questionNr);
+            final Question currentQuestion = quiz.getQuestions().get(questionNr.intValue());
             updateQuestionData(currentQuestion);
         } catch (Exception e){
             Toast.makeText(QuizActivity.this, "Fehler beim Aktualisieren der Frage", Toast.LENGTH_LONG).show();
