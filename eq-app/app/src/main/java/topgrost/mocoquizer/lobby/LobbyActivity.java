@@ -46,7 +46,7 @@ public class LobbyActivity extends AppCompatActivity {
             public void onClick(View view) {
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference quizRef = database.getReference(Quiz.class.getSimpleName().toLowerCase() + "s");
-                quizRef.child(game.getQuizId()).getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                quizRef.orderByChild("name").equalTo(game.getQuizId()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Quiz quiz = (Quiz) dataSnapshot.getValue();
