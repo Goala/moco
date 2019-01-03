@@ -25,7 +25,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Daten werden geladen..."
+        android:text="Frage wird geladen..."
         app:layout_constraintBottom_toTopOf="@+id/quizAnswer1Layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +55,7 @@
 
         <TextView
             android:id="@+id/quizAnswerText1"
-            android:text="Daten werden geladen..."
+            android:text="Antwortmöglichkeit 1 wird geladen..."
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight=".70" />
@@ -86,7 +86,7 @@
             android:id="@+id/quizAnswerText2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Daten werden geladen..."
+            android:text="Antwortmöglichkeit 2 wird geladen..."
             android:layout_weight=".70" />
     </LinearLayout>
 
@@ -115,7 +115,7 @@
             android:id="@+id/quizAnswerText3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Daten werden geladen..."
+            android:text="Antwortmöglichkeit 3 wird geladen..."
             android:layout_weight=".70" />
     </LinearLayout>
 
