@@ -15,11 +15,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.browser.GameBrowserActivity;
 import topgrost.mocoquizer.model.Game;
+import topgrost.mocoquizer.model.Question;
 import topgrost.mocoquizer.model.Quiz;
 import topgrost.mocoquizer.quiz.QuizActivity;
 
@@ -49,7 +52,7 @@ public class LobbyActivity extends AppCompatActivity {
                 quizRef.orderByChild("name").equalTo(game.getQuizId()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Quiz quiz = (Quiz) dataSnapshot.getValue();
+                        Quiz quiz = dataSnapshot.getChildren().iterator().next().getValue(Quiz.class);
 
                         Intent intent = new Intent(getApplicationContext(), QuizActivity.class);
                         intent.putExtra(Quiz.class.getSimpleName().toLowerCase(),quiz);
