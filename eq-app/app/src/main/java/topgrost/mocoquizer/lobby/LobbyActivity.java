@@ -25,6 +25,8 @@ import topgrost.mocoquizer.quiz.QuizActivity;
 
 public class LobbyActivity extends AppCompatActivity {
 
+    public static final String GAME_ID_KEY = "gameId";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +53,7 @@ public class LobbyActivity extends AppCompatActivity {
 
                         Intent intent = new Intent(getApplicationContext(), QuizActivity.class);
                         intent.putExtra(Quiz.class.getSimpleName().toLowerCase(),quiz);
+                        intent.putExtra(GAME_ID_KEY, game.getFirebaseKey());
                         startActivity(intent);
                     }
 
