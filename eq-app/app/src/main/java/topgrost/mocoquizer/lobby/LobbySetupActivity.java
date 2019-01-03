@@ -59,7 +59,7 @@ public class LobbySetupActivity extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(LobbySetupActivity.this, "Fehler beim Laden der verfügbaren Geräte", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -88,7 +88,7 @@ public class LobbySetupActivity extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(LobbySetupActivity.this, "Fehler beim Laden der verfügbaren Quiz-Daten", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -113,9 +113,8 @@ public class LobbySetupActivity extends AppCompatActivity implements View.OnClic
         game.setFirebaseKey(gameID);
         gameRef.child(gameID).setValue(game);
 
-
         Intent lobbyIntent = new Intent(getApplicationContext(), LobbyActivity.class);
-        lobbyIntent.putExtra("game", game);
+        lobbyIntent.putExtra(Game.class.getSimpleName().toLowerCase(), game);
         startActivity(lobbyIntent);
     }
 

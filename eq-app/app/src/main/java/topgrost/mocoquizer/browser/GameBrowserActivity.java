@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,7 +48,7 @@ public class GameBrowserActivity extends AppCompatActivity implements TableDataC
     }
 
     void setupGameBrowserTable() {
-        final SortableTableView<Game> tableView = (SortableTableView<Game>) findViewById(R.id.gameBrowserTable);
+        final SortableTableView<Game> tableView = findViewById(R.id.gameBrowserTable);
         tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(this, TABLE_HEADERS));
 
         TableColumnWeightModel columnModel = new TableColumnWeightModel(TABLE_HEADERS.length);
@@ -84,17 +85,17 @@ public class GameBrowserActivity extends AppCompatActivity implements TableDataC
                     games.add(gameToAdd);
                 }
 
-                final SortableTableView<Game> tableView = (SortableTableView<Game>) findViewById(R.id.gameBrowserTable);
+                final SortableTableView<Game> tableView = findViewById(R.id.gameBrowserTable);
                 tableView.setDataAdapter(new GameBrowserListAdapter(getBaseContext(), games));
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(GameBrowserActivity.this, "Fehler beim Laden der Spieleliste", Toast.LENGTH_LONG).show();
             }
         });
 
-        final SortableTableView<Game> tableView = (SortableTableView<Game>) findViewById(R.id.gameBrowserTable);
+        final SortableTableView<Game> tableView = findViewById(R.id.gameBrowserTable);
         tableView.setDataAdapter(new GameBrowserListAdapter(getBaseContext(), new LinkedList<Game>()));
     }
 
