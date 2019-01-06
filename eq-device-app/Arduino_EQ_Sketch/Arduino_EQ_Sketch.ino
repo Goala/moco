@@ -28,9 +28,12 @@ class Device {
     }
 };
 
+void(* resetFunc) (void) = 0; //declare reset function @ address 0
+
 void setup() {
   Serial.begin(9600);
   pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
 
 
   // connect to wifi.
@@ -78,6 +81,7 @@ void loop() {
         JsonObject& obj2 = child2.getJsonVariant();
         if (child2.success()) {
           Serial.println("get device check");
+          Serial.flush();
           loadedDevices = true;
           if (obj2.get<String>("mac").equals(device.get_mac())) {
             alreadyInBase = true;
@@ -86,36 +90,37 @@ void loop() {
           deviceInit = true;
           digitalWrite(LED_BUILTIN, LOW);
         } else {
-          Serial.println("failed");
-          setup();
+          Serial.println("get device failed");
+          resetFunc();
         }
       }
       if (!alreadyInBase && loadedDevices) {
         Firebase.push("devices", deviceJSON);
         Serial.print("pushed: /device: ");
         Serial.println(device.get_name());
+        Serial.flush();
       } else {
         if (loadedDevices) {
           String devicePath = "devices/" + deviceKey + "/available";
           Serial.print("need to update: ");
           Serial.println(devicePath);
+          Serial.flush();
           Firebase.setBool(devicePath, true);
         } else {
-          Serial.println("failed");
-          setup();
+          Serial.println("failed loading");
+          resetFunc();
         }
       }
     } else {
-      Serial.println("failed");
-      setup();
+      Serial.println("get devices failed");
+      resetFunc();
     }
   } else {
     digitalWrite(LED_BUILTIN, LOW);
   }
 
   delay(5000);
-
-
+  
   if (gameRef.length() < 1) {
     FirebaseObject foGames = Firebase.get("devices");
     if (Firebase.failed()) {
@@ -123,20 +128,15 @@ void loop() {
     }
     if (foGames.success()) {
       Serial.println("get games check");
+      Serial.flush();
 
-      Serial.println("1");
       JsonObject& games = foGames.getJsonVariant();
-      Serial.println("2");
 
-      Serial.println(games.size());
       for (auto kv : games) {
         Serial.println(kv.key);
         Serial.println(kv.value.as<char*>());
+        Serial.flush();
       }
-
-      Serial.println("3");
-
-
 
     } else {
       Serial.println("määähhhh");
