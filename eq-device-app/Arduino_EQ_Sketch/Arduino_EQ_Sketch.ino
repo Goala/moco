@@ -17,13 +17,21 @@ class Device {
       this->mac = mac;
       this->name = name;
     }
-    String get_name() {return (name);}
-    String get_mac() {return (mac);}
-    boolean is_available() {return (available);}
+    String get_name() {
+      return (name);
+    }
+    String get_mac() {
+      return (mac);
+    }
+    boolean is_available() {
+      return (available);
+    }
 };
 
 void setup() {
   Serial.begin(9600);
+  pinMode(LED_BUILTIN, OUTPUT);
+
 
   // connect to wifi.
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
@@ -35,47 +43,106 @@ void setup() {
   Serial.println();
   Serial.print("connected: ");
   Serial.println(WiFi.localIP());
-  
+
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
 
-  Device device = Device(WiFi.macAddress(), "NodeMCU");  
-  StaticJsonBuffer<200> jsonBuffer;
-  JsonObject& deviceJSON = jsonBuffer.createObject();
-  deviceJSON["available"] = (device.is_available()) ? true : false;
-  deviceJSON["name"] = device.get_name();
-  deviceJSON["mac"] = device.get_mac();
-  
-
-  bool alreadyInBase = false;
-  String deviceKey = "";
-  
-  FirebaseObject child = Firebase.get("devices");
-  JsonObject& obj = child.getJsonVariant();
-
-  for (auto kv : obj) {   
-    FirebaseObject child2 = Firebase.get("devices/"+ String(kv.key));
-    JsonObject& obj2 = child2.getJsonVariant();
-    for (auto kv2 : obj2) {
-      if(String(kv2.value.as<char*>()).equals(device.get_mac())) {
-        alreadyInBase = true;
-        deviceKey = String(kv.key);
-      }
-    }
-  }
-
-  if(!alreadyInBase) {
-    Firebase.push("devices", deviceJSON);    
-    Serial.print("pushed: /device: ");
-    Serial.print(device.get_name());
-  } else {
-    Serial.print("need to update:");
-    Serial.println(deviceKey);
-  }
-  
   delay(1000);
 }
 
+bool deviceInit = false;
+String gameRef = "";
+bool alreadyInBase = false;
+String deviceKey = "";
+bool loadedDevices = false;
 
 void loop() {
-  
+  Serial.println(deviceInit);
+  if (!deviceInit) {
+    digitalWrite(LED_BUILTIN, HIGH);
+    Device device = Device(WiFi.macAddress(), DEVICE_NAME);
+    StaticJsonBuffer<200> jsonBuffer;
+    JsonObject& deviceJSON = jsonBuffer.createObject();
+    deviceJSON["available"] = (device.is_available()) ? true : false;
+    deviceJSON["name"] = device.get_name();
+    deviceJSON["mac"] = device.get_mac();
+    FirebaseObject child = Firebase.get("devices");
+    if (child.success()) {
+      Serial.println("get devices check");
+      Serial.flush();
+      JsonObject& obj = child.getJsonVariant();
+      for (auto kv : obj) {
+        FirebaseObject child2 = Firebase.get("devices/" + String(kv.key));
+        if (Firebase.failed()) {
+          Serial.println(Firebase.error());
+        }
+        JsonObject& obj2 = child2.getJsonVariant();
+        if (child2.success()) {
+          Serial.println("get device check");
+          loadedDevices = true;
+          if (obj2.get<String>("mac").equals(device.get_mac())) {
+            alreadyInBase = true;
+            deviceKey = String(kv.key);
+          }
+          deviceInit = true;
+          digitalWrite(LED_BUILTIN, LOW);
+        } else {
+          Serial.println("failed");
+          setup();
+        }
+      }
+      if (!alreadyInBase && loadedDevices) {
+        Firebase.push("devices", deviceJSON);
+        Serial.print("pushed: /device: ");
+        Serial.println(device.get_name());
+      } else {
+        if (loadedDevices) {
+          String devicePath = "devices/" + deviceKey + "/available";
+          Serial.print("need to update: ");
+          Serial.println(devicePath);
+          Firebase.setBool(devicePath, true);
+        } else {
+          Serial.println("failed");
+          setup();
+        }
+      }
+    } else {
+      Serial.println("failed");
+      setup();
+    }
+  } else {
+    digitalWrite(LED_BUILTIN, LOW);
+  }
+
+  delay(5000);
+
+
+  if (gameRef.length() < 1) {
+    FirebaseObject foGames = Firebase.get("devices");
+    if (Firebase.failed()) {
+      Serial.println(Firebase.error());
+    }
+    if (foGames.success()) {
+      Serial.println("get games check");
+
+      Serial.println("1");
+      JsonObject& games = foGames.getJsonVariant();
+      Serial.println("2");
+
+      Serial.println(games.size());
+      for (auto kv : games) {
+        Serial.println(kv.key);
+        Serial.println(kv.value.as<char*>());
+      }
+
+      Serial.println("3");
+
+
+
+    } else {
+      Serial.println("määähhhh");
+    }
+
+  } else {
+    Serial.println("schinken");
+  }
 }
