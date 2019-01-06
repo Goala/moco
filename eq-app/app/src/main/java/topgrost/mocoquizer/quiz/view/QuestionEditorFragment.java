@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -78,15 +79,15 @@ public class QuestionEditorFragment extends Fragment implements View.OnClickList
 
         final Answer answerOne = new Answer();
         answerOne.setText(((TextView) getView().findViewById(R.id.quizEditorAnswerText1)).getText().toString());
-        answerOne.setCorrect(getView().findViewById(R.id.quizEditorQuestionAnswer1).isSelected());
+        answerOne.setCorrect(((CheckBox) getView().findViewById(R.id.quizEditorQuestionAnswer1)).isChecked());
 
         final Answer answerTwo = new Answer();
         answerTwo.setText(((TextView) getView().findViewById(R.id.quizEditorAnswerText2)).getText().toString());
-        answerTwo.setCorrect(getView().findViewById(R.id.quizEditorQuestionAnswer2).isSelected());
+        answerTwo.setCorrect(((CheckBox) getView().findViewById(R.id.quizEditorQuestionAnswer2)).isChecked());
 
         final Answer answerThree = new Answer();
         answerThree.setText(((TextView) getView().findViewById(R.id.quizEditorAnswerText3)).getText().toString());
-        answerThree.setCorrect(getView().findViewById(R.id.quizEditorQuestionAnswer3).isSelected());
+        answerThree.setCorrect(((CheckBox) getView().findViewById(R.id.quizEditorQuestionAnswer3)).isChecked());
 
         question.getAnswers().add(answerOne);
         question.getAnswers().add(answerTwo);
