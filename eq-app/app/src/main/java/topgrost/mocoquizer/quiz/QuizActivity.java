@@ -78,15 +78,13 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
 
     @Override
     public void onClick(View v) {
-        evaluateAnswer();
-    }
-
-    private void evaluateAnswer() {
         // Set progress to max and disable edit of answer
         ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
         progressBar.setProgress(progressBar.getMax());
         updateEnablement(false);
+    }
 
+    private void evaluateAnswer() {
         boolean correctAnswer = true;
         if(!currentQuestion.getAnswers().get(0).getCorrect().equals(((CheckBox) findViewById(R.id.quizAnswer1)).isChecked())){
             correctAnswer = false;
@@ -102,9 +100,11 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
             Toast.makeText(QuizActivity.this, "Richtig!", Toast.LENGTH_SHORT).show();
             score += 30;
         } else {
+            // TODO LG set feedback required to true for current user
             Toast.makeText(QuizActivity.this, "Falsch!", Toast.LENGTH_SHORT).show();
             score -= 10;
         }
+        ((TextView) findViewById(R.id.quizScore)).setText(String.valueOf(score));
     }
 
     private void updateQuestionData() {
