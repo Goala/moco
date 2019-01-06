@@ -28,9 +28,11 @@ import topgrost.mocoquizer.model.Game;
 import topgrost.mocoquizer.model.Question;
 import topgrost.mocoquizer.model.Quiz;
 
-public class QuizActivity extends BaseActivity implements ValueEventListener {
+public class QuizActivity extends BaseActivity implements ValueEventListener, View.OnClickListener {
 
-    private Timer timer;
+    private int score = 0;
+    private Timer timer = new Timer();
+    private Question currentQuestion;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class QuizActivity extends BaseActivity implements ValueEventListener {
 
         setContentView(R.layout.quiz);
 
-        timer = new Timer();
+        findViewById(R.id.quizSendAnswer).setOnClickListener(this);
         try {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY)).child("questionNr");
@@ -54,9 +56,14 @@ public class QuizActivity extends BaseActivity implements ValueEventListener {
         try {
             Long questionNr = (Long) dataSnapshot.getValue();
             Quiz quiz = (Quiz) getIntent().getSerializableExtra(Quiz.class.getSimpleName().toLowerCase());
-            final Question currentQuestion = quiz.getQuestions().get(questionNr.intValue());
-            updateQuestionData(currentQuestion);
-            startTimer(currentQuestion);
+
+            ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
+            if(currentQuestion != null && progressBar.getProgress() < progressBar.getMax()) {
+                evaluateAnswer();
+            }
+            currentQuestion = quiz.getQuestions().get(questionNr.intValue());
+            updateQuestionData();
+            startTimer();
         } catch (Exception e) {
             Toast.makeText(QuizActivity.this, "Fehler beim Aktualisieren der Frage", Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -69,11 +76,42 @@ public class QuizActivity extends BaseActivity implements ValueEventListener {
         System.out.println(databaseError.getMessage());
     }
 
-    private void updateQuestionData(Question question) {
-        ((TextView) findViewById(R.id.quizQuestionText)).setText(question.getText());
-        ((TextView) findViewById(R.id.quizAnswerText1)).setText(question.getAnswers().get(0).getText());
-        ((TextView) findViewById(R.id.quizAnswerText2)).setText(question.getAnswers().get(1).getText());
-        ((TextView) findViewById(R.id.quizAnswerText3)).setText(question.getAnswers().get(2).getText());
+    @Override
+    public void onClick(View v) {
+        evaluateAnswer();
+    }
+
+    private void evaluateAnswer() {
+        // Set progress to max and disable edit of answer
+        ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
+        progressBar.setProgress(progressBar.getMax());
+        updateEnablement(false);
+
+        boolean correctAnswer = true;
+        if(!currentQuestion.getAnswers().get(0).getCorrect().equals(findViewById(R.id.quizAnswer1).isPressed())){
+            correctAnswer = false;
+        }
+        if(!currentQuestion.getAnswers().get(1).getCorrect().equals(findViewById(R.id.quizAnswer2).isPressed())){
+            correctAnswer = false;
+        }
+        if(!currentQuestion.getAnswers().get(2).getCorrect().equals(findViewById(R.id.quizAnswer3).isPressed())){
+            correctAnswer = false;
+        }
+
+        if(correctAnswer) {
+            Toast.makeText(QuizActivity.this, "Richtig!", Toast.LENGTH_SHORT).show();
+            score += 30;
+        } else {
+            Toast.makeText(QuizActivity.this, "Falsch!", Toast.LENGTH_SHORT).show();
+            score -= 10;
+        }
+    }
+
+    private void updateQuestionData() {
+        ((TextView) findViewById(R.id.quizQuestionText)).setText(currentQuestion.getText());
+        ((TextView) findViewById(R.id.quizAnswerText1)).setText(currentQuestion.getAnswers().get(0).getText());
+        ((TextView) findViewById(R.id.quizAnswerText2)).setText(currentQuestion.getAnswers().get(1).getText());
+        ((TextView) findViewById(R.id.quizAnswerText3)).setText(currentQuestion.getAnswers().get(2).getText());
     }
 
     private void updateEnablement(boolean enable) {
@@ -83,12 +121,12 @@ public class QuizActivity extends BaseActivity implements ValueEventListener {
         findViewById(R.id.quizSendAnswer).setEnabled(enable);
     }
 
-    private void startTimer(Question question) {
+    private void startTimer() {
         ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
-        progressBar.setMax(question.getTime_seconds());
+        progressBar.setMax(currentQuestion.getTime_seconds());
         progressBar.setProgress(0);
 
-        timer.scheduleAtFixedRate(new ProgressUpdateTask(), DateUtils.SECOND_IN_MILLIS, DateUtils.SECOND_IN_MILLIS * question.getTime_seconds());
+        timer.scheduleAtFixedRate(new ProgressUpdateTask(), 0, DateUtils.SECOND_IN_MILLIS * currentQuestion.getTime_seconds());
         updateEnablement(true);
     }
 
@@ -102,7 +140,7 @@ public class QuizActivity extends BaseActivity implements ValueEventListener {
                 public void run() {
                     ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
                     if (progressBar.getProgress() >= progressBar.getMax()) {
-                        updateEnablement(false);
+                        evaluateAnswer();
                         cancel();
                     } else {
                         progressBar.setProgress(progressBar.getProgress() + 1);
