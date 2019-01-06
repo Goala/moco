@@ -1,7 +1,9 @@
 package topgrost.mocoquizer.browser;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +23,7 @@ import de.codecrafters.tableview.listeners.TableDataClickListener;
 import de.codecrafters.tableview.model.TableColumnWeightModel;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
+import topgrost.mocoquizer.BaseActivity;
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.browser.view.GameBrowserListAdapter;
 import topgrost.mocoquizer.browser.view.GameNameComparator;
@@ -33,13 +36,21 @@ import topgrost.mocoquizer.model.Game;
 import topgrost.mocoquizer.model.Player;
 import topgrost.mocoquizer.model.Quiz;
 
-public class GameBrowserActivity extends AppCompatActivity implements TableDataClickListener<Game> {
+public class GameBrowserActivity extends BaseActivity implements TableDataClickListener<Game> {
+
+    private String user;
 
     private static final String[] TABLE_HEADERS = {"Name", "Status", "Spieler", "Passwort"};
+
+    //Todo User kann nur beitreten, wenn er noch nicht im Spiel ist
+    //Catch Blöcke bei Datenbankanwendungen
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        user = sharedPref.getString("user", "");
 
         setContentView(R.layout.game_browser);
 
@@ -103,8 +114,8 @@ public class GameBrowserActivity extends AppCompatActivity implements TableDataC
     public void onDataClicked(int rowIndex, Game selectedGame) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s");
-        // TOBO set logged in user alias
-        selectedGame.getPlayers().add(new Player("Lukas", false));
+
+        selectedGame.getPlayers().add(new Player(user, false));
         gameRef.child(selectedGame.getFirebaseKey()).child(Player.class.getSimpleName().toLowerCase() + "s").setValue(selectedGame.getPlayers());
 
         Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);

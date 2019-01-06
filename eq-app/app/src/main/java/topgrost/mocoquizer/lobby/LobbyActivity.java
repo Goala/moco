@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import topgrost.mocoquizer.BaseActivity;
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.browser.GameBrowserActivity;
 import topgrost.mocoquizer.model.Game;
@@ -26,7 +27,7 @@ import topgrost.mocoquizer.model.Question;
 import topgrost.mocoquizer.model.Quiz;
 import topgrost.mocoquizer.quiz.QuizActivity;
 
-public class LobbyActivity extends AppCompatActivity {
+public class LobbyActivity extends BaseActivity {
 
     public static final String GAME_ID_KEY = "gameId";
 
@@ -53,7 +54,6 @@ public class LobbyActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Quiz quiz = dataSnapshot.getChildren().iterator().next().getValue(Quiz.class);
-
                         Intent intent = new Intent(getApplicationContext(), QuizActivity.class);
                         intent.putExtra(Quiz.class.getSimpleName().toLowerCase(),quiz);
                         intent.putExtra(GAME_ID_KEY, game.getFirebaseKey());

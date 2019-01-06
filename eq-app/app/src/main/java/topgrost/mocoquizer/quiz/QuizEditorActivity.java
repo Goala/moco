@@ -17,13 +17,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.LinkedList;
 import java.util.List;
 
+import topgrost.mocoquizer.BaseActivity;
 import topgrost.mocoquizer.MainActivity;
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.model.Question;
 import topgrost.mocoquizer.model.Quiz;
 import topgrost.mocoquizer.quiz.view.QuestionEditorFragment;
 
-public class QuizEditorActivity extends AppCompatActivity implements View.OnClickListener {
+public class QuizEditorActivity extends BaseActivity implements View.OnClickListener {
 
     private List<Question> questions = new LinkedList<>();
 

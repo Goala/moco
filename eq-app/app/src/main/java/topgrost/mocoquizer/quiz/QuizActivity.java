@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import topgrost.mocoquizer.BaseActivity;
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.browser.GameBrowserActivity;
 import topgrost.mocoquizer.lobby.LobbyActivity;
@@ -22,7 +23,7 @@ import topgrost.mocoquizer.model.Game;
 import topgrost.mocoquizer.model.Question;
 import topgrost.mocoquizer.model.Quiz;
 
-public class QuizActivity extends AppCompatActivity implements ValueEventListener {
+public class QuizActivity extends BaseActivity implements ValueEventListener {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

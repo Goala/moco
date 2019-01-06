@@ -1,7 +1,9 @@
 package topgrost.mocoquizer.lobby;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -17,19 +19,26 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import topgrost.mocoquizer.BaseActivity;
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.model.Device;
 import topgrost.mocoquizer.model.Game;
 import topgrost.mocoquizer.model.Player;
 import topgrost.mocoquizer.model.Quiz;
 
-public class LobbySetupActivity extends AppCompatActivity implements View.OnClickListener {
+public class LobbySetupActivity extends BaseActivity implements View.OnClickListener {
+    private String user;
+
+    //Catch Blöcke bei Datenbankzugriffen
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.lobby_setup);
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        user = sharedPref.getString("user", "");
 
         loadAndSetDeviceList();
         loadAndSetQuizList();
@@ -103,7 +112,7 @@ public class LobbySetupActivity extends AppCompatActivity implements View.OnClic
         game.setPassword(((TextView) findViewById(R.id.lobbySetupPassword)).getText().toString());
         game.setDeviceId(((Spinner) findViewById(R.id.lobbySetupDevice)).getSelectedItem().toString());
         game.setQuizId(((Spinner) findViewById(R.id.lobbySetupQuiz)).getSelectedItem().toString());
-        game.setPlayers(new ArrayList<>(Arrays.asList(new Player("currentUser (todo tobi)", false))));
+        game.setPlayers(new ArrayList<>(Arrays.asList(new Player(user, false))));
         game.setQuestionNr(0);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
