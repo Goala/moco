@@ -30,17 +30,14 @@ public class QuizActivity extends AppCompatActivity implements ValueEventListene
 
         setContentView(R.layout.quiz);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY)).child("questionNr");
-        gameRef.addValueEventListener(this);
-    }
-
-    private void updateQuestionData(Question question) {
-        ((ProgressBar)findViewById(R.id.quizTimeProgressBar)).setMax(question.getTime_seconds());
-        ((TextView)findViewById(R.id.quizQuestionText)).setText(question.getText());
-        ((TextView)findViewById(R.id.quizAnswerText1)).setText(question.getAnswers().get(0).getText());
-        ((TextView)findViewById(R.id.quizAnswerText2)).setText(question.getAnswers().get(1).getText());
-        ((TextView)findViewById(R.id.quizAnswerText3)).setText(question.getAnswers().get(2).getText());
+        try {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY)).child("questionNr");
+            gameRef.addValueEventListener(this);
+        } catch (Exception e) {
+            Toast.makeText(QuizActivity.this, "Fehler beim Laden der Quiz-Daten", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -52,11 +49,21 @@ public class QuizActivity extends AppCompatActivity implements ValueEventListene
             updateQuestionData(currentQuestion);
         } catch (Exception e){
             Toast.makeText(QuizActivity.this, "Fehler beim Aktualisieren der Frage", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
     }
 
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
         Toast.makeText(QuizActivity.this, "Fehler beim Aktualisieren der Frage", Toast.LENGTH_LONG).show();
+        System.out.println(databaseError.getMessage());
+    }
+
+    private void updateQuestionData(Question question) {
+        ((ProgressBar)findViewById(R.id.quizTimeProgressBar)).setMax(question.getTime_seconds());
+        ((TextView)findViewById(R.id.quizQuestionText)).setText(question.getText());
+        ((TextView)findViewById(R.id.quizAnswerText1)).setText(question.getAnswers().get(0).getText());
+        ((TextView)findViewById(R.id.quizAnswerText2)).setText(question.getAnswers().get(1).getText());
+        ((TextView)findViewById(R.id.quizAnswerText3)).setText(question.getAnswers().get(2).getText());
     }
 }

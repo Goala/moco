@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -67,15 +68,18 @@ public class QuizEditorActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void saveQuiz() {
-        final Quiz quiz = new Quiz();
-        quiz.setName(((TextView) findViewById(R.id.quizEditorName)).getText().toString());
-        quiz.setQuestions(new LinkedList<>(questions));
+        try {
+            final Quiz quiz = new Quiz();
+            quiz.setName(((TextView) findViewById(R.id.quizEditorName)).getText().toString());
+            quiz.setQuestions(new LinkedList<>(questions));
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference quizRef = database.getReference(Quiz.class.getSimpleName().toLowerCase() + "s");
-        quizRef.push().setValue(quiz);
-
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference quizRef = database.getReference(Quiz.class.getSimpleName().toLowerCase() + "s");
+            quizRef.push().setValue(quiz);
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        } catch (Exception e) {
+            Toast.makeText(QuizEditorActivity.this, "Fehler beim Speichern der Quiz-Daten", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void restQuiz() {
