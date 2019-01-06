@@ -140,6 +140,7 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
                 public void run() {
                     ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
                     if (progressBar.getProgress() >= progressBar.getMax()) {
+                        updateEnablement(false);
                         evaluateAnswer();
                         cancel();
                     } else {
