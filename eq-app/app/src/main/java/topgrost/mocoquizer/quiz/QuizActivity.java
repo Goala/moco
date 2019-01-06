@@ -88,13 +88,13 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
         updateEnablement(false);
 
         boolean correctAnswer = true;
-        if(!currentQuestion.getAnswers().get(0).getCorrect().equals(findViewById(R.id.quizAnswer1).isPressed())){
+        if(!currentQuestion.getAnswers().get(0).getCorrect().equals(((CheckBox) findViewById(R.id.quizAnswer1)).isChecked())){
             correctAnswer = false;
         }
-        if(!currentQuestion.getAnswers().get(1).getCorrect().equals(findViewById(R.id.quizAnswer2).isPressed())){
+        if(!currentQuestion.getAnswers().get(1).getCorrect().equals(((CheckBox) findViewById(R.id.quizAnswer2)).isChecked())){
             correctAnswer = false;
         }
-        if(!currentQuestion.getAnswers().get(2).getCorrect().equals(findViewById(R.id.quizAnswer3).isPressed())){
+        if(!currentQuestion.getAnswers().get(2).getCorrect().equals(((CheckBox) findViewById(R.id.quizAnswer3)).isChecked())){
             correctAnswer = false;
         }
 
