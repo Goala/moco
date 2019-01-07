@@ -13,6 +13,7 @@
         <activity android:name=".browser.GameBrowserActivity" />
         <activity android:name=".quiz.QuizActivity" />
         <activity android:name=".quiz.QuizEditorActivity" />
+        <activity android:name=".quiz.QuizResultActivity" />
         <activity android:name=".lobby.LobbyActivity" />
         <activity android:name=".lobby.LobbySetupActivity" />
         <activity

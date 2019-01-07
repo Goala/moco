@@ -61,7 +61,7 @@ public class GameBrowserListAdapter extends TableDataAdapter<Game> {
     private TextView renderPlayers(Game game) {
         int playerCount = 0;
         if(game.getPlayer1() != null && !game.getPlayer1().trim().isEmpty()) {
-                playerCount++;
+            playerCount++;
         }
         if(game.getPlayer2() != null && !game.getPlayer2().trim().isEmpty()) {
             playerCount++;
