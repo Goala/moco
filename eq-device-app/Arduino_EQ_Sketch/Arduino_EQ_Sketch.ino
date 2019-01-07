@@ -60,8 +60,7 @@ bool loadedDevices = false;
 bool streamSet = false;
 
 void loop() {
-  delay(1000);
-  Serial.println("loop");
+  delay(200);
   if (!deviceInit) {
     digitalWrite(LED_BUILTIN, HIGH);
     Device device = Device(WiFi.macAddress(), DEVICE_NAME);
@@ -110,7 +109,6 @@ void loop() {
     digitalWrite(LED_BUILTIN, LOW);
   }
 
-  delay(1000);
 
   if (gameRef.length() < 1) {
     FirebaseObject foGames = Firebase.get("games");
