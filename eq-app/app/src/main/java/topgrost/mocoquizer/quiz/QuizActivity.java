@@ -98,7 +98,11 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
             Toast.makeText(QuizActivity.this, "Richtig!", Toast.LENGTH_SHORT).show();
             score += 30;
         } else {
-            // TODO LG set feedback required to true for current user
+            String game = getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY);
+            String player = "feed" + getIntent().getIntExtra(LobbyActivity.PLAYER_NUMBER_KEY, 0);
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(game).child(player).setValue(true);
             Toast.makeText(QuizActivity.this, "Falsch!", Toast.LENGTH_SHORT).show();
             score -= 10;
         }

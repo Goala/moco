@@ -58,7 +58,7 @@ public class LobbyActivity extends BaseActivity {
                         Intent intent = new Intent(getApplicationContext(), QuizActivity.class);
                         intent.putExtra(Quiz.class.getSimpleName().toLowerCase(),quiz);
                         intent.putExtra(GAME_ID_KEY, game.getFirebaseKey());
-                        intent.putExtra(PLAYER_NUMBER_KEY, Integer.valueOf(1));
+                        intent.putExtra(PLAYER_NUMBER_KEY, 1);
                         startActivity(intent);
                     }
 
