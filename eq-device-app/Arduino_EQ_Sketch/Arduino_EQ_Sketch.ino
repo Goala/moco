@@ -57,9 +57,11 @@ String gameRef = "";
 bool alreadyInBase = false;
 String deviceKey = "";
 bool loadedDevices = false;
+bool streamSet = false;
 
 void loop() {
-  Serial.println(deviceInit);
+  delay(1000);
+  Serial.println("loop");
   if (!deviceInit) {
     digitalWrite(LED_BUILTIN, HIGH);
     Device device = Device(WiFi.macAddress(), DEVICE_NAME);
@@ -74,24 +76,11 @@ void loop() {
       Serial.flush();
       JsonObject& obj = child.getJsonVariant();
       for (auto kv : obj) {
-        FirebaseObject child2 = Firebase.get("devices/" + String(kv.key));
-        if (Firebase.failed()) {
-          Serial.println(Firebase.error());
-        }
-        JsonObject& obj2 = child2.getJsonVariant();
-        if (child2.success()) {
-          Serial.println("get device check");
-          Serial.flush();
-          loadedDevices = true;
-          if (obj2.get<String>("mac").equals(device.get_mac())) {
-            alreadyInBase = true;
-            deviceKey = String(kv.key);
-          }
-          deviceInit = true;
-          digitalWrite(LED_BUILTIN, LOW);
-        } else {
-          Serial.println("get device failed");
-          resetFunc();
+        loadedDevices = true;
+        JsonObject& value = kv.value;
+        if (value.get<String>("mac").equals(device.get_mac())) {
+          alreadyInBase = true;
+          deviceKey = String(kv.key);
         }
       }
       if (!alreadyInBase && loadedDevices) {
@@ -99,6 +88,7 @@ void loop() {
         Serial.print("pushed: /device: ");
         Serial.println(device.get_name());
         Serial.flush();
+        deviceInit = true;
       } else {
         if (loadedDevices) {
           String devicePath = "devices/" + deviceKey + "/available";
@@ -106,23 +96,24 @@ void loop() {
           Serial.println(devicePath);
           Serial.flush();
           Firebase.setBool(devicePath, true);
+          deviceInit = true;
         } else {
           Serial.println("failed loading");
-          resetFunc();
+          //resetFunc();
         }
       }
     } else {
       Serial.println("get devices failed");
-      resetFunc();
+      //resetFunc();
     }
   } else {
     digitalWrite(LED_BUILTIN, LOW);
   }
 
-  delay(5000);
-  
+  delay(1000);
+
   if (gameRef.length() < 1) {
-    FirebaseObject foGames = Firebase.get("devices");
+    FirebaseObject foGames = Firebase.get("games");
     if (Firebase.failed()) {
       Serial.println(Firebase.error());
     }
@@ -133,16 +124,42 @@ void loop() {
       JsonObject& games = foGames.getJsonVariant();
 
       for (auto kv : games) {
-        Serial.println(kv.key);
-        Serial.println(kv.value.as<char*>());
-        Serial.flush();
+        JsonObject& value = kv.value;
+        if (value.get<String>("deviceId").equals(DEVICE_NAME)) {
+          gameRef = "games/" + String(kv.key);
+          Serial.print("Node is linked to: ");
+          Serial.println(value.get<String>("name"));
+        }
+
       }
 
     } else {
-      Serial.println("määähhhh");
+      Serial.println("get games failed");
+      Serial.flush();
     }
 
   } else {
-    Serial.println("schinken");
+    if (!streamSet) {
+      Serial.println(gameRef);
+      Serial.flush();
+      Firebase.stream("/test");
+      streamSet = true;
+    } else {
+      if (Firebase.available()) {
+        FirebaseObject event = Firebase.readEvent();
+        String eventType = event.getString("type");
+        eventType.toLowerCase();
+        if (eventType == "put") {
+          FirebaseObject obj = Firebase.get("test");
+          Serial.print("value changed:");
+          Serial.println(obj.getString("type"));
+        }
+
+
+        Serial.flush();
+      }
+    }
+
+
   }
 }
