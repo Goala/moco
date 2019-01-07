@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.*;
 
@@ -23,7 +22,6 @@ import topgrost.mocoquizer.BaseActivity;
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.model.Device;
 import topgrost.mocoquizer.model.Game;
-import topgrost.mocoquizer.model.Player;
 import topgrost.mocoquizer.model.Quiz;
 
 public class LobbySetupActivity extends BaseActivity implements View.OnClickListener {
@@ -112,7 +110,8 @@ public class LobbySetupActivity extends BaseActivity implements View.OnClickList
         game.setPassword(((TextView) findViewById(R.id.lobbySetupPassword)).getText().toString());
         game.setDeviceId(((Spinner) findViewById(R.id.lobbySetupDevice)).getSelectedItem().toString());
         game.setQuizId(((Spinner) findViewById(R.id.lobbySetupQuiz)).getSelectedItem().toString());
-        game.setPlayers(new ArrayList<>(Arrays.asList(new Player(user, false))));
+        game.setPlayer1(user);
+        game.setFeed1(false);
         game.setQuestionNr(0);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();

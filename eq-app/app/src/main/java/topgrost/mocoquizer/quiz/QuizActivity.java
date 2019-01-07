@@ -3,7 +3,6 @@ package topgrost.mocoquizer.quiz;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.CheckBox;
@@ -17,12 +16,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import topgrost.mocoquizer.BaseActivity;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import topgrost.mocoquizer.BaseActivity;
 import topgrost.mocoquizer.R;
-import topgrost.mocoquizer.browser.GameBrowserActivity;
 import topgrost.mocoquizer.lobby.LobbyActivity;
 import topgrost.mocoquizer.model.Game;
 import topgrost.mocoquizer.model.Question;

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -31,10 +30,7 @@ import topgrost.mocoquizer.browser.view.GamePasswordComparator;
 import topgrost.mocoquizer.browser.view.GamePlayersComparator;
 import topgrost.mocoquizer.browser.view.GameRunningComparator;
 import topgrost.mocoquizer.lobby.LobbyActivity;
-import topgrost.mocoquizer.lobby.LobbySetupActivity;
 import topgrost.mocoquizer.model.Game;
-import topgrost.mocoquizer.model.Player;
-import topgrost.mocoquizer.model.Quiz;
 
 public class GameBrowserActivity extends BaseActivity implements TableDataClickListener<Game> {
 
@@ -115,8 +111,8 @@ public class GameBrowserActivity extends BaseActivity implements TableDataClickL
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s");
 
-        selectedGame.getPlayers().add(new Player(user, false));
-        gameRef.child(selectedGame.getFirebaseKey()).child(Player.class.getSimpleName().toLowerCase() + "s").setValue(selectedGame.getPlayers());
+        gameRef.child(selectedGame.getFirebaseKey()).child("player1").setValue(user);
+        gameRef.child(selectedGame.getFirebaseKey()).child("feed1").setValue(false);
 
         Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
         intent.putExtra(Game.class.getSimpleName().toLowerCase(), selectedGame);

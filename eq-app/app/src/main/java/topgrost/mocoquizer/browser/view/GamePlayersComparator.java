@@ -13,7 +13,24 @@ public class GamePlayersComparator implements Comparator<Game> {
         } else if (o2 == null) {
             return 1;
         } else {
-            return o1.getPlayers().size() > (o2.getPlayers().size()) ? 0 : 1 ;
+            return playerCount(o1) > playerCount(o2) ? 0 : 1 ;
         }
+    }
+
+    private int playerCount(Game o) {
+        int playerCount = 0;
+        if(o.getPlayer1() != null && !o.getPlayer1().trim().isEmpty()) {
+            playerCount++;
+        }
+        if(o.getPlayer2() != null && !o.getPlayer2().trim().isEmpty()) {
+            playerCount++;
+        }
+        if(o.getPlayer3() != null && !o.getPlayer3().trim().isEmpty()) {
+            playerCount++;
+        }
+        if(o.getPlayer4() != null && !o.getPlayer4().trim().isEmpty()) {
+            playerCount++;
+        }
+        return playerCount;
     }
 }

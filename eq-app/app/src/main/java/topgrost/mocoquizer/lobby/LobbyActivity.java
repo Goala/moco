@@ -42,7 +42,7 @@ public class LobbyActivity extends BaseActivity {
         title.setText(game.getName());
 
         Button lobbyPlayer1 = findViewById(R.id.lobbyPlayer1);
-        lobbyPlayer1.setText(game.getPlayers().get(0).getName());
+        lobbyPlayer1.setText(game.getPlayer1());
 
         Button btnStartGame = findViewById(R.id.lobbyStartGame);
         btnStartGame.setOnClickListener(new View.OnClickListener() {

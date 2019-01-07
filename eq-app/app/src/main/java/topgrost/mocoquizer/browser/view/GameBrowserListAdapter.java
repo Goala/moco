@@ -11,7 +11,6 @@ import java.util.List;
 import de.codecrafters.tableview.TableDataAdapter;
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.model.Game;
-import topgrost.mocoquizer.model.Player;
 
 public class GameBrowserListAdapter extends TableDataAdapter<Game> {
 
@@ -35,7 +34,7 @@ public class GameBrowserListAdapter extends TableDataAdapter<Game> {
             case 1:
                 return renderRunning(game.isRunning());
             case 2:
-                return renderPlayers(game.getPlayers());
+                return renderPlayers(game);
             case 3:
                 return renderPassword(game.getPassword());
         }
@@ -59,12 +58,19 @@ public class GameBrowserListAdapter extends TableDataAdapter<Game> {
         return view;
     }
 
-    private TextView renderPlayers(List<Player> players) {
+    private TextView renderPlayers(Game game) {
         int playerCount = 0;
-        for (Player player : players) {
-            if(player != null && !player.getName().trim().isEmpty()) {
+        if(game.getPlayer1() != null && !game.getPlayer1().trim().isEmpty()) {
                 playerCount++;
-            }
+        }
+        if(game.getPlayer2() != null && !game.getPlayer2().trim().isEmpty()) {
+            playerCount++;
+        }
+        if(game.getPlayer3() != null && !game.getPlayer3().trim().isEmpty()) {
+            playerCount++;
+        }
+        if(game.getPlayer4() != null && !game.getPlayer4().trim().isEmpty()) {
+            playerCount++;
         }
 
         TextView view = new TextView(getContext());
