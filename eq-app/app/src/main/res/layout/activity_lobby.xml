@@ -7,71 +7,14 @@
     tools:context=".lobby.LobbyActivity"
     tools:layout_editor_absoluteY="81dp">
 
-    <Button
-        android:id="@+id/lobbyPlayer1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/btPlayer1"
-        app:layout_constraintBottom_toTopOf="@+id/lobbyPlayer2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lobby_headline" />
-
-    <Button
-        android:id="@+id/lobbyPlayer2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/btPlayer2"
-        app:layout_constraintBottom_toTopOf="@+id/lobbyPlayer3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/lobbyPlayer4"
-        app:layout_constraintTop_toBottomOf="@+id/lobbyPlayer1" />
-
-    <Button
-        android:id="@+id/lobbyPlayer3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/btPlayer3"
-        app:layout_constraintBottom_toTopOf="@+id/btnHostQuiz"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lobbyPlayer4" />
-
-    <Button
-        android:id="@+id/lobbyPlayer4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/btPlayer4"
-        app:layout_constraintBottom_toTopOf="@+id/lobbyPlayer3"
-        app:layout_constraintEnd_toStartOf="@+id/lobbyPlayer2"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lobbyPlayer1" />
-
-    <TextView
-        android:id="@+id/lobby_headline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/lobby_headline"
-        app:layout_constraintBottom_toTopOf="@+id/lobbyPlayer1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lobbyTitle" />
+    <de.codecrafters.tableview.SortableTableView xmlns:table="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/lobbyTable"
+        android:layout_width="match_parent"
+        android:layout_height="379dp"
+        android:layout_marginTop="16dp"
+        table:layout_constraintTop_toBottomOf="@+id/lobbyTitle"
+        table:tableView_columnCount="3"
+        table:tableView_headerElevation="10" />
 
     <Button
         android:id="@+id/lobbyStartGame"
@@ -84,8 +27,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lobbyPlayer3" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/lobbyTitle"
@@ -94,10 +36,8 @@
         android:layout_marginStart="1dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="3dp"
         android:text="Neues Spiel"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/lobby_headline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

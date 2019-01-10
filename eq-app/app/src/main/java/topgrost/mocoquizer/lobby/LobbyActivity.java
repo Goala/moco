@@ -19,6 +19,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.codecrafters.tableview.SortableTableView;
+import de.codecrafters.tableview.model.TableColumnWeightModel;
+import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
+import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
 import topgrost.mocoquizer.BaseActivity;
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.browser.GameBrowserActivity;
@@ -32,6 +36,9 @@ public class LobbyActivity extends BaseActivity {
     public static final String GAME_ID_KEY = "gameId";
     public static final String PLAYER_NUMBER_KEY = "playerNumber";
 
+    private static final String[] TABLE_HEADERS = {"Player", "#"};
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +49,19 @@ public class LobbyActivity extends BaseActivity {
         TextView title = findViewById(R.id.lobbyTitle);
         title.setText(game.getName());
 
-        Button lobbyPlayer1 = findViewById(R.id.lobbyPlayer1);
-        lobbyPlayer1.setText(game.getPlayer1());
+        final SortableTableView<Game> tableView = findViewById(R.id.lobbyTable);
+        tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(this, TABLE_HEADERS));
+
+        TableColumnWeightModel columnModel = new TableColumnWeightModel(TABLE_HEADERS.length);
+        columnModel.setColumnWeight(0, 5);
+        columnModel.setColumnWeight(1, 1);
+        tableView.setColumnModel(columnModel);
+
+
+        int colorEvenRows = getResources().getColor(R.color.colorPrimaryDark);
+        int colorOddRows = getResources().getColor(R.color.colorPrimary);
+        tableView.setDataRowBackgroundProvider(TableDataRowBackgroundProviders.alternatingRowColors(colorEvenRows, colorOddRows));
+
 
         Button btnStartGame = findViewById(R.id.lobbyStartGame);
         btnStartGame.setOnClickListener(new View.OnClickListener() {
