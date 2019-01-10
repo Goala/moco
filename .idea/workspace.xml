@@ -6,14 +6,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eef65200-043b-4bde-83ee-f8b7e259f8bf" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eq-app/app/src/main/java/topgrost/mocoquizer/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/eq-app/app/src/main/java/topgrost/mocoquizer/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eq-app/app/src/main/java/topgrost/mocoquizer/login/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/eq-app/app/src/main/java/topgrost/mocoquizer/login/LoginActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eq-app/app/src/main/java/topgrost/mocoquizer/login/LoginFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/eq-app/app/src/main/java/topgrost/mocoquizer/login/LoginFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eq-app/app/src/main/res/layout/fragment_login.xml" beforeDir="false" afterPath="$PROJECT_DIR$/eq-app/app/src/main/res/layout/fragment_login.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eq-app/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/eq-app/app/src/main/res/values/styles.xml" afterDir="false" />
-    </list>
+    <list default="true" id="eef65200-043b-4bde-83ee-f8b7e259f8bf" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -35,9 +28,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane" />
-      <pane id="AndroidView" />
       <pane id="Scope" />
     </panes>
   </component>

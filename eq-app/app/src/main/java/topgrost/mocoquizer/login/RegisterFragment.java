@@ -50,10 +50,13 @@ public class RegisterFragment extends Fragment {
         boolean valid = true;
 
         String alias = mAliasField.getText().toString();
-        if (TextUtils.isEmpty(alias)) {
+        if (TextUtils.isEmpty(alias) || alias.trim().equals("")) {
             mAliasField.setError("Username erforderlich!");
             valid = false;
-        } else {
+        }else if(alias.trim().length()< 4) {
+            mAliasField.setError("Der Username muss mindestens 4 Zeichen enthalten");
+            valid= false;
+        }else {
             mEmailField.setError(null);
         }
 

@@ -118,4 +118,5 @@ public class GameBrowserActivity extends BaseActivity implements TableDataClickL
         intent.putExtra(Game.class.getSimpleName().toLowerCase(), selectedGame);
         startActivity(intent);
     }
+
 }

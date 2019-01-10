@@ -1,8 +1,9 @@
 package topgrost.mocoquizer.lobby;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,8 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.codecrafters.tableview.SortableTableView;
@@ -25,9 +25,8 @@ import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
 import topgrost.mocoquizer.BaseActivity;
 import topgrost.mocoquizer.R;
-import topgrost.mocoquizer.browser.GameBrowserActivity;
+import topgrost.mocoquizer.lobby.view.LobbyListAdapter;
 import topgrost.mocoquizer.model.Game;
-import topgrost.mocoquizer.model.Question;
 import topgrost.mocoquizer.model.Quiz;
 import topgrost.mocoquizer.quiz.QuizActivity;
 
@@ -37,6 +36,8 @@ public class LobbyActivity extends BaseActivity {
     public static final String PLAYER_NUMBER_KEY = "playerNumber";
 
     private static final String[] TABLE_HEADERS = {"Player", "#"};
+    private String firebaseGameKey;
+    private String user;
 
 
     @Override
@@ -44,7 +45,12 @@ public class LobbyActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
 
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        user = sharedPref.getString("user", "");
+
         final Game game = (Game) getIntent().getSerializableExtra(Game.class.getSimpleName().toLowerCase());
+        firebaseGameKey = game.getFirebaseKey();
+
 
         TextView title = findViewById(R.id.lobbyTitle);
         title.setText(game.getName());
@@ -61,7 +67,8 @@ public class LobbyActivity extends BaseActivity {
         int colorEvenRows = getResources().getColor(R.color.colorPrimaryDark);
         int colorOddRows = getResources().getColor(R.color.colorPrimary);
         tableView.setDataRowBackgroundProvider(TableDataRowBackgroundProviders.alternatingRowColors(colorEvenRows, colorOddRows));
-
+        savePlayer();
+        loadLobby();
 
         Button btnStartGame = findViewById(R.id.lobbyStartGame);
         btnStartGame.setOnClickListener(new View.OnClickListener() {
@@ -88,4 +95,36 @@ public class LobbyActivity extends BaseActivity {
             }
         });
     }
+
+    private void loadLobby(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
+        gameRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<String> players = new ArrayList<>();
+                final Game selectedGame = dataSnapshot.getValue(Game.class);
+                players.add(selectedGame.getPlayer1());
+                players.add(selectedGame.getPlayer2());
+                players.add(selectedGame.getPlayer3());
+                players.add(selectedGame.getPlayer4());
+
+                final SortableTableView<String> tableView = findViewById(R.id.lobbyTable);
+                tableView.setDataAdapter(new LobbyListAdapter(getBaseContext(), players));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(LobbyActivity.this, "Fehler beim Laden der Lobby", Toast.LENGTH_LONG).show();
+            }
+
+        });
+    }
+
+    private void savePlayer(){
+
+    }
+
+
+
 }
