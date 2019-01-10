@@ -140,7 +140,7 @@ void loop() {
     if (!streamSet) {
       Serial.println(gameRef);
       Serial.flush();
-      Firebase.stream("/test");
+      Firebase.stream(gameRef);
       streamSet = true;
     } else {
       if (Firebase.available()) {
@@ -148,9 +148,17 @@ void loop() {
         String eventType = event.getString("type");
         eventType.toLowerCase();
         if (eventType == "put") {
-          FirebaseObject obj = Firebase.get("test");
-          Serial.print("value changed:");
-          Serial.println(obj.getString("type"));
+          FirebaseObject currentGame = Firebase.get(gameRef);
+          Serial.println("value changed:");
+          boolean player1 = currentGame.getBool("feed1");
+          boolean player2 = currentGame.getBool("feed2");
+          boolean player3 = currentGame.getBool("feed3");
+          boolean player4 = currentGame.getBool("feed4");
+          Serial.println(player1);
+          Serial.println(player2);
+          Serial.println(player3);
+          Serial.println(player4);
+
         }
 
 
