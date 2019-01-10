@@ -17,15 +17,19 @@ public class Game implements Serializable {
 
     private String player1;
     private boolean feed1;
+    private int score1;
 
     private String player2;
     private boolean feed2;
+    private int score2;
 
     private String player3;
     private boolean feed3;
+    private int score3;
 
     private String player4;
     private boolean feed4;
+    private int score4;
 
     private String firebaseKey;
 
@@ -145,6 +149,38 @@ public class Game implements Serializable {
         this.feed4 = feed4;
     }
 
+    public int getScore1() {
+        return score1;
+    }
+
+    public void setScore1(int score1) {
+        this.score1 = score1;
+    }
+
+    public int getScore2() {
+        return score2;
+    }
+
+    public void setScore2(int score2) {
+        this.score2 = score2;
+    }
+
+    public int getScore3() {
+        return score3;
+    }
+
+    public void setScore3(int score3) {
+        this.score3 = score3;
+    }
+
+    public int getScore4() {
+        return score4;
+    }
+
+    public void setScore4(int score4) {
+        this.score4 = score4;
+    }
+
     @Exclude
     public String getFirebaseKey() {
         return firebaseKey;
@@ -162,9 +198,13 @@ public class Game implements Serializable {
         return questionNr == game.questionNr &&
                 running == game.running &&
                 feed1 == game.feed1 &&
+                score1 == game.score1 &&
                 feed2 == game.feed2 &&
+                score2 == game.score2 &&
                 feed3 == game.feed3 &&
+                score3 == game.score3 &&
                 feed4 == game.feed4 &&
+                score4 == game.score4 &&
                 Objects.equals(name, game.name) &&
                 Objects.equals(password, game.password) &&
                 Objects.equals(deviceId, game.deviceId) &&
@@ -178,8 +218,7 @@ public class Game implements Serializable {
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(name, password, deviceId, questionNr, quizId, running, player1, feed1, player2, feed2, player3, feed3, player4, feed4, firebaseKey);
+        return Objects.hash(name, password, deviceId, questionNr, quizId, running, player1, feed1, score1, player2, feed2, score2, player3, feed3, score3, player4, feed4, score4, firebaseKey);
     }
 
     @Override
@@ -193,12 +232,16 @@ public class Game implements Serializable {
                 ", running=" + running +
                 ", player1='" + player1 + '\'' +
                 ", feed1=" + feed1 +
+                ", score1=" + score1 +
                 ", player2='" + player2 + '\'' +
                 ", feed2=" + feed2 +
+                ", score2=" + score2 +
                 ", player3='" + player3 + '\'' +
                 ", feed3=" + feed3 +
+                ", score3=" + score3 +
                 ", player4='" + player4 + '\'' +
                 ", feed4=" + feed4 +
+                ", score4=" + score4 +
                 ", firebaseKey='" + firebaseKey + '\'' +
                 '}';
     }
