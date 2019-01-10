@@ -1,5 +1,6 @@
 package topgrost.mocoquizer.quiz;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,6 +32,7 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
     private int score = 0;
     private Timer timer = new Timer();
     private Question currentQuestion;
+    private Quiz quiz;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +55,7 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         try {
             Long questionNr = (Long) dataSnapshot.getValue();
-            Quiz quiz = (Quiz) getIntent().getSerializableExtra(Quiz.class.getSimpleName().toLowerCase());
+            quiz = (Quiz) getIntent().getSerializableExtra(Quiz.class.getSimpleName().toLowerCase());
 
             ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
             if(currentQuestion != null && progressBar.getProgress() < progressBar.getMax()) {
@@ -110,6 +112,18 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
         ((TextView) findViewById(R.id.quizScore)).setText(String.valueOf(score));
     }
 
+    private void checkGameIsOver() {
+        if(quiz == null || currentQuestion == null) {
+            return;
+        }
+
+        if(quiz.getQuestions().indexOf(currentQuestion) + 1 >= quiz.getQuestions().size()) {
+            Intent intent = new Intent(getApplicationContext(), QuizResultActivity.class);
+            intent.putExtra(LobbyActivity.GAME_ID_KEY, getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY));
+            startActivity(intent);
+        }
+    }
+
     private void updateQuestionData() {
         ((TextView) findViewById(R.id.quizQuestionText)).setText(currentQuestion.getText());
         ((TextView) findViewById(R.id.quizAnswerText1)).setText(currentQuestion.getAnswers().get(0).getText());
@@ -145,6 +159,7 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
                     if (progressBar.getProgress() >= progressBar.getMax()) {
                         updateEnablement(false);
                         evaluateAnswer();
+                        checkGameIsOver();
                         cancel();
                     } else {
                         progressBar.setProgress(progressBar.getProgress() + 1);
