@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.firebase.database.*;
 import de.codecrafters.tableview.SortableTableView;
+import de.codecrafters.tableview.SortingOrder;
 import de.codecrafters.tableview.model.TableColumnWeightModel;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
@@ -62,6 +63,9 @@ public class QuizResultActivity extends BaseActivity implements View.OnClickList
         // Set comparators to allow sorting
         tableView.setColumnComparator(0, new QuizResultNameComparator());
         tableView.setColumnComparator(1, new QuizResultScoreComparator());
+
+        // Pre sort by use score descending
+        tableView.sort(1, SortingOrder.DESCENDING);
     }
 
     private void loadResults() {
