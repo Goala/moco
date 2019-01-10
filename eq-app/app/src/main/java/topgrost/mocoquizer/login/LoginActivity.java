@@ -16,11 +16,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import topgrost.mocoquizer.MainActivity;
 import topgrost.mocoquizer.R;
+import topgrost.mocoquizer.model.Game;
+import topgrost.mocoquizer.model.Quiz;
 import topgrost.mocoquizer.model.User;
 
 public class LoginActivity extends AppCompatActivity {
@@ -87,7 +92,6 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference userRef = database.getReference(User.class.getSimpleName().toLowerCase() + "s");
                             userRef.push().setValue(mUser);
-                            setSharedPrefs(alias);
                             Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(myIntent);
                         } else {
@@ -101,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    void signIn(String email, String password) {
+    void signIn(final String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -109,6 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithEmail:success");
                             user = mAuth.getCurrentUser();
+                            getUser(email);
                             Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(myIntent);
                         } else {
@@ -122,10 +127,34 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    public void setSharedPrefs(String user){
+    public void setSharedPrefs(User user){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("user", user);
+        editor.putString("user", user.getName());
+        editor.putString("userEmail", user.getEmail());
         editor.commit();
+    }
+
+    private void getUser(String email){
+        final User loggedUser = new User();
+        loggedUser.setEmail(email);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference gameRef = database.getReference(User.class.getSimpleName().toLowerCase() + "s");
+        gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot userDataSnapshot : dataSnapshot.getChildren()) {
+                    final User selectedUser = userDataSnapshot.getValue(User.class);
+                    if(selectedUser.getEmail().equals(loggedUser.getEmail())) {
+                        setSharedPrefs(selectedUser);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

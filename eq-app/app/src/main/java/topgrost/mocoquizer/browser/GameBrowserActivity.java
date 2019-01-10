@@ -108,11 +108,11 @@ public class GameBrowserActivity extends BaseActivity implements TableDataClickL
 
     @Override
     public void onDataClicked(int rowIndex, Game selectedGame) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s");
+        /*FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s");*
 
         gameRef.child(selectedGame.getFirebaseKey()).child("player1").setValue(user);
-        gameRef.child(selectedGame.getFirebaseKey()).child("feed1").setValue(false);
+        gameRef.child(selectedGame.getFirebaseKey()).child("feed1").setValue(false);*/
 
         Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
         intent.putExtra(Game.class.getSimpleName().toLowerCase(), selectedGame);

@@ -1,5 +1,7 @@
 package topgrost.mocoquizer.lobby;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -25,9 +27,11 @@ import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
 import topgrost.mocoquizer.BaseActivity;
 import topgrost.mocoquizer.R;
+import topgrost.mocoquizer.browser.GameBrowserActivity;
 import topgrost.mocoquizer.lobby.view.LobbyListAdapter;
 import topgrost.mocoquizer.model.Game;
 import topgrost.mocoquizer.model.Quiz;
+import topgrost.mocoquizer.model.User;
 import topgrost.mocoquizer.quiz.QuizActivity;
 
 public class LobbyActivity extends BaseActivity {
@@ -46,7 +50,7 @@ public class LobbyActivity extends BaseActivity {
         setContentView(R.layout.activity_lobby);
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        user = sharedPref.getString("user", "");
+        user = sharedPref.getString("user", "NoUser");
 
         final Game game = (Game) getIntent().getSerializableExtra(Game.class.getSimpleName().toLowerCase());
         firebaseGameKey = game.getFirebaseKey();
@@ -108,7 +112,6 @@ public class LobbyActivity extends BaseActivity {
                 players.add(selectedGame.getPlayer2());
                 players.add(selectedGame.getPlayer3());
                 players.add(selectedGame.getPlayer4());
-
                 final SortableTableView<String> tableView = findViewById(R.id.lobbyTable);
                 tableView.setDataAdapter(new LobbyListAdapter(getBaseContext(), players));
             }
@@ -122,8 +125,80 @@ public class LobbyActivity extends BaseActivity {
     }
 
     private void savePlayer(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
+        gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.child("player1").exists()) {
+                    gameRef.child("player1").setValue(user);
+                }else if(!dataSnapshot.child("player2").exists()){
+                    gameRef.child("player2").setValue(user);
+                }else if(!dataSnapshot.child("player3").exists()){
+                    gameRef.child("player3").setValue(user);
+                }else if(!dataSnapshot.child("player4").exists()){
+                    gameRef.child("player4").setValue(user);
+                }else{
+                    Toast.makeText(LobbyActivity.this, "Die Lobby ist voll", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getApplicationContext(),GameBrowserActivity.class);
+                    startActivity(intent);
+                }
 
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(LobbyActivity.this, "Fehler Betreten der Lobby", Toast.LENGTH_LONG).show();
+            }
+        });
     }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Exit Lobby")
+                .setMessage("Möchten Sie die Lobby verlassen?")
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deletePlayer();
+                        Intent intent = new Intent(getApplicationContext(), GameBrowserActivity.class);
+                        startActivity(intent);
+                    }
+
+                })
+                .setNegativeButton("Nein", null)
+                .show();
+    }
+
+    private void deletePlayer(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
+        gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final Game game = dataSnapshot.getValue(Game.class);
+                if(game.getPlayer1().equals(user)) {
+                    dataSnapshot.child("player1").getRef().removeValue();
+                }else if(game.getPlayer2().equals(user)) {
+                    dataSnapshot.child("player2").getRef().removeValue();
+                }else if(game.getPlayer3().equals(user)) {
+                    dataSnapshot.child("player3").getRef().removeValue();
+                }else if(game.getPlayer4().equals(user)) {
+                    dataSnapshot.child("player4").getRef().removeValue();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
 
 
