@@ -64,13 +64,11 @@ static void wifiWatchdog(void) {
   }
 }
 
-boolean check = false;
-
 void setup() {
   Serial.begin(9600);
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
-  
+
   pinMode(KEEP_ALIVE, OUTPUT);
   pinMode(PLAYER_1, OUTPUT);
   pinMode(PLAYER_2, OUTPUT);
@@ -92,27 +90,29 @@ void setup() {
 
   Firebase.begin(FIREBASE_HOST);
 
-
-
   delay(200);
 }
 
 bool deviceInit = false;
-String gameRef = "";
 bool alreadyInBase = false;
-String deviceKey = "";
+String deviceRef = "";
 bool loadedDevices = false;
+
+String gameRef = "";
 bool streamSet = false;
 int lastKeepAlive = 0;
 
+int questionTimeInMs = 0;
+int questionCount = 0;
+int questionNr = 0;
+
+int startTime = 0;
+int currentTime = 0;
+bool gameRunning = false;
+
 void loop() {
-  delay(200);
-  
-  analogWrite(PLAYER_1, 0);
-  analogWrite(PLAYER_2, 0);
-  analogWrite(PLAYER_3, 0);
-  analogWrite(PLAYER_4, 0);
-  
+  delay(100);
+
   wifiWatchdog();
   if (Firebase.failed()) {
     Serial.print("stream broken --> restarting");
@@ -138,64 +138,57 @@ void loop() {
         JsonObject& value = kv.value;
         if (value.get<String>("mac").equals(device.get_mac())) {
           alreadyInBase = true;
-          deviceKey = String(kv.key);
+          deviceRef = String(kv.key);
         }
       }
       if (!alreadyInBase && loadedDevices) {
-        Firebase.push("devices", deviceJSON);
+        deviceRef = Firebase.push("devices", deviceJSON);
         Serial.print("pushed: /device: ");
+        Serial.print(deviceRef + " ");
         Serial.println(device.get_name());
-        Serial.flush();
         deviceInit = true;
       } else {
         if (loadedDevices) {
-          String devicePath = "devices/" + deviceKey + "/available";
+          String devicePath = "devices/" + deviceRef + "/available";
           Serial.print("need to update: ");
           Serial.println(devicePath);
-          Serial.flush();
           Firebase.setBool(devicePath, true);
           deviceInit = true;
         } else {
           Serial.println("failed loading");
-          //resetFunc();
         }
       }
     } else {
       Serial.println("get devices failed");
-      //resetFunc();
     }
   } else {
     digitalWrite(LED_BUILTIN, LOW);
   }
 
-
   if (gameRef.length() < 1) {
     FirebaseObject foGames = Firebase.get("games");
-    if (Firebase.failed()) {
-      Serial.println(Firebase.error());
-    }
     if (foGames.success()) {
-      Serial.println("get games check");
-      Serial.flush();
-
+      Serial.println("searching for game");
       JsonObject& games = foGames.getJsonVariant();
-
       for (auto kv : games) {
         JsonObject& value = kv.value;
         if (value.get<String>("deviceId").equals(DEVICE_NAME)) {
           gameRef = "games/" + String(kv.key);
+          questionTimeInMs = value.get<int>("questionTime") * 1000;
+          questionCount = value.get<int>("questionCount");
+          questionNr = value.get<int>("questionNr");
           Serial.print("Node is linked to: ");
           Serial.println(value.get<String>("name"));
         }
-
       }
-
+      delay(2000);
     } else {
       Serial.println("get games failed");
       Serial.flush();
     }
 
   } else {
+    // activate stream to current game
     if (!streamSet) {
       Serial.println(gameRef);
       Serial.flush();
@@ -213,35 +206,72 @@ void loop() {
           boolean player2 = currentGame.getBool("feed2");
           boolean player3 = currentGame.getBool("feed3");
           boolean player4 = currentGame.getBool("feed4");
+          gameRunning = currentGame.getBool("running");
+
           if (player1) {
             analogWrite(PLAYER_1, 255);
             Serial.println("Give player1 feedback");
             Firebase.setBool(gameRef + "/feed1", false);
+          } else {
+            analogWrite(PLAYER_1, 0);
           }
           if (player2) {
             analogWrite(PLAYER_2, 255);
             Serial.println("Give player2 feedback");
             Firebase.setBool(gameRef + "/feed2", false);
+          } else {
+            analogWrite(PLAYER_2, 0);
+
           }
           if (player3) {
+            analogWrite(PLAYER_3, 255);
             Serial.println("Give player3 feedback");
             Firebase.setBool(gameRef + "/feed3", false);
+          } else {
+            analogWrite(PLAYER_3, 0);
+
           }
           if (player4) {
+            analogWrite(PLAYER_4, 255);
             Serial.println("Give player4 feedback");
             Firebase.setBool(gameRef + "/feed4", false);
+          } else {
+            analogWrite(PLAYER_4, 0);
           }
         }
+
+        //keep alive to maintain stream conncetion
         int ms = millis();
         if (ms - lastKeepAlive > 30000) {
-          digitalWrite(D0, HIGH);
+          digitalWrite(KEEP_ALIVE, HIGH);
           Firebase.setInt(gameRef + "/keepAlive", ms);
           lastKeepAlive = ms;
           Serial.println("keep alive"); //hack to maintain the stream connction
-          digitalWrite(D0, LOW);
+          digitalWrite(KEEP_ALIVE, LOW);
+        }
+      }
+
+
+      if (gameRunning) {
+        if (startTime == 0) {
+          startTime = millis();
         }
 
+        if (questionNr < questionCount) {
+          currentTime = millis();
+          if (currentTime - startTime >= questionTimeInMs) {
+            startTime = currentTime;
+            Firebase.setInt(gameRef + "/questionNr", questionNr++);
+          }
+        } else {
+          Serial.println("Game finished!");
+          delay(5000);
+        }
+      } else {
+        Serial.println("Waiting for game to start...");
+        delay(2000);
       }
+
     }
   }
 }
