@@ -2,12 +2,12 @@ package topgrost.mocoquizer.login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -24,8 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import topgrost.mocoquizer.MainActivity;
 import topgrost.mocoquizer.R;
-import topgrost.mocoquizer.model.Game;
-import topgrost.mocoquizer.model.Quiz;
 import topgrost.mocoquizer.model.User;
 
 public class LoginActivity extends AppCompatActivity {
@@ -37,10 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private FirebaseUser user;
 
-
     private FirebaseAuth mAuth;
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,8 +69,6 @@ public class LoginActivity extends AppCompatActivity {
             // User is signed out
             Log.d(TAG, "onAuthStateChanged:signed_out");
         }
-
-
     }
 
     void createAccount(final String email, final String password, final String alias) {
@@ -99,8 +92,6 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-
-
                     }
                 });
     }
@@ -121,13 +112,11 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Anmeldung fehlgeschlagen. Bitte überprüfen Sie ihre E-Mail und Ihr Passwort!",
                                     Toast.LENGTH_SHORT).show();
                         }
-
-
                     }
                 });
     }
 
-    public void setSharedPrefs(User user){
+    public void setSharedPrefs(User user) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("user", user.getName());
@@ -135,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    private void getUser(String email){
+    private void getUser(String email) {
         final User loggedUser = new User();
         loggedUser.setEmail(email);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -145,16 +134,14 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot userDataSnapshot : dataSnapshot.getChildren()) {
                     final User selectedUser = userDataSnapshot.getValue(User.class);
-                    if(selectedUser.getEmail().equals(loggedUser.getEmail())) {
+                    if (selectedUser.getEmail().equals(loggedUser.getEmail())) {
                         setSharedPrefs(selectedUser);
                     }
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
 }
