@@ -110,6 +110,9 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
         }
         database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(game).child(scoreOfPlayer).setValue(score);
         ((TextView) findViewById(R.id.quizScore)).setText(String.valueOf(score));
+        ((CheckBox) findViewById(R.id.quizAnswer1)).setChecked(false);
+        ((CheckBox) findViewById(R.id.quizAnswer2)).setChecked(false);
+        ((CheckBox) findViewById(R.id.quizAnswer2)).setChecked(false);
     }
 
     private void checkGameIsOver() {
