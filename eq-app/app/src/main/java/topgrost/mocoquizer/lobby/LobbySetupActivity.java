@@ -42,9 +42,9 @@ public class LobbySetupActivity extends BaseActivity implements View.OnClickList
         loadAndSetQuizList();
 
         NumberPicker npTimeSeconds = findViewById(R.id.lobbySetupTimeSeconds);
-        npTimeSeconds.setMinValue(2);
+        npTimeSeconds.setMinValue(6);
         npTimeSeconds.setMaxValue(30);
-        npTimeSeconds.setValue(3);
+        npTimeSeconds.setValue(8);
 
         Button btnStartGame = findViewById(R.id.lobbySetupCreate);
         btnStartGame.setOnClickListener(this);
