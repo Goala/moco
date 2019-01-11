@@ -193,7 +193,6 @@ public class LobbyActivity extends BaseActivity {
                 }else if(game.getPlayer4().equals(user)) {
                     dataSnapshot.child("player4").getRef().removeValue();
                 }
-
             }
 
             @Override

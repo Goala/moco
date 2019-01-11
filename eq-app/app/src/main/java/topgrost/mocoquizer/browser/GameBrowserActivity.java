@@ -110,9 +110,36 @@ public class GameBrowserActivity extends BaseActivity implements TableDataClickL
 
     @Override
     public void onDataClicked(int rowIndex, Game selectedGame) {
-        Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
-        intent.putExtra(Game.class.getSimpleName().toLowerCase(), selectedGame);
-        startActivity(intent);
+        if(isGameFull(selectedGame)) {
+            Toast.makeText(GameBrowserActivity.this, "Spiel ist voll", Toast.LENGTH_SHORT).show();
+            Log.d(GameBrowserActivity.class.getSimpleName(), "User " + user + " tried to join full game " + selectedGame.getName());
+        } else {
+            Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
+            intent.putExtra(Game.class.getSimpleName().toLowerCase(), selectedGame);
+            startActivity(intent);
+        }
     }
 
+    private boolean isGameFull(Game gameToCheck) {
+        List<String> players = new LinkedList<>();
+        players.add(gameToCheck.getPlayer1());
+        players.add(gameToCheck.getPlayer2());
+        players.add(gameToCheck.getPlayer3());
+        players.add(gameToCheck.getPlayer4());
+
+        int playerCount = 0;
+        for(int i = 0; i < players.size(); i++) {
+            if (isPlayerSet(players.get(i))) {
+                playerCount++;
+            }
+        }
+        return playerCount >= 4;
+    }
+
+    private boolean isPlayerSet(String player) {
+        if(user.equals(player) || player == null || player.trim().isEmpty()){
+            return false;
+        }
+        return true;
+    }
 }
