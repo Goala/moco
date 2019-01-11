@@ -143,7 +143,7 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
         progressBar.setMax(getIntent().getIntExtra(LobbyActivity.QUESTION_COUNT_KEY, 3));
         progressBar.setProgress(0);
 
-        timer.scheduleAtFixedRate(new ProgressUpdateTask(), 0, DateUtils.SECOND_IN_MILLIS * getIntent().getIntExtra(LobbyActivity.QUESTION_COUNT_KEY, 3));
+        timer.scheduleAtFixedRate(new ProgressUpdateTask(), 0, DateUtils.SECOND_IN_MILLIS);
         updateEnablement(true);
     }
 
