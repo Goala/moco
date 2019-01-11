@@ -18,6 +18,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -26,9 +29,7 @@ import topgrost.mocoquizer.model.Answer;
 import topgrost.mocoquizer.model.Question;
 import topgrost.mocoquizer.quiz.QuizEditorActivity;
 
-public class QuestionEditorFragment extends Fragment implements View.OnClickListener, RecognitionListener {
-
-    private SpeechRecognizer speech = SpeechRecognizer.createSpeechRecognizer(getActivity());
+public class QuestionEditorFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,22 +46,11 @@ public class QuestionEditorFragment extends Fragment implements View.OnClickList
 
         final Button btnSave = view.findViewById(R.id.quizEditorApply);
         btnSave.setOnClickListener(this);
-
-        speech.setRecognitionListener(this);
-
-        Intent recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "de");
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getActivity().getPackageName());
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-        speech.startListening(recognizerIntent);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
-        speech.stopListening();
 
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
@@ -106,52 +96,5 @@ public class QuestionEditorFragment extends Fragment implements View.OnClickList
         question.getAnswers().add(answerTwo);
         question.getAnswers().add(answerThree);
         return question;
-    }
-
-    @Override
-    public void onReadyForSpeech(Bundle params) {
-
-    }
-
-    @Override
-    public void onBeginningOfSpeech() {
-
-    }
-
-    @Override
-    public void onRmsChanged(float rmsdB) {
-
-    }
-
-    @Override
-    public void onBufferReceived(byte[] buffer) {
-
-    }
-
-    @Override
-    public void onEndOfSpeech() {
-
-    }
-
-    @Override
-    public void onError(int error) {
-
-    }
-
-    @Override
-    public void onResults(Bundle results) {
-        ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-        final TextView questionTextView = getView().findViewById(R.id.quizEditorQuestionText);
-        questionTextView.setText(matches.get(0));
-    }
-
-    @Override
-    public void onPartialResults(Bundle partialResults) {
-
-    }
-
-    @Override
-    public void onEvent(int eventType, Bundle params) {
-
     }
 }
