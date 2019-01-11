@@ -22,6 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import topgrost.mocoquizer.BaseActivity;
 import topgrost.mocoquizer.R;
@@ -31,6 +34,7 @@ import topgrost.mocoquizer.model.Quiz;
 
 public class LobbySetupActivity extends BaseActivity implements View.OnClickListener {
     private String user;
+    private Map<String, Quiz> quizes = new HashMap<>();
 
     //Catch Blöcke bei Datenbankzugriffen
 
@@ -90,15 +94,14 @@ public class LobbySetupActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final ArrayList<Quiz> quizzes = new ArrayList<>();
-
                 for (DataSnapshot quizDataSnapshot : dataSnapshot.getChildren()) {
                     Quiz quiz = quizDataSnapshot.getValue(Quiz.class);
-                    quizzes.add(quiz);
+                    quizes.put(quiz.getName(), quiz);
                 }
 
-                Quiz[] primQuizzes = new Quiz[quizzes.size()];
-                primQuizzes = quizzes.toArray(primQuizzes);
+                Set<String> quizNames = quizes.keySet();
+                String[] primQuizzes = new String[quizNames.size()];
+                primQuizzes = quizNames.toArray(primQuizzes);
 
                 setQuizSpinnerData(primQuizzes);
             }
@@ -110,25 +113,24 @@ public class LobbySetupActivity extends BaseActivity implements View.OnClickList
             }
         });
 
-        // TODO fix in rederer
-        //setQuizSpinnerData(new Quiz[]{"Loading..."});
+        setQuizSpinnerData(new String[]{"Loading..."});
     }
 
     @Override
     public void onClick(View view) {
         Spinner spinner = findViewById(R.id.lobbySetupQuiz);
-        Quiz selectedQuiz = (Quiz) spinner.getSelectedItem();
+        String selectedQuizName = (String) spinner.getSelectedItem();
 
         Game game = new Game();
         game.setRunning(false);
         game.setName(((TextView) findViewById(R.id.lobbySetupName)).getText().toString());
         game.setPassword(((TextView) findViewById(R.id.lobbySetupPassword)).getText().toString());
         game.setDeviceId(((Spinner) findViewById(R.id.lobbySetupDevice)).getSelectedItem().toString());
-        game.setQuizId(selectedQuiz.getName());
+        game.setQuizId(selectedQuizName);
         game.setPlayer1(user);
         game.setFeed1(false);
         game.setQuestionNr(0);
-        game.setQuestionCount(selectedQuiz.getQuestions().size());
+        game.setQuestionCount(quizes.get(selectedQuizName).getQuestions().size());
         game.setQuestionTime(((NumberPicker) findViewById(R.id.lobbySetupTimeSeconds)).getValue());
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -143,9 +145,9 @@ public class LobbySetupActivity extends BaseActivity implements View.OnClickList
         startActivity(lobbyIntent);
     }
 
-    private void setQuizSpinnerData(Quiz[] quizzes) {
+    private void setQuizSpinnerData(String[] quizzes) {
         Spinner spinner = findViewById(R.id.lobbySetupQuiz);
-        ArrayAdapter<Quiz> adapter = new ArrayAdapter<>(getBaseContext(),
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(),
                 android.R.layout.simple_spinner_dropdown_item, quizzes);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
