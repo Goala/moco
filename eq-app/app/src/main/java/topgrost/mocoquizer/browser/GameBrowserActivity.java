@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -99,6 +100,7 @@ public class GameBrowserActivity extends BaseActivity implements TableDataClickL
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(GameBrowserActivity.this, "Fehler beim Laden der Spieleliste", Toast.LENGTH_LONG).show();
+                Log.d(GameBrowserActivity.class.getSimpleName(), databaseError.getMessage());
             }
         });
 
@@ -108,12 +110,6 @@ public class GameBrowserActivity extends BaseActivity implements TableDataClickL
 
     @Override
     public void onDataClicked(int rowIndex, Game selectedGame) {
-        /*FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s");*
-
-        gameRef.child(selectedGame.getFirebaseKey()).child("player1").setValue(user);
-        gameRef.child(selectedGame.getFirebaseKey()).child("feed1").setValue(false);*/
-
         Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
         intent.putExtra(Game.class.getSimpleName().toLowerCase(), selectedGame);
         startActivity(intent);

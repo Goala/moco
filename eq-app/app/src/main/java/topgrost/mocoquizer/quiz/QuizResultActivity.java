@@ -4,13 +4,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
-
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
-import com.google.firebase.database.*;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import de.codecrafters.tableview.SortableTableView;
 import de.codecrafters.tableview.SortingOrder;
 import de.codecrafters.tableview.model.TableColumnWeightModel;
@@ -19,16 +26,11 @@ import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
 import topgrost.mocoquizer.BaseActivity;
 import topgrost.mocoquizer.MainActivity;
 import topgrost.mocoquizer.R;
-import topgrost.mocoquizer.browser.view.*;
 import topgrost.mocoquizer.lobby.LobbyActivity;
 import topgrost.mocoquizer.model.Game;
-import topgrost.mocoquizer.model.Quiz;
 import topgrost.mocoquizer.quiz.view.QuizResultListAdapter;
 import topgrost.mocoquizer.quiz.view.QuizResultNameComparator;
 import topgrost.mocoquizer.quiz.view.QuizResultScoreComparator;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class QuizResultActivity extends BaseActivity implements View.OnClickListener {
 
@@ -82,17 +84,18 @@ public class QuizResultActivity extends BaseActivity implements View.OnClickList
                 addPlayerScoreContainer(game.getPlayer3(), game.getScore3(), playerScores);
                 addPlayerScoreContainer(game.getPlayer4(), game.getScore4(), playerScores);
 
-                    final SortableTableView<Pair> tableView = findViewById(R.id.quizResultTable);
+                final SortableTableView<Pair> tableView = findViewById(R.id.quizResultTable);
                 tableView.setDataAdapter(new QuizResultListAdapter(getBaseContext(), playerScores));
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(QuizResultActivity.this, "Fehler beim Aktualisieren der Highscore", Toast.LENGTH_LONG).show();
+                Log.d(QuizResultActivity.class.getSimpleName(), databaseError.getMessage());
             }
 
             private void addPlayerScoreContainer(String playerName, int score, List<Pair> playerScores) {
-                if(playerName == null ||playerName.trim().isEmpty()) {
+                if (playerName == null || playerName.trim().isEmpty()) {
                     return;
                 }
                 playerScores.add(new Pair<>(playerName, Integer.valueOf(score)));

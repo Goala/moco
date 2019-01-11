@@ -6,8 +6,14 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.NumberPicker;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,7 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import topgrost.mocoquizer.BaseActivity;
 import topgrost.mocoquizer.R;
@@ -72,6 +77,7 @@ public class LobbySetupActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(LobbySetupActivity.this, "Fehler beim Laden der verfügbaren Geräte", Toast.LENGTH_LONG).show();
+                Log.d(LobbySetupActivity.class.getSimpleName(), databaseError.getMessage());
             }
         });
 
@@ -100,6 +106,7 @@ public class LobbySetupActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(LobbySetupActivity.this, "Fehler beim Laden der verfügbaren Quiz-Daten", Toast.LENGTH_LONG).show();
+                Log.d(LobbySetupActivity.class.getSimpleName(), databaseError.getMessage());
             }
         });
 

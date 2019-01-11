@@ -4,9 +4,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,7 +32,6 @@ import topgrost.mocoquizer.browser.GameBrowserActivity;
 import topgrost.mocoquizer.lobby.view.LobbyListAdapter;
 import topgrost.mocoquizer.model.Game;
 import topgrost.mocoquizer.model.Quiz;
-import topgrost.mocoquizer.model.User;
 import topgrost.mocoquizer.quiz.QuizActivity;
 
 public class LobbyActivity extends BaseActivity {
@@ -96,6 +96,7 @@ public class LobbyActivity extends BaseActivity {
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         Toast.makeText(LobbyActivity.this, "Spiel konnte nicht gestartet werden. Fehler beim Laden der Quiz-Daten", Toast.LENGTH_LONG).show();
+                        Log.d(LobbyActivity.class.getSimpleName(), databaseError.getMessage());
                     }
                 });
             }
@@ -121,8 +122,8 @@ public class LobbyActivity extends BaseActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(LobbyActivity.this, "Fehler beim Laden der Lobby", Toast.LENGTH_LONG).show();
+                Log.d(LobbyActivity.class.getSimpleName(), databaseError.getMessage());
             }
-
         });
     }
 
@@ -151,6 +152,7 @@ public class LobbyActivity extends BaseActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(LobbyActivity.this, "Fehler Betreten der Lobby", Toast.LENGTH_LONG).show();
+                Log.d(LobbyActivity.class.getSimpleName(), databaseError.getMessage());
             }
         });
     }
@@ -196,12 +198,8 @@ public class LobbyActivity extends BaseActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d(LobbyActivity.class.getSimpleName(), databaseError.getMessage());
             }
         });
     }
-
-
-
-
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
@@ -47,7 +48,7 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
             gameRef.addValueEventListener(this);
         } catch (Exception e) {
             Toast.makeText(QuizActivity.this, "Fehler beim Laden der Quiz-Daten", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
+            Log.d(QuizActivity.class.getSimpleName(), e.getMessage());
         }
     }
 
@@ -66,14 +67,14 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
             startTimer();
         } catch (Exception e) {
             Toast.makeText(QuizActivity.this, "Fehler beim Aktualisieren der Frage", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
+            Log.d(QuizActivity.class.getSimpleName(), e.getMessage());
         }
     }
 
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
         Toast.makeText(QuizActivity.this, "Fehler beim Aktualisieren der Frage", Toast.LENGTH_LONG).show();
-        System.out.println(databaseError.getMessage());
+        Log.d(QuizActivity.class.getSimpleName(), databaseError.getMessage());
     }
 
     @Override
