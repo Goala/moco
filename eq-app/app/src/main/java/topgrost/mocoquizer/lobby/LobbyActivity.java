@@ -37,6 +37,7 @@ import topgrost.mocoquizer.quiz.QuizActivity;
 public class LobbyActivity extends BaseActivity {
 
     public static final String GAME_ID_KEY = "gameId";
+    public static final String QUESTION_COUNT_KEY = "questionCount";
     public static final String PLAYER_NUMBER_KEY = "playerNumber";
 
     private static final String[] TABLE_HEADERS = {"Player", "#"};
@@ -87,6 +88,7 @@ public class LobbyActivity extends BaseActivity {
                         Intent intent = new Intent(getApplicationContext(), QuizActivity.class);
                         intent.putExtra(Quiz.class.getSimpleName().toLowerCase(),quiz);
                         intent.putExtra(GAME_ID_KEY, game.getFirebaseKey());
+                        intent.putExtra(QUESTION_COUNT_KEY, quiz.getQuestions().size());
                         intent.putExtra(PLAYER_NUMBER_KEY, 1);
                         startActivity(intent);
                     }

@@ -22,9 +22,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import topgrost.mocoquizer.R;
-import topgrost.mocoquizer.quiz.QuizEditorActivity;
 import topgrost.mocoquizer.model.Answer;
 import topgrost.mocoquizer.model.Question;
+import topgrost.mocoquizer.quiz.QuizEditorActivity;
 
 public class QuestionEditorFragment extends Fragment implements View.OnClickListener, RecognitionListener {
 
@@ -39,11 +39,6 @@ public class QuestionEditorFragment extends Fragment implements View.OnClickList
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        NumberPicker timeSeconds = view.findViewById(R.id.quizEditorTimeSeconds);
-        timeSeconds.setMinValue(3);
-        timeSeconds.setMaxValue(30);
-        timeSeconds.setValue(6);
 
         final TextView questionTextView = view.findViewById(R.id.quizEditorQuestionText);
         questionTextView.requestFocus();
@@ -94,7 +89,6 @@ public class QuestionEditorFragment extends Fragment implements View.OnClickList
     private Question getQuestionData() {
         final Question question = new Question();
         question.setText(((TextView) getView().findViewById(R.id.quizEditorQuestionText)).getText().toString());
-        question.setTime_seconds(((NumberPicker) getView().findViewById(R.id.quizEditorTimeSeconds)).getValue());
 
         final Answer answerOne = new Answer();
         answerOne.setText(((TextView) getView().findViewById(R.id.quizEditorAnswerText1)).getText().toString());

@@ -5,32 +5,13 @@
     android:layout_height="wrap_content"
     android:gravity="center">
 
-    <LinearLayout
+    <EditText
+        android:id="@+id/quizEditorQuestionText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/quizEditorQuestionText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight=".70"
-            android:inputType="textPersonName"
-            android:hint="Frage" />
-
-        <TextView
-            android:id="@+id/quizEditorTimeSecondsText"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:gravity="center"
-            android:text="Zeit [Sec]" />
-
-        <NumberPicker
-            android:id="@+id/quizEditorTimeSeconds"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:inputType="number" />
-    </LinearLayout>
+        android:layout_weight=".70"
+        android:inputType="textPersonName"
+        android:hint="Frage" />
 
     <LinearLayout
         android:layout_width="match_parent"

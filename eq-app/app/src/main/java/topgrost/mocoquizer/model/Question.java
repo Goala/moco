@@ -8,15 +8,13 @@ import java.util.Objects;
 public class Question implements Serializable {
 
     private String text;
-    private int time_seconds;
     private List<Answer> answers = new LinkedList<>();
 
     public Question() {
     }
 
-    public Question(String text, int time_seconds, List<Answer> answers) {
+    public Question(String text, List<Answer> answers) {
         this.text = text;
-        this.time_seconds = time_seconds;
         this.answers = answers;
     }
 
@@ -26,14 +24,6 @@ public class Question implements Serializable {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public int getTime_seconds() {
-        return time_seconds;
-    }
-
-    public void setTime_seconds(int time_seconds) {
-        this.time_seconds = time_seconds;
     }
 
     public List<Answer> getAnswers() {
@@ -49,24 +39,21 @@ public class Question implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Question question = (Question) o;
-        return time_seconds == question.time_seconds &&
-                Objects.equals(text, question.text) &&
+        return Objects.equals(text, question.text) &&
                 Objects.equals(answers, question.answers);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(text, time_seconds, answers);
+        return Objects.hash(text, answers);
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Question{");
-        sb.append("text='").append(text).append('\'');
-        sb.append(", time_seconds=").append(time_seconds);
-        sb.append(", answers=").append(answers);
-        sb.append('}');
-        return sb.toString();
+        return "Question{" +
+                "text='" + text + '\'' +
+                ", answers=" + answers +
+                '}';
     }
 }

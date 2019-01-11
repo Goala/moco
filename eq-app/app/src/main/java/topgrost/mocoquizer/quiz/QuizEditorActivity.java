@@ -106,13 +106,10 @@ public class QuizEditorActivity extends BaseActivity implements View.OnClickList
         sb.append("Frage ");
         sb.append(questions.size());
         sb.append(": ");
-        if (questionText.length() > 30) {
+        if (questionText.length() > 40) {
             questionText = questionText.substring(0, 30) + "...";
         }
         sb.append(questionText);
-        sb.append(" (");
-        sb.append(question.getTime_seconds());
-        sb.append(" Sekunden Zeit)");
         return sb.toString();
     }
 }

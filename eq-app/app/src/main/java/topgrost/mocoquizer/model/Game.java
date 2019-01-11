@@ -12,6 +12,8 @@ public class Game implements Serializable {
     private String password;
     private String deviceId;
     private int questionNr;
+    private int questionCount;
+    private int questionTime;
     private String quizId;
     private boolean running;
 
@@ -67,6 +69,22 @@ public class Game implements Serializable {
 
     public void setQuestionNr(int questionNr) {
         this.questionNr = questionNr;
+    }
+
+    public int getQuestionCount() {
+        return questionCount;
+    }
+
+    public void setQuestionCount(int questionCount) {
+        this.questionCount = questionCount;
+    }
+
+    public int getQuestionTime() {
+        return questionTime;
+    }
+
+    public void setQuestionTime(int questionTime) {
+        this.questionTime = questionTime;
     }
 
     public String getQuizId() {
@@ -196,6 +214,8 @@ public class Game implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
         return questionNr == game.questionNr &&
+                questionCount == game.questionCount &&
+                questionTime == game.questionTime &&
                 running == game.running &&
                 feed1 == game.feed1 &&
                 score1 == game.score1 &&
@@ -218,7 +238,8 @@ public class Game implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, password, deviceId, questionNr, quizId, running, player1, feed1, score1, player2, feed2, score2, player3, feed3, score3, player4, feed4, score4, firebaseKey);
+
+        return Objects.hash(name, password, deviceId, questionNr, questionCount, questionTime, quizId, running, player1, feed1, score1, player2, feed2, score2, player3, feed3, score3, player4, feed4, score4, firebaseKey);
     }
 
     @Override
@@ -228,6 +249,8 @@ public class Game implements Serializable {
                 ", password='" + password + '\'' +
                 ", deviceId='" + deviceId + '\'' +
                 ", questionNr=" + questionNr +
+                ", questionCount=" + questionCount +
+                ", questionTime=" + questionTime +
                 ", quizId='" + quizId + '\'' +
                 ", running=" + running +
                 ", player1='" + player1 + '\'' +
