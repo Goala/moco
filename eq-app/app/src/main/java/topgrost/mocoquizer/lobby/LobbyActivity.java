@@ -40,13 +40,13 @@ public class LobbyActivity extends BaseActivity {
     public static final String QUESTION_COUNT_KEY = "questionCount";
     public static final String PLAYER_NUMBER_KEY = "playerNumber";
 
-    private static final String[] TABLE_HEADERS = {"Player", "#"};
+    private static final String[] TABLE_HEADERS = {"#", "Player"};
     private String firebaseGameKey;
     private String user;
     private FirebaseDatabase database;
     private Button btnStartGame;
 
-
+    //Todo Event Listener zusammenfassen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +68,8 @@ public class LobbyActivity extends BaseActivity {
         tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(this, TABLE_HEADERS));
 
         TableColumnWeightModel columnModel = new TableColumnWeightModel(TABLE_HEADERS.length);
-        columnModel.setColumnWeight(0, 5);
-        columnModel.setColumnWeight(1, 1);
+        columnModel.setColumnWeight(0, 1);
+        columnModel.setColumnWeight(1, 6);
         tableView.setColumnModel(columnModel);
 
 
