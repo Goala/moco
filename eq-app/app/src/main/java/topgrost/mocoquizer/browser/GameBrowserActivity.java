@@ -90,8 +90,10 @@ public class GameBrowserActivity extends BaseActivity implements TableDataClickL
                     final List<Game> games = new LinkedList<>();
                     for (DataSnapshot gameDataSnapshot : dataSnapshot.getChildren()) {
                         final Game gameToAdd = gameDataSnapshot.getValue(Game.class);
-                        gameToAdd.setFirebaseKey(gameDataSnapshot.getKey());
-                        games.add(gameToAdd);
+                        if(gameDataSnapshot.child("running").equals(false)) {
+                            gameToAdd.setFirebaseKey(gameDataSnapshot.getKey());
+                            games.add(gameToAdd);
+                        }
                     }
 
                     final SortableTableView<Game> tableView = findViewById(R.id.gameBrowserTable);
