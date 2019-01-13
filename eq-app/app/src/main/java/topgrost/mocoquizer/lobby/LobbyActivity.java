@@ -43,12 +43,16 @@ public class LobbyActivity extends BaseActivity {
     private static final String[] TABLE_HEADERS = {"Player", "#"};
     private String firebaseGameKey;
     private String user;
+    private FirebaseDatabase database;
+    private Button btnStartGame;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
+        database = FirebaseDatabase.getInstance();
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         user = sharedPref.getString("user", "NoUser");
@@ -74,37 +78,19 @@ public class LobbyActivity extends BaseActivity {
         tableView.setDataRowBackgroundProvider(TableDataRowBackgroundProviders.alternatingRowColors(colorEvenRows, colorOddRows));
         savePlayer();
         loadLobby();
+        autoStart();
 
-        Button btnStartGame = findViewById(R.id.lobbyStartGame);
+        btnStartGame = findViewById(R.id.lobbyStartGame);
+        btnStartGame.setEnabled(false);
         btnStartGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference quizRef = database.getReference(Quiz.class.getSimpleName().toLowerCase() + "s");
-                quizRef.orderByChild("name").equalTo(game.getQuizId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Quiz quiz = dataSnapshot.getChildren().iterator().next().getValue(Quiz.class);
-                        Intent intent = new Intent(getApplicationContext(), QuizActivity.class);
-                        intent.putExtra(Quiz.class.getSimpleName().toLowerCase(),quiz);
-                        intent.putExtra(GAME_ID_KEY, game.getFirebaseKey());
-                        intent.putExtra(QUESTION_COUNT_KEY, quiz.getQuestions().size());
-                        intent.putExtra(PLAYER_NUMBER_KEY, 1);
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Toast.makeText(LobbyActivity.this, "Spiel konnte nicht gestartet werden. Fehler beim Laden der Quiz-Daten", Toast.LENGTH_LONG).show();
-                        Log.d(LobbyActivity.class.getSimpleName(), databaseError.getMessage());
-                    }
-                });
+               startGame();
             }
         });
     }
 
     private void loadLobby(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
         gameRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -115,6 +101,11 @@ public class LobbyActivity extends BaseActivity {
                 players.add(selectedGame.getPlayer2());
                 players.add(selectedGame.getPlayer3());
                 players.add(selectedGame.getPlayer4());
+                if(selectedGame.getPlayer1()!=null){
+                    if(selectedGame.getPlayer1().equals(user)) {
+                        btnStartGame.setEnabled(true);
+                    }
+                }
                 final SortableTableView<String> tableView = findViewById(R.id.lobbyTable);
                 tableView.setDataAdapter(new LobbyListAdapter(getBaseContext(), players));
             }
@@ -128,25 +119,20 @@ public class LobbyActivity extends BaseActivity {
     }
 
     private void savePlayer(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
         gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.child("player1").exists()) {
                     gameRef.child("player1").setValue(user);
+                    btnStartGame.setEnabled(true);
                 }else if(!dataSnapshot.child("player2").exists()){
                     gameRef.child("player2").setValue(user);
                 }else if(!dataSnapshot.child("player3").exists()){
                     gameRef.child("player3").setValue(user);
                 }else if(!dataSnapshot.child("player4").exists()){
                     gameRef.child("player4").setValue(user);
-                }else{
-                    Toast.makeText(LobbyActivity.this, "Die Lobby ist voll", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(getApplicationContext(),GameBrowserActivity.class);
-                    startActivity(intent);
                 }
-
             }
 
             @Override
@@ -178,26 +164,114 @@ public class LobbyActivity extends BaseActivity {
     }
 
     private void deletePlayer(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
         gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final Game game = dataSnapshot.getValue(Game.class);
-                if(game.getPlayer1().equals(user)) {
-                    dataSnapshot.child("player1").getRef().removeValue();
-                }else if(game.getPlayer2().equals(user)) {
-                    dataSnapshot.child("player2").getRef().removeValue();
-                }else if(game.getPlayer3().equals(user)) {
-                    dataSnapshot.child("player3").getRef().removeValue();
-                }else if(game.getPlayer4().equals(user)) {
-                    dataSnapshot.child("player4").getRef().removeValue();
+                try {
+                    final Game game = dataSnapshot.getValue(Game.class);
+                    if (game.getPlayer1().equals(user)) {
+                        dataSnapshot.child("player1").getRef().removeValue();
+                        //Set new player one to start game
+                        if (dataSnapshot.child("player2").exists()) {
+                            gameRef.child("player1").setValue(game.getPlayer2());
+                            dataSnapshot.child("player2").getRef().removeValue();
+                        }else if(dataSnapshot.child("player3").exists()) {
+                            gameRef.child("player1").setValue(game.getPlayer3());
+                            dataSnapshot.child("player3").getRef().removeValue();
+                        }else if(dataSnapshot.child("player4").exists()) {
+                            gameRef.child("player1").setValue(game.getPlayer4());
+                            dataSnapshot.child("player4").getRef().removeValue();
+                        }
+                    } else if (game.getPlayer2().equals(user)) {
+                        dataSnapshot.child("player2").getRef().removeValue();
+                    } else if (game.getPlayer3().equals(user)) {
+                        dataSnapshot.child("player3").getRef().removeValue();
+                    } else if (game.getPlayer4().equals(user)) {
+                        dataSnapshot.child("player4").getRef().removeValue();
+                    }
+                }catch(Exception e){
+                    Toast.makeText(LobbyActivity.this, "Fehler beim Verlassen der Lobby", Toast.LENGTH_LONG).show();
+                    Log.d(LobbyActivity.class.getSimpleName(), e.getMessage());
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(LobbyActivity.this, "Fehler beim Verlassen der Lobby", Toast.LENGTH_LONG).show();
                 Log.d(LobbyActivity.class.getSimpleName(), databaseError.getMessage());
+            }
+        });
+    }
+
+    public void autoStart(){
+        final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
+        gameRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try {
+                    final Game game = dataSnapshot.getValue(Game.class);
+                    if(game.getPlayer1()!= null) {
+                        if (game.isRunning() && !game.getPlayer1().equals(user)) {
+                            startGame();
+                        }
+                    }
+                }catch(Exception e){
+                    Toast.makeText(LobbyActivity.this, "Fehler beim Starten des Spiels", Toast.LENGTH_LONG).show();
+                    Log.e(LobbyActivity.class.getSimpleName(), e.getMessage());
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(LobbyActivity.this, "Fehler beim Starten des Spiels", Toast.LENGTH_LONG).show();
+                Log.e(LobbyActivity.class.getSimpleName(), databaseError.getMessage());
+            }
+        });
+    }
+
+    public void startGame(){
+        final Game game = (Game) getIntent().getSerializableExtra(Game.class.getSimpleName().toLowerCase());
+        DatabaseReference quizRef = database.getReference(Quiz.class.getSimpleName().toLowerCase() + "s");
+        quizRef.orderByChild("name").equalTo(game.getQuizId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try {
+                    Quiz quiz = dataSnapshot.getChildren().iterator().next().getValue(Quiz.class);
+                    Intent intent = new Intent(getApplicationContext(), QuizActivity.class);
+                    intent.putExtra(Quiz.class.getSimpleName().toLowerCase(), quiz);
+                    intent.putExtra(GAME_ID_KEY, game.getFirebaseKey());
+                    intent.putExtra(QUESTION_COUNT_KEY, quiz.getQuestions().size());
+                    intent.putExtra(PLAYER_NUMBER_KEY, 1);
+                    startActivity(intent);
+                }catch(Exception e){
+                    Toast.makeText(LobbyActivity.this, "Das Spiel konnte nicht gestartet werden.", Toast.LENGTH_LONG).show();
+                    Log.e(LobbyActivity.class.getSimpleName(), e.getMessage());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(LobbyActivity.this, "Das Spiel konnte nicht gestartet werden.", Toast.LENGTH_LONG).show();
+                Log.e(LobbyActivity.class.getSimpleName(), databaseError.getMessage());
+            }
+        });
+
+        final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
+        gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try{
+                    gameRef.child("running").setValue(true);
+                }catch(Exception e){
+                    Toast.makeText(LobbyActivity.this, "Das Spiel konnte nicht gestartet werden.(Running Value)", Toast.LENGTH_LONG).show();
+                    Log.e(LobbyActivity.class.getSimpleName(), e.getMessage());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(LobbyActivity.this, "Das Spiel konnte nicht gestartet werden.(Running Value)", Toast.LENGTH_LONG).show();
+                Log.e(LobbyActivity.class.getSimpleName(), databaseError.getMessage());
             }
         });
     }

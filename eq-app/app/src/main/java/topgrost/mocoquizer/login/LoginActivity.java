@@ -22,6 +22,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import topgrost.mocoquizer.MainActivity;
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.model.User;
@@ -72,28 +75,28 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void createAccount(final String email, final String password, final String alias) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "createUserWithEmail:success");
-                            user = mAuth.getCurrentUser();
-                            User mUser = new User();
-                            mUser.setName(alias);
-                            mUser.setEmail(email);
-                            FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            DatabaseReference userRef = database.getReference(User.class.getSimpleName().toLowerCase() + "s");
-                            userRef.push().setValue(mUser);
-                            Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(myIntent);
-                        } else {
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "createUserWithEmail:success");
+                                user = mAuth.getCurrentUser();
+                                User mUser = new User();
+                                mUser.setName(alias);
+                                mUser.setEmail(email);
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                DatabaseReference userRef = database.getReference(User.class.getSimpleName().toLowerCase() + "s");
+                                userRef.push().setValue(mUser);
+                                Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(myIntent);
+                            } else {
+                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
     }
 
     void signIn(final String email, String password) {
@@ -144,4 +147,5 @@ public class LoginActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
+
 }

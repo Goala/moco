@@ -24,6 +24,7 @@ import de.codecrafters.tableview.model.TableColumnWeightModel;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
 import topgrost.mocoquizer.BaseActivity;
+import topgrost.mocoquizer.MainActivity;
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.browser.view.GameBrowserListAdapter;
 import topgrost.mocoquizer.browser.view.GameNameComparator;
@@ -39,8 +40,7 @@ public class GameBrowserActivity extends BaseActivity implements TableDataClickL
 
     private static final String[] TABLE_HEADERS = {"Name", "Status", "Spieler", "Passwort"};
 
-    //Todo User kann nur beitreten, wenn er noch nicht im Spiel ist
-    //Catch Blöcke bei Datenbankanwendungen
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,15 +86,20 @@ public class GameBrowserActivity extends BaseActivity implements TableDataClickL
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final List<Game> games = new LinkedList<>();
-                for (DataSnapshot gameDataSnapshot : dataSnapshot.getChildren()) {
-                    final Game gameToAdd = gameDataSnapshot.getValue(Game.class);
-                    gameToAdd.setFirebaseKey(gameDataSnapshot.getKey());
-                    games.add(gameToAdd);
-                }
+                try {
+                    final List<Game> games = new LinkedList<>();
+                    for (DataSnapshot gameDataSnapshot : dataSnapshot.getChildren()) {
+                        final Game gameToAdd = gameDataSnapshot.getValue(Game.class);
+                        gameToAdd.setFirebaseKey(gameDataSnapshot.getKey());
+                        games.add(gameToAdd);
+                    }
 
-                final SortableTableView<Game> tableView = findViewById(R.id.gameBrowserTable);
-                tableView.setDataAdapter(new GameBrowserListAdapter(getBaseContext(), games));
+                    final SortableTableView<Game> tableView = findViewById(R.id.gameBrowserTable);
+                    tableView.setDataAdapter(new GameBrowserListAdapter(getBaseContext(), games));
+                }catch(Exception e){
+                    Toast.makeText(GameBrowserActivity.this, "Fehler beim Laden der Spieleliste", Toast.LENGTH_LONG).show();
+                    Log.d(GameBrowserActivity.class.getSimpleName(), e.getMessage());
+                }
             }
 
             @Override
@@ -141,5 +146,11 @@ public class GameBrowserActivity extends BaseActivity implements TableDataClickL
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
     }
 }
