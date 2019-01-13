@@ -1,6 +1,7 @@
 package topgrost.mocoquizer.lobby.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ public class LobbyListAdapter extends TableDataAdapter<String> {
         view.setText(value);
         view.setMinHeight(DEFAULT_MIN_HEIGHT);
         view.setPadding(DEFAULT_PAD_LEFT, DEFAULT_PAD_TOP, DEFAULT_PAD_RIGHT, DEFAULT_PAD_BOTTOM);
+        view.setTextColor(Color.WHITE);
         return view;
     }
 }

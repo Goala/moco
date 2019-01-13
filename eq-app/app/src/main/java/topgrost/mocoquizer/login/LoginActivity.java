@@ -22,11 +22,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import topgrost.mocoquizer.MainActivity;
 import topgrost.mocoquizer.R;
+import topgrost.mocoquizer.login.view.LoginFragment;
+import topgrost.mocoquizer.login.view.RegisterFragment;
+import topgrost.mocoquizer.login.view.TabAdapter;
 import topgrost.mocoquizer.model.User;
 
 public class LoginActivity extends AppCompatActivity {
@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "EmailPassword";
 
     private TabAdapter adapter;
-    private TabLayout tabLayout;
+    public TabLayout tabLayout;
     private ViewPager viewPager;
     private FirebaseUser user;
 
@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    void createAccount(final String email, final String password, final String alias) {
+    public void createAccount(final String email, final String password, final String alias) {
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                     });
     }
 
-    void signIn(final String email, String password) {
+    public void signIn(final String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override

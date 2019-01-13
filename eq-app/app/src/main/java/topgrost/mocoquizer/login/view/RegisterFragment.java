@@ -1,4 +1,4 @@
-package topgrost.mocoquizer.login;
+package topgrost.mocoquizer.login.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import topgrost.mocoquizer.R;
+import topgrost.mocoquizer.login.LoginActivity;
 import topgrost.mocoquizer.model.User;
 import topgrost.mocoquizer.quiz.QuizActivity;
 

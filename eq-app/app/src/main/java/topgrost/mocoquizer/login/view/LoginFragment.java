@@ -1,4 +1,4 @@
-package topgrost.mocoquizer.login;
+package topgrost.mocoquizer.login.view;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import topgrost.mocoquizer.R;
-
+import topgrost.mocoquizer.login.LoginActivity;
 
 
 public class LoginFragment extends Fragment {

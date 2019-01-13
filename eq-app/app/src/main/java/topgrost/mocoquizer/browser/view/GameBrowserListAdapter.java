@@ -1,6 +1,7 @@
 package topgrost.mocoquizer.browser.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -46,6 +47,7 @@ public class GameBrowserListAdapter extends TableDataAdapter<Game> {
         view.setText(name);
         view.setMinHeight(DEFAULT_MIN_HEIGHT);
         view.setPadding(DEFAULT_PAD_LEFT, DEFAULT_PAD_TOP, DEFAULT_PAD_RIGHT, DEFAULT_PAD_BOTTOM);
+        view.setTextColor(Color.WHITE);
         return view;
     }
 
@@ -55,6 +57,7 @@ public class GameBrowserListAdapter extends TableDataAdapter<Game> {
         view.setMinHeight(DEFAULT_MIN_HEIGHT);
         view.setMaxHeight(DEFAULT_MIN_HEIGHT);
         view.setPadding(DEFAULT_PAD_LEFT, DEFAULT_PAD_TOP, DEFAULT_PAD_RIGHT, DEFAULT_PAD_BOTTOM);
+        view.setTextColor(Color.WHITE);
         return view;
     }
 
@@ -78,6 +81,7 @@ public class GameBrowserListAdapter extends TableDataAdapter<Game> {
         view.setMinHeight(DEFAULT_MIN_HEIGHT);
         view.setMaxHeight(DEFAULT_MIN_HEIGHT);
         view.setPadding(DEFAULT_PAD_LEFT, DEFAULT_PAD_TOP, DEFAULT_PAD_RIGHT, DEFAULT_PAD_BOTTOM);
+        view.setTextColor(Color.WHITE);
         return view;
     }
 

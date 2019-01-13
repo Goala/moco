@@ -90,7 +90,8 @@ public class GameBrowserActivity extends BaseActivity implements TableDataClickL
                     final List<Game> games = new LinkedList<>();
                     for (DataSnapshot gameDataSnapshot : dataSnapshot.getChildren()) {
                         final Game gameToAdd = gameDataSnapshot.getValue(Game.class);
-                        if(gameDataSnapshot.child("running").equals(false)) {
+                        //Todo disable running games instead of not showing them
+                        if(!gameToAdd.isRunning()) {
                             gameToAdd.setFirebaseKey(gameDataSnapshot.getKey());
                             games.add(gameToAdd);
                         }
