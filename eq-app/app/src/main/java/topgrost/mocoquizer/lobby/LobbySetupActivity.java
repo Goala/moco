@@ -130,7 +130,7 @@ public class LobbySetupActivity extends BaseActivity implements View.OnClickList
         game.setQuestionNr(0);
         game.setQuestionCount(quizes.get(selectedQuizName).getQuestions().size());
         game.setQuestionTime(((NumberPicker) findViewById(R.id.lobbySetupTimeSeconds)).getValue());
-        game.setTimeLeft(0);
+        game.setCurrentTime(0);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s");

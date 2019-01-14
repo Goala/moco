@@ -15,7 +15,7 @@ public class Game implements Serializable {
     private int questionTime;
     private String quizId;
     private boolean running;
-    private int timeLeft;
+    private int currentTime;
 
     private String player1;
     private boolean feed1;
@@ -87,12 +87,12 @@ public class Game implements Serializable {
         this.questionTime = questionTime;
     }
 
-    public int getTimeLeft() {
-        return timeLeft;
+    public int getCurrentTime() {
+        return currentTime;
     }
 
-    public void setTimeLeft(int timeLeft) {
-        this.timeLeft = timeLeft;
+    public void setCurrentTime(int currentTime) {
+        this.currentTime = currentTime;
     }
 
     public String getQuizId() {
@@ -225,7 +225,7 @@ public class Game implements Serializable {
                 questionCount == game.questionCount &&
                 questionTime == game.questionTime &&
                 running == game.running &&
-                timeLeft == game.timeLeft &&
+                currentTime == game.currentTime &&
                 feed1 == game.feed1 &&
                 score1 == game.score1 &&
                 feed2 == game.feed2 &&
@@ -248,7 +248,7 @@ public class Game implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(name, password, deviceId, questionNr, questionCount, questionTime, quizId, running, timeLeft, player1, feed1, score1, player2, feed2, score2, player3, feed3, score3, player4, feed4, score4, firebaseKey);
+        return Objects.hash(name, password, deviceId, questionNr, questionCount, questionTime, quizId, running, currentTime, player1, feed1, score1, player2, feed2, score2, player3, feed3, score3, player4, feed4, score4, firebaseKey);
     }
 
     @Override
@@ -262,7 +262,7 @@ public class Game implements Serializable {
                 ", questionTime=" + questionTime +
                 ", quizId='" + quizId + '\'' +
                 ", running=" + running +
-                ", timeLeft=" + timeLeft +
+                ", currentTime=" + currentTime +
                 ", player1='" + player1 + '\'' +
                 ", feed1=" + feed1 +
                 ", score1=" + score1 +

@@ -19,8 +19,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Timer;
-
 import topgrost.mocoquizer.BaseActivity;
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.lobby.LobbyActivity;
@@ -88,7 +86,7 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
                 }
             });
 
-            DatabaseReference timeLeftRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY)).child("timeLeft");
+            DatabaseReference timeLeftRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY)).child("currentTime");
             timeLeftRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
