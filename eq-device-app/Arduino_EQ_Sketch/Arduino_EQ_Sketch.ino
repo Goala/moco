@@ -13,6 +13,7 @@
 #define PLAYER_2 D4
 #define PLAYER_3 D5
 #define PLAYER_4 D7
+#define RESET SD1
 
 class Device {
   private:
@@ -94,6 +95,7 @@ void setup() {
 }
 
 bool deviceInit = false;
+String devicePath = "";
 bool alreadyInBase = false;
 String deviceRef = "";
 bool loadedDevices = false;
@@ -114,12 +116,14 @@ void loop() {
   delay(100);
 
   wifiWatchdog();
+  // reset node if Firebase gets errors
   if (Firebase.failed()) {
     Serial.print("stream broken --> restarting");
-    delay(200);
-    resetFunc();
+    delay(1000);
+    ESP.reset();
   }
 
+  // registers or updates current device in Firebase
   if (!deviceInit) {
     digitalWrite(LED_BUILTIN, HIGH);
     Device device = Device(WiFi.macAddress(), DEVICE_NAME);
@@ -134,6 +138,7 @@ void loop() {
       Serial.flush();
       JsonObject& obj = child.getJsonVariant();
       for (auto kv : obj) {
+        // prevents readding device if loading of current devices fails
         loadedDevices = true;
         JsonObject& value = kv.value;
         if (value.get<String>("mac").equals(device.get_mac())) {
@@ -141,6 +146,7 @@ void loop() {
           deviceRef = String(kv.key);
         }
       }
+      // add device to firebase
       if (!alreadyInBase && loadedDevices) {
         deviceRef = Firebase.push("devices", deviceJSON);
         Serial.print("pushed: /device: ");
@@ -148,8 +154,9 @@ void loop() {
         Serial.println(device.get_name());
         deviceInit = true;
       } else {
+        // update device in firebase
         if (loadedDevices) {
-          String devicePath = "devices/" + deviceRef + "/available";
+          devicePath = "devices/" + deviceRef + "/available";
           Serial.print("need to update: ");
           Serial.println(devicePath);
           Firebase.setBool(devicePath, true);
@@ -165,6 +172,7 @@ void loop() {
     digitalWrite(LED_BUILTIN, LOW);
   }
 
+  // check if node is used in a game and make it unavailable
   if (gameRef.length() < 1) {
     FirebaseObject foGames = Firebase.get("games");
     if (foGames.success()) {
@@ -179,6 +187,7 @@ void loop() {
           questionNr = value.get<int>("questionNr");
           Serial.print("Node is linked to: ");
           Serial.println(value.get<String>("name"));
+          Firebase.setBool(devicePath, false);
         }
       }
       delay(2000);
@@ -199,6 +208,7 @@ void loop() {
         FirebaseObject event = Firebase.readEvent();
         String eventType = event.getString("type");
         eventType.toLowerCase();
+        // read feedback fields as soon as something changes in game
         if (eventType == "put") {
           FirebaseObject currentGame = Firebase.get(gameRef);
           Serial.println("Ready to (schock)");
@@ -251,7 +261,7 @@ void loop() {
         }
       }
 
-
+      // manages remaining time of current question und increments question count if time ist passed 
       if (gameRunning) {
         if (startTime == 0) {
           startTime = millis();
@@ -264,8 +274,12 @@ void loop() {
             Firebase.setInt(gameRef + "/questionNr", questionNr++);
           }
         } else {
+          // restarts the node and sets it available again
           Serial.println("Game finished!");
           delay(5000);
+          Firebase.setBool(devicePath, true);
+          ESP.reset();
+          
         }
       } else {
         Serial.println("Waiting for game to start...");
