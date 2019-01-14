@@ -3,6 +3,7 @@ package topgrost.mocoquizer.quiz;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -93,6 +94,7 @@ public class QuizEditorActivity extends BaseActivity implements View.OnClickList
 
         final TextView tvQuestionAdded = new TextView(getBaseContext());
         tvQuestionAdded.setText(formatQuestionText(questionToAdd));
+        tvQuestionAdded.setTextColor(Color.WHITE);
 
         LinearLayout lyContentContainer = findViewById(R.id.quizEditorContentContainer);
         lyContentContainer.addView(tvQuestionAdded);
