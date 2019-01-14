@@ -56,7 +56,7 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
         // Set progress to max and disable edit of answer
         ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
         progressBar.setProgress(progressBar.getMax());
-        updateEnablement(false);
+        evaluateAnswer();
     }
 
     private void registerListeners() {
@@ -100,9 +100,7 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
                     progressBar.setProgress(remainingTime.intValue());
 
                     if (remainingTime >= progressBar.getMax()) {
-                        updateEnablement(false);
                         evaluateAnswer();
-                        checkGameIsOver();
                     }
                 }
 
@@ -119,6 +117,8 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void evaluateAnswer() {
+        updateEnablement(false);
+
         boolean correctAnswer = true;
         if(!currentQuestion.getAnswers().get(0).getCorrect().equals(((CheckBox) findViewById(R.id.quizAnswer1)).isChecked())){
             correctAnswer = false;
@@ -144,9 +144,7 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
         }
         database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(game).child(scoreOfPlayer).setValue(score);
         ((TextView) findViewById(R.id.quizScore)).setText(String.valueOf(score));
-        ((CheckBox) findViewById(R.id.quizAnswer1)).setChecked(false);
-        ((CheckBox) findViewById(R.id.quizAnswer2)).setChecked(false);
-        ((CheckBox) findViewById(R.id.quizAnswer2)).setChecked(false);
+        checkGameIsOver();
     }
 
     private void checkGameIsOver() {
@@ -160,9 +158,15 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
     private void updateQuestionData(int questionNumber) {
         ((TextView) findViewById(R.id.quizQuestionCount)).setText("Frage " + questionNumber + " von " + getIntent().getIntExtra(LobbyActivity.QUESTION_COUNT_KEY, 0));
         ((TextView) findViewById(R.id.quizQuestionText)).setText(currentQuestion.getText());
+
         ((TextView) findViewById(R.id.quizAnswerText1)).setText(currentQuestion.getAnswers().get(0).getText());
+        ((CheckBox) findViewById(R.id.quizAnswer1)).setChecked(false);
+
         ((TextView) findViewById(R.id.quizAnswerText2)).setText(currentQuestion.getAnswers().get(1).getText());
+        ((CheckBox) findViewById(R.id.quizAnswer2)).setChecked(false);
+
         ((TextView) findViewById(R.id.quizAnswerText3)).setText(currentQuestion.getAnswers().get(2).getText());
+        ((CheckBox) findViewById(R.id.quizAnswer2)).setChecked(false);
     }
 
     private void updateEnablement(boolean enable) {
