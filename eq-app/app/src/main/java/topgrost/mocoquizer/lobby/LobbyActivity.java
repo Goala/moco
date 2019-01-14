@@ -42,7 +42,7 @@ public class LobbyActivity extends BaseActivity {
     public static final String QUESTION_TIME_KEY = "questionTime";
 
     private static final String[] TABLE_HEADERS = {"#", "Player"};
-    private String firebaseGameKey;
+    private String fireBaseGameKey;
     private String user;
     private FirebaseDatabase database;
     private Button btnStartGame;
@@ -60,8 +60,7 @@ public class LobbyActivity extends BaseActivity {
         user = sharedPref.getString("user", "NoUser");
 
         final Game game = (Game) getIntent().getSerializableExtra(Game.class.getSimpleName().toLowerCase());
-        firebaseGameKey = game.getFirebaseKey();
-
+        fireBaseGameKey = game.getFirebaseKey();
 
         TextView title = findViewById(R.id.lobbyTitle);
         title.setText(game.getName());
@@ -73,7 +72,6 @@ public class LobbyActivity extends BaseActivity {
         columnModel.setColumnWeight(0, 1);
         columnModel.setColumnWeight(1, 6);
         tableView.setColumnModel(columnModel);
-
 
         int colorEvenRows = getResources().getColor(R.color.colorPrimaryDark);
         int colorOddRows = getResources().getColor(R.color.colorPrimary);
@@ -87,7 +85,7 @@ public class LobbyActivity extends BaseActivity {
         btnStartGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
+                final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(fireBaseGameKey);
                 try {
                     gameRef.child("running").setValue(true);
                 } catch (Exception e) {
@@ -99,7 +97,7 @@ public class LobbyActivity extends BaseActivity {
     }
 
     private void loadLobby() {
-        final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
+        final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(fireBaseGameKey);
         gameRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -132,7 +130,7 @@ public class LobbyActivity extends BaseActivity {
     }
 
     private void savePlayer() {
-        final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
+        final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(fireBaseGameKey);
         gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -180,7 +178,7 @@ public class LobbyActivity extends BaseActivity {
     }
 
     private void deletePlayer() {
-        final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
+        final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(fireBaseGameKey);
         gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -221,7 +219,7 @@ public class LobbyActivity extends BaseActivity {
     }
 
     public void autoStart() {
-        final DatabaseReference runningRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey).child("running");
+        final DatabaseReference runningRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(fireBaseGameKey).child("running");
         final ValueEventListener autoStartListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
