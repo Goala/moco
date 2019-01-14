@@ -1,7 +1,9 @@
 package topgrost.mocoquizer.quiz;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
@@ -41,13 +43,17 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
 
         setContentView(R.layout.quiz);
 
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String user = sharedPref.getString("user", "NoUser");
+
         findViewById(R.id.quizSendAnswer).setOnClickListener(this);
+        ((TextView) findViewById(R.id.quizPlayerText)).setText("Spieler" + getIntent().getIntExtra(LobbyActivity.PLAYER_NUMBER_KEY, 0) + ": " + user);
         try {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY)).child("questionNr");
             gameRef.addValueEventListener(this);
         } catch (Exception e) {
-            Toast.makeText(QuizActivity.this, "Fehler beim Laden der Quiz-Daten", Toast.LENGTH_LONG).show();
+            Toast.makeText(QuizActivity.this, "Fehler beim Laden der Quiz-Daten", Toast.LENGTH_SHORT).show();
             Log.d(QuizActivity.class.getSimpleName(), e.getMessage());
         }
     }
@@ -66,14 +72,14 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
             updateQuestionData();
             startTimer();
         } catch (Exception e) {
-            Toast.makeText(QuizActivity.this, "Fehler beim Aktualisieren der Frage", Toast.LENGTH_LONG).show();
+            Toast.makeText(QuizActivity.this, "Fehler beim Aktualisieren der Frage", Toast.LENGTH_SHORT).show();
             Log.d(QuizActivity.class.getSimpleName(), e.getMessage());
         }
     }
 
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
-        Toast.makeText(QuizActivity.this, "Fehler beim Aktualisieren der Frage", Toast.LENGTH_LONG).show();
+        Toast.makeText(QuizActivity.this, "Fehler beim Aktualisieren der Frage", Toast.LENGTH_SHORT).show();
         Log.d(QuizActivity.class.getSimpleName(), databaseError.getMessage());
     }
 
