@@ -53,9 +53,6 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        // Set progress to max and disable edit of answer
-        ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
-        progressBar.setProgress(progressBar.getMax());
         evaluateAnswer();
     }
 
@@ -100,7 +97,7 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
                     progressBar.setProgress(remainingTime.intValue());
 
                     if (remainingTime >= progressBar.getMax()) {
-                        evaluateAnswer();
+                        findViewById(R.id.quizSendAnswer).callOnClick();
                     }
                 }
 
