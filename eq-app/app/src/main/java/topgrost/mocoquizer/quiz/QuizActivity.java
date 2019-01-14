@@ -67,9 +67,15 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
-                        Long questionNr = (Long) dataSnapshot.getValue();
-                        currentQuestion = quiz.getQuestions().get(questionNr.intValue());
-                        updateQuestionData();
+                        Long questionIndex = (Long) dataSnapshot.getValue();
+                        if (questionIndex == null) {
+                            Log.d(QuizActivity.class.getSimpleName(), "Got invalid question number");
+                            return;
+                        }
+
+                        currentQuestion = quiz.getQuestions().get(questionIndex.intValue());
+                        int questionNumber = questionIndex.intValue() + 1;
+                        updateQuestionData(questionNumber);
                         updateEnablement(true);
                     } catch (Exception e) {
                         Toast.makeText(QuizActivity.this, "Fehler beim Aktualisieren der Frage", Toast.LENGTH_SHORT).show();
@@ -151,7 +157,8 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    private void updateQuestionData() {
+    private void updateQuestionData(int questionNumber) {
+        ((TextView) findViewById(R.id.quizQuestionCount)).setText("Frage " + questionNumber + " von " + getIntent().getIntExtra(LobbyActivity.QUESTION_COUNT_KEY, 0));
         ((TextView) findViewById(R.id.quizQuestionText)).setText(currentQuestion.getText());
         ((TextView) findViewById(R.id.quizAnswerText1)).setText(currentQuestion.getAnswers().get(0).getText());
         ((TextView) findViewById(R.id.quizAnswerText2)).setText(currentQuestion.getAnswers().get(1).getText());
