@@ -163,7 +163,7 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
         ((CheckBox) findViewById(R.id.quizAnswer2)).setChecked(false);
 
         ((TextView) findViewById(R.id.quizAnswerText3)).setText(currentQuestion.getAnswers().get(2).getText());
-        ((CheckBox) findViewById(R.id.quizAnswer2)).setChecked(false);
+        ((CheckBox) findViewById(R.id.quizAnswer3)).setChecked(false);
     }
 
     private void updateEnablement(boolean enable) {
