@@ -3,7 +3,6 @@ package topgrost.mocoquizer.model;
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Game implements Serializable {
@@ -16,7 +15,7 @@ public class Game implements Serializable {
     private int questionTime;
     private String quizId;
     private boolean running;
-    private int remainingTime;
+    private int timeLeft;
 
     private String player1;
     private boolean feed1;
@@ -88,12 +87,12 @@ public class Game implements Serializable {
         this.questionTime = questionTime;
     }
 
-    public int getRemainingTime() {
-        return remainingTime;
+    public int getTimeLeft() {
+        return timeLeft;
     }
 
-    public void setRemainingTime(int remainingTime) {
-        this.remainingTime = remainingTime;
+    public void setTimeLeft(int timeLeft) {
+        this.timeLeft = timeLeft;
     }
 
     public String getQuizId() {
@@ -226,7 +225,7 @@ public class Game implements Serializable {
                 questionCount == game.questionCount &&
                 questionTime == game.questionTime &&
                 running == game.running &&
-                remainingTime == game.remainingTime &&
+                timeLeft == game.timeLeft &&
                 feed1 == game.feed1 &&
                 score1 == game.score1 &&
                 feed2 == game.feed2 &&
@@ -249,7 +248,7 @@ public class Game implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(name, password, deviceId, questionNr, questionCount, questionTime, quizId, running, remainingTime, player1, feed1, score1, player2, feed2, score2, player3, feed3, score3, player4, feed4, score4, firebaseKey);
+        return Objects.hash(name, password, deviceId, questionNr, questionCount, questionTime, quizId, running, timeLeft, player1, feed1, score1, player2, feed2, score2, player3, feed3, score3, player4, feed4, score4, firebaseKey);
     }
 
     @Override
@@ -263,7 +262,7 @@ public class Game implements Serializable {
                 ", questionTime=" + questionTime +
                 ", quizId='" + quizId + '\'' +
                 ", running=" + running +
-                ", remainingTime=" + remainingTime +
+                ", timeLeft=" + timeLeft +
                 ", player1='" + player1 + '\'' +
                 ", feed1=" + feed1 +
                 ", score1=" + score1 +

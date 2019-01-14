@@ -60,8 +60,8 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
     private void registerListeners() {
         try {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY)).child("questionNr");
-            gameRef.addValueEventListener(new ValueEventListener() {
+            DatabaseReference questionNrRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY)).child("questionNr");
+            questionNrRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
@@ -88,8 +88,8 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
                 }
             });
 
-            DatabaseReference remainingTimeRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY)).child("remainingTime");
-            remainingTimeRef.addValueEventListener(new ValueEventListener() {
+            DatabaseReference timeLeftRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY)).child("timeLeft");
+            timeLeftRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Long remainingTime = (Long) dataSnapshot.getValue();
