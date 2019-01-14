@@ -96,14 +96,18 @@ public class LobbyActivity extends BaseActivity {
         gameRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final Game game = dataSnapshot.getValue(Game.class);
+                if(game.isRunning()) {
+                    return;
+                }
+
                 List<String> players = new ArrayList<>();
-                final Game selectedGame = dataSnapshot.getValue(Game.class);
-                players.add(selectedGame.getPlayer1());
-                players.add(selectedGame.getPlayer2());
-                players.add(selectedGame.getPlayer3());
-                players.add(selectedGame.getPlayer4());
-                if(selectedGame.getPlayer1()!=null){
-                    if(selectedGame.getPlayer1().equals(user)) {
+                players.add(game.getPlayer1());
+                players.add(game.getPlayer2());
+                players.add(game.getPlayer3());
+                players.add(game.getPlayer4());
+                if(game.getPlayer1()!=null){
+                    if(game.getPlayer1().equals(user)) {
                         btnStartGame.setEnabled(true);
                     }
                 }
@@ -212,6 +216,10 @@ public class LobbyActivity extends BaseActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
                     final Game game = dataSnapshot.getValue(Game.class);
+                    if(game.isRunning()) {
+                        return;
+                    }
+
                     if(game.getPlayer1()!= null) {
                         if (game.isRunning() && !game.getPlayer1().equals(user)) {
                             int playerNumber = getPlayerNumber();
