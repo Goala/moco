@@ -1,12 +1,16 @@
 package topgrost.mocoquizer.browser;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -121,11 +125,44 @@ public class GameBrowserActivity extends BaseActivity implements TableDataClickL
         if(isGameFull(selectedGame)) {
             Toast.makeText(GameBrowserActivity.this, "Spiel ist voll", Toast.LENGTH_SHORT).show();
             Log.d(GameBrowserActivity.class.getSimpleName(), "User " + user + " tried to join full game " + selectedGame.getName());
-        } else {
-            Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
-            intent.putExtra(Game.class.getSimpleName().toLowerCase(), selectedGame);
-            startActivity(intent);
+            return;
         }
+        final String password = selectedGame.getPassword();
+        if(password != null && !password.trim().isEmpty()) {
+            checkPassword(selectedGame);
+            return;
+        }
+        showLobby(selectedGame);
+    }
+
+    private void showLobby(Game game) {
+        Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
+        intent.putExtra(Game.class.getSimpleName().toLowerCase(), game);
+        startActivity(intent);
+    }
+
+    private void checkPassword(final Game game) {
+        final EditText input = new EditText(GameBrowserActivity.this);
+        input.requestFocus();
+
+        new AlertDialog.Builder(GameBrowserActivity.this)
+                .setTitle("Passwort benötigt")
+                .setMessage("Bitte geben Sie das Passwort ein")
+                .setView(input)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Editable value = input.getText();
+                        if(game.getPassword().equals(value.toString())) {
+                            showLobby(game);
+                        } else {
+                            Toast.makeText(GameBrowserActivity.this, "Passwort falsch", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Do nothing.
+            }
+        }).show();
     }
 
     private boolean isGameFull(Game gameToCheck) {
