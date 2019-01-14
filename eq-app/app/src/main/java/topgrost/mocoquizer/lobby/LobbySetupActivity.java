@@ -127,8 +127,6 @@ public class LobbySetupActivity extends BaseActivity implements View.OnClickList
         game.setPassword(((TextView) findViewById(R.id.lobbySetupPassword)).getText().toString());
         game.setDeviceId(((Spinner) findViewById(R.id.lobbySetupDevice)).getSelectedItem().toString());
         game.setQuizId(selectedQuizName);
-        game.setPlayer1(user);
-        game.setFeed1(false);
         game.setQuestionNr(0);
         game.setQuestionCount(quizes.get(selectedQuizName).getQuestions().size());
         game.setQuestionTime(((NumberPicker) findViewById(R.id.lobbySetupTimeSeconds)).getValue());
