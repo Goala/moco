@@ -18,7 +18,7 @@
         android:id="@+id/quizEditorScrollContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1.2">
+        android:layout_weight="0.4">
 
         <LinearLayout
             android:id="@+id/quizEditorContentContainer"
@@ -28,13 +28,13 @@
         </LinearLayout>
     </ScrollView>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/quizEditorFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.5">
-    </RelativeLayout>
-
+        android:orientation="vertical"
+        android:layout_weight="0.4">
+    </LinearLayout>
 
     <Button
         android:id="@+id/quizEditorAddQuestion"

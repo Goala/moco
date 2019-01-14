@@ -23,7 +23,7 @@ public class QuestionEditorFragment extends Fragment implements View.OnClickList
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        updateToolbarVisibility(View.GONE);
+        updateComponentVisibility(View.GONE);
         return inflater.inflate(R.layout.quiz_editor_question, container, false);
     }
 
@@ -44,10 +44,11 @@ public class QuestionEditorFragment extends Fragment implements View.OnClickList
 
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-        updateToolbarVisibility(View.VISIBLE);
+        updateComponentVisibility(View.VISIBLE);
     }
 
-    private void updateToolbarVisibility(int visibility) {
+    private void updateComponentVisibility(int visibility) {
+        getActivity().findViewById(R.id.quizEditorScrollContainer).setVisibility(visibility);
         getActivity().findViewById(R.id.quizEditorAddQuestion).setVisibility(visibility);
         getActivity().findViewById(R.id.quizEditorReset).setVisibility(visibility);
         getActivity().findViewById(R.id.quizEditorSave).setVisibility(visibility);

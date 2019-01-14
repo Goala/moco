@@ -8,7 +8,7 @@
     <EditText
         android:id="@+id/quizEditorQuestionText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight=".70"
         android:inputType="textPersonName"
         android:hint="Frage" />
@@ -76,6 +76,6 @@
     <Button
         android:id="@+id/quizEditorApply"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:text="Änderungen übernehmen" />
 </LinearLayout>
