@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -21,7 +20,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 import topgrost.mocoquizer.BaseActivity;
 import topgrost.mocoquizer.R;
@@ -30,10 +28,9 @@ import topgrost.mocoquizer.model.Game;
 import topgrost.mocoquizer.model.Question;
 import topgrost.mocoquizer.model.Quiz;
 
-public class QuizActivity extends BaseActivity implements ValueEventListener, View.OnClickListener {
+public class QuizActivity extends BaseActivity implements View.OnClickListener {
 
     private int score = 0;
-    private Timer timer = new Timer();
     private Question currentQuestion;
     private Quiz quiz;
 
@@ -48,39 +45,8 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
 
         findViewById(R.id.quizSendAnswer).setOnClickListener(this);
         ((TextView) findViewById(R.id.quizPlayerText)).setText("Spieler" + getIntent().getIntExtra(LobbyActivity.PLAYER_NUMBER_KEY, 0) + ": " + user);
-        try {
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY)).child("questionNr");
-            gameRef.addValueEventListener(this);
-        } catch (Exception e) {
-            Toast.makeText(QuizActivity.this, "Fehler beim Laden der Quiz-Daten", Toast.LENGTH_SHORT).show();
-            Log.d(QuizActivity.class.getSimpleName(), e.getMessage());
-        }
-    }
 
-    @Override
-    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-        try {
-            Long questionNr = (Long) dataSnapshot.getValue();
-            quiz = (Quiz) getIntent().getSerializableExtra(Quiz.class.getSimpleName().toLowerCase());
-
-            ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
-            if(currentQuestion != null && progressBar.getProgress() < progressBar.getMax()) {
-                evaluateAnswer();
-            }
-            currentQuestion = quiz.getQuestions().get(questionNr.intValue());
-            updateQuestionData();
-            startTimer();
-        } catch (Exception e) {
-            Toast.makeText(QuizActivity.this, "Fehler beim Aktualisieren der Frage", Toast.LENGTH_SHORT).show();
-            Log.d(QuizActivity.class.getSimpleName(), e.getMessage());
-        }
-    }
-
-    @Override
-    public void onCancelled(@NonNull DatabaseError databaseError) {
-        Toast.makeText(QuizActivity.this, "Fehler beim Aktualisieren der Frage", Toast.LENGTH_SHORT).show();
-        Log.d(QuizActivity.class.getSimpleName(), databaseError.getMessage());
+        registerListeners();
     }
 
     @Override
@@ -89,6 +55,65 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
         ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
         progressBar.setProgress(progressBar.getMax());
         updateEnablement(false);
+    }
+
+    private void registerListeners() {
+        try {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY)).child("questionNr");
+            gameRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try {
+                        Long questionNr = (Long) dataSnapshot.getValue();
+                        quiz = (Quiz) getIntent().getSerializableExtra(Quiz.class.getSimpleName().toLowerCase());
+
+                        ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
+                        if(currentQuestion != null && progressBar.getProgress() < progressBar.getMax()) {
+                            evaluateAnswer();
+                        }
+                        currentQuestion = quiz.getQuestions().get(questionNr.intValue());
+                        updateQuestionData();
+                        updateEnablement(true);
+                    } catch (Exception e) {
+                        Toast.makeText(QuizActivity.this, "Fehler beim Aktualisieren der Frage", Toast.LENGTH_SHORT).show();
+                        Log.d(QuizActivity.class.getSimpleName(), e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(QuizActivity.this, "Fehler beim Aktualisieren der Frage", Toast.LENGTH_SHORT).show();
+                    Log.d(QuizActivity.class.getSimpleName(), databaseError.getMessage());
+                }
+            });
+
+            DatabaseReference remainingTimeRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY)).child("remainingTime");
+            remainingTimeRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Long remainingTime = (Long) dataSnapshot.getValue();
+
+                    ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
+                    progressBar.setProgress(remainingTime.intValue());
+
+                    if (remainingTime >= progressBar.getMax()) {
+                        updateEnablement(false);
+                        evaluateAnswer();
+                        checkGameIsOver();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(QuizActivity.this, "Fehler beim Aktualisieren der Frage", Toast.LENGTH_SHORT).show();
+                    Log.d(QuizActivity.class.getSimpleName(), databaseError.getMessage());
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(QuizActivity.this, "Fehler beim Laden der Quiz-Daten", Toast.LENGTH_SHORT).show();
+            Log.d(QuizActivity.class.getSimpleName(), e.getMessage());
+        }
     }
 
     private void evaluateAnswer() {
@@ -146,36 +171,5 @@ public class QuizActivity extends BaseActivity implements ValueEventListener, Vi
         findViewById(R.id.quizAnswer2).setEnabled(enable);
         findViewById(R.id.quizAnswer3).setEnabled(enable);
         findViewById(R.id.quizSendAnswer).setEnabled(enable);
-    }
-
-    private void startTimer() {
-        ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
-        progressBar.setMax(getIntent().getIntExtra(LobbyActivity.QUESTION_COUNT_KEY, 3));
-        progressBar.setProgress(0);
-
-        timer.scheduleAtFixedRate(new ProgressUpdateTask(), 0, DateUtils.SECOND_IN_MILLIS);
-        updateEnablement(true);
-    }
-
-    private class ProgressUpdateTask extends TimerTask {
-
-        @Override
-        public void run() {
-            QuizActivity.this.runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
-                    if (progressBar.getProgress() >= progressBar.getMax()) {
-                        updateEnablement(false);
-                        evaluateAnswer();
-                        checkGameIsOver();
-                        cancel();
-                    } else {
-                        progressBar.setProgress(progressBar.getProgress() + 1);
-                    }
-                }
-            });
-        }
     }
 }
