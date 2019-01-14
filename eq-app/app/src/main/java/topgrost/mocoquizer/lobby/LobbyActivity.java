@@ -46,6 +46,7 @@ public class LobbyActivity extends BaseActivity {
     private String user;
     private FirebaseDatabase database;
     private Button btnStartGame;
+    private int playerNumber;
 
     //Todo Event Listener zusammenfassen
 
@@ -86,18 +87,25 @@ public class LobbyActivity extends BaseActivity {
         btnStartGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               startGame(1);
+                final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
+                try {
+                    gameRef.child("running").setValue(true);
+                } catch (Exception e) {
+                    Toast.makeText(LobbyActivity.this, "Das Spiel konnte nicht gestartet werden.(Running Value)", Toast.LENGTH_LONG).show();
+                    Log.e(LobbyActivity.class.getSimpleName(), e.getMessage());
+                }
             }
         });
     }
 
-    private void loadLobby(){
-        DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
+    private void loadLobby() {
+        final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
         gameRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 final Game game = dataSnapshot.getValue(Game.class);
-                if(game.isRunning()) {
+                if (game.isRunning()) {
+                    gameRef.removeEventListener(this);
                     return;
                 }
 
@@ -106,8 +114,8 @@ public class LobbyActivity extends BaseActivity {
                 players.add(game.getPlayer2());
                 players.add(game.getPlayer3());
                 players.add(game.getPlayer4());
-                if(game.getPlayer1()!=null){
-                    if(game.getPlayer1().equals(user)) {
+                if (game.getPlayer1() != null) {
+                    if (game.getPlayer1().equals(user)) {
                         btnStartGame.setEnabled(true);
                     }
                 }
@@ -123,19 +131,23 @@ public class LobbyActivity extends BaseActivity {
         });
     }
 
-    private void savePlayer(){
+    private void savePlayer() {
         final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
         gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.child("player1").exists()) {
                     gameRef.child("player1").setValue(user);
+                    playerNumber = 1;
                     btnStartGame.setEnabled(true);
-                }else if(!dataSnapshot.child("player2").exists()){
+                } else if (!dataSnapshot.child("player2").exists()) {
+                    playerNumber = 2;
                     gameRef.child("player2").setValue(user);
-                }else if(!dataSnapshot.child("player3").exists()){
+                } else if (!dataSnapshot.child("player3").exists()) {
+                    playerNumber = 3;
                     gameRef.child("player3").setValue(user);
-                }else if(!dataSnapshot.child("player4").exists()){
+                } else if (!dataSnapshot.child("player4").exists()) {
+                    playerNumber = 4;
                     gameRef.child("player4").setValue(user);
                 }
             }
@@ -154,8 +166,7 @@ public class LobbyActivity extends BaseActivity {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Exit Lobby")
                 .setMessage("Möchten Sie die Lobby verlassen?")
-                .setPositiveButton("Ja", new DialogInterface.OnClickListener()
-                {
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         deletePlayer();
@@ -168,7 +179,7 @@ public class LobbyActivity extends BaseActivity {
                 .show();
     }
 
-    private void deletePlayer(){
+    private void deletePlayer() {
         final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
         gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -181,10 +192,10 @@ public class LobbyActivity extends BaseActivity {
                         if (dataSnapshot.child("player2").exists()) {
                             gameRef.child("player1").setValue(game.getPlayer2());
                             dataSnapshot.child("player2").getRef().removeValue();
-                        }else if(dataSnapshot.child("player3").exists()) {
+                        } else if (dataSnapshot.child("player3").exists()) {
                             gameRef.child("player1").setValue(game.getPlayer3());
                             dataSnapshot.child("player3").getRef().removeValue();
-                        }else if(dataSnapshot.child("player4").exists()) {
+                        } else if (dataSnapshot.child("player4").exists()) {
                             gameRef.child("player1").setValue(game.getPlayer4());
                             dataSnapshot.child("player4").getRef().removeValue();
                         }
@@ -195,7 +206,7 @@ public class LobbyActivity extends BaseActivity {
                     } else if (game.getPlayer4().equals(user)) {
                         dataSnapshot.child("player4").getRef().removeValue();
                     }
-                }catch(Exception e){
+                } catch (Exception e) {
                     Toast.makeText(LobbyActivity.this, "Fehler beim Verlassen der Lobby", Toast.LENGTH_LONG).show();
                     Log.d(LobbyActivity.class.getSimpleName(), e.getMessage());
                 }
@@ -209,47 +220,34 @@ public class LobbyActivity extends BaseActivity {
         });
     }
 
-    public void autoStart(){
-        final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
-        gameRef.addValueEventListener(new ValueEventListener() {
+    public void autoStart() {
+        final DatabaseReference runningRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey).child("running");
+        final ValueEventListener autoStartListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
-                    final Game game = dataSnapshot.getValue(Game.class);
-                    if(game.isRunning()) {
+                    final Boolean running = dataSnapshot.getValue(Boolean.class);
+                    if (running == null || !running.booleanValue()) {
                         return;
                     }
-
-                    if(game.getPlayer1()!= null) {
-                        if (game.isRunning() && !game.getPlayer1().equals(user)) {
-                            int playerNumber = getPlayerNumber();
-                            startGame(playerNumber);
-                        }
-                    }
-                }catch(Exception e){
+                    startGame();
+                    runningRef.removeEventListener(this);
+                } catch (Exception e) {
                     Toast.makeText(LobbyActivity.this, "Fehler beim Starten des Spiels", Toast.LENGTH_LONG).show();
                     Log.e(LobbyActivity.class.getSimpleName(), e.getMessage());
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(LobbyActivity.this, "Fehler beim Starten des Spiels", Toast.LENGTH_LONG).show();
                 Log.e(LobbyActivity.class.getSimpleName(), databaseError.getMessage());
             }
-        });
+        };
+        runningRef.addValueEventListener(autoStartListener);
     }
 
-    private int getPlayerNumber() {
-        SortableTableView<String> tableView = findViewById(R.id.lobbyTable);
-        for(int i = 1; i < 4; i++) {
-            if(user.equals(tableView.getDataAdapter().getRowData(i))) {
-                return i + 1; // Row index + 1 is equal player id
-            }
-        }
-        throw new RuntimeException("Failed to find player number");
-    }
-
-    public void startGame(final int playerNumber){
+    public void startGame() {
         final Game game = (Game) getIntent().getSerializableExtra(Game.class.getSimpleName().toLowerCase());
         DatabaseReference quizRef = database.getReference(Quiz.class.getSimpleName().toLowerCase() + "s");
         quizRef.orderByChild("name").equalTo(game.getQuizId()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -264,7 +262,7 @@ public class LobbyActivity extends BaseActivity {
                     intent.putExtra(PLAYER_NUMBER_KEY, playerNumber);
                     intent.putExtra(QUESTION_TIME_KEY, game.getQuestionTime());
                     startActivity(intent);
-                }catch(Exception e){
+                } catch (Exception e) {
                     Toast.makeText(LobbyActivity.this, "Das Spiel konnte nicht gestartet werden.", Toast.LENGTH_LONG).show();
                     Log.e(LobbyActivity.class.getSimpleName(), e.getMessage());
                 }
@@ -273,25 +271,6 @@ public class LobbyActivity extends BaseActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(LobbyActivity.this, "Das Spiel konnte nicht gestartet werden.", Toast.LENGTH_LONG).show();
-                Log.e(LobbyActivity.class.getSimpleName(), databaseError.getMessage());
-            }
-        });
-
-        final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(firebaseGameKey);
-        gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                try{
-                    gameRef.child("running").setValue(true);
-                }catch(Exception e){
-                    Toast.makeText(LobbyActivity.this, "Das Spiel konnte nicht gestartet werden.(Running Value)", Toast.LENGTH_LONG).show();
-                    Log.e(LobbyActivity.class.getSimpleName(), e.getMessage());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(LobbyActivity.this, "Das Spiel konnte nicht gestartet werden.(Running Value)", Toast.LENGTH_LONG).show();
                 Log.e(LobbyActivity.class.getSimpleName(), databaseError.getMessage());
             }
         });
