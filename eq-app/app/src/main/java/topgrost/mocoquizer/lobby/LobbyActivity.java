@@ -64,7 +64,7 @@ public class LobbyActivity extends BaseActivity {
         TextView title = findViewById(R.id.lobbyTitle);
         title.setText(game.getName());
 
-        final SortableTableView<Game> tableView = findViewById(R.id.lobbyTable);
+        final SortableTableView<String> tableView = findViewById(R.id.lobbyTable);
         tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(this, TABLE_HEADERS));
 
         TableColumnWeightModel columnModel = new TableColumnWeightModel(TABLE_HEADERS.length);
@@ -85,7 +85,7 @@ public class LobbyActivity extends BaseActivity {
         btnStartGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               startGame();
+               startGame(1);
             }
         });
     }
@@ -213,7 +213,8 @@ public class LobbyActivity extends BaseActivity {
                     final Game game = dataSnapshot.getValue(Game.class);
                     if(game.getPlayer1()!= null) {
                         if (game.isRunning() && !game.getPlayer1().equals(user)) {
-                            startGame();
+                            int playerNumber = getPlayerNumber();
+                            startGame(playerNumber);
                         }
                     }
                 }catch(Exception e){
@@ -229,7 +230,17 @@ public class LobbyActivity extends BaseActivity {
         });
     }
 
-    public void startGame(){
+    private int getPlayerNumber() {
+        SortableTableView<String> tableView = findViewById(R.id.lobbyTable);
+        for(int i = 1; i < 4; i++) {
+            if(user.equals(tableView.getDataAdapter().getRowData(i))) {
+                return i + 1; // Row index + 1 is equal player id
+            }
+        }
+        throw new RuntimeException("Failed to find player number");
+    }
+
+    public void startGame(final int playerNumber){
         final Game game = (Game) getIntent().getSerializableExtra(Game.class.getSimpleName().toLowerCase());
         DatabaseReference quizRef = database.getReference(Quiz.class.getSimpleName().toLowerCase() + "s");
         quizRef.orderByChild("name").equalTo(game.getQuizId()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -241,7 +252,7 @@ public class LobbyActivity extends BaseActivity {
                     intent.putExtra(Quiz.class.getSimpleName().toLowerCase(), quiz);
                     intent.putExtra(GAME_ID_KEY, game.getFirebaseKey());
                     intent.putExtra(QUESTION_COUNT_KEY, game.getQuestionTime());
-                    intent.putExtra(PLAYER_NUMBER_KEY, 1);
+                    intent.putExtra(PLAYER_NUMBER_KEY, playerNumber);
                     startActivity(intent);
                 }catch(Exception e){
                     Toast.makeText(LobbyActivity.this, "Das Spiel konnte nicht gestartet werden.", Toast.LENGTH_LONG).show();
