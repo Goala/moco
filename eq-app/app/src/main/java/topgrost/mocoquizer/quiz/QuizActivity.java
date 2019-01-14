@@ -44,6 +44,10 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
         findViewById(R.id.quizSendAnswer).setOnClickListener(this);
         ((TextView) findViewById(R.id.quizPlayerText)).setText("Spieler" + getIntent().getIntExtra(LobbyActivity.PLAYER_NUMBER_KEY, 0) + ": " + user);
 
+        quiz = (Quiz) getIntent().getSerializableExtra(Quiz.class.getSimpleName().toLowerCase());
+        ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
+        progressBar.setMax(getIntent().getIntExtra(LobbyActivity.QUESTION_TIME_KEY, 0));
+
         registerListeners();
     }
 
@@ -64,12 +68,6 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
                         Long questionNr = (Long) dataSnapshot.getValue();
-                        quiz = (Quiz) getIntent().getSerializableExtra(Quiz.class.getSimpleName().toLowerCase());
-
-                        ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
-                        if(currentQuestion != null && progressBar.getProgress() < progressBar.getMax()) {
-                            evaluateAnswer();
-                        }
                         currentQuestion = quiz.getQuestions().get(questionNr.intValue());
                         updateQuestionData();
                         updateEnablement(true);
@@ -146,10 +144,6 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void checkGameIsOver() {
-        if(quiz == null || currentQuestion == null) {
-            return;
-        }
-
         if(quiz.getQuestions().indexOf(currentQuestion) + 1 >= quiz.getQuestions().size()) {
             Intent intent = new Intent(getApplicationContext(), QuizResultActivity.class);
             intent.putExtra(LobbyActivity.GAME_ID_KEY, getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY));

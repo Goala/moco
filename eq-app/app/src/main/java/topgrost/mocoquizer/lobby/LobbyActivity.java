@@ -39,6 +39,7 @@ public class LobbyActivity extends BaseActivity {
     public static final String GAME_ID_KEY = "gameId";
     public static final String QUESTION_COUNT_KEY = "questionCount";
     public static final String PLAYER_NUMBER_KEY = "playerNumber";
+    public static final String QUESTION_TIME_KEY = "questionTime";
 
     private static final String[] TABLE_HEADERS = {"#", "Player"};
     private String firebaseGameKey;
@@ -251,8 +252,9 @@ public class LobbyActivity extends BaseActivity {
                     Intent intent = new Intent(getApplicationContext(), QuizActivity.class);
                     intent.putExtra(Quiz.class.getSimpleName().toLowerCase(), quiz);
                     intent.putExtra(GAME_ID_KEY, game.getFirebaseKey());
-                    intent.putExtra(QUESTION_COUNT_KEY, game.getQuestionTime());
+                    intent.putExtra(QUESTION_COUNT_KEY, game.getQuestionCount());
                     intent.putExtra(PLAYER_NUMBER_KEY, playerNumber);
+                    intent.putExtra(QUESTION_TIME_KEY, game.getQuestionTime());
                     startActivity(intent);
                 }catch(Exception e){
                     Toast.makeText(LobbyActivity.this, "Das Spiel konnte nicht gestartet werden.", Toast.LENGTH_LONG).show();
