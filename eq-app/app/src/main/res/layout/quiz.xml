@@ -1,66 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/quizPlayerText"
-        android:layout_width="0dp"
-        android:layout_height="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginBottom="8dp"
         android:text="Spieler"
-        app:layout_constraintBottom_toTopOf="@+id/quizTimeProgressBar"
-        app:layout_constraintEnd_toStartOf="@+id/quizScoreText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.03" />
-
-    <TextView
-        android:id="@+id/quizScoreText"
-        android:layout_width="50dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Punkte:"
-        app:layout_constraintBottom_toTopOf="@+id/quizTimeProgressBar"
+        app:layout_constraintBaseline_toBaselineOf="@+id/quizScore"
         app:layout_constraintEnd_toStartOf="@+id/quizScore"
-        app:layout_constraintStart_toEndOf="@+id/quizPlayerText"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/quizScore"
-        android:layout_width="66dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginBottom="8dp"
-        android:text="0"
-        app:layout_constraintBottom_toTopOf="@+id/quizTimeProgressBar"
+        android:text="Punkte"
+        app:layout_constraintBaseline_toBaselineOf="@+id/quizQuestionCount"
         app:layout_constraintEnd_toStartOf="@+id/quizQuestionCount"
-        app:layout_constraintStart_toEndOf="@+id/quizScoreText"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/quizPlayerText" />
 
     <TextView
         android:id="@+id/quizQuestionCount"
-        android:layout_width="89dp"
-        android:layout_height="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
         android:text="Frage 1 von x"
-        app:layout_constraintBottom_toTopOf="@+id/quizTimeProgressBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/quizScore"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.03" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/quizTimeProgressBar"
@@ -73,7 +50,7 @@
         app:layout_constraintBottom_toTopOf="@+id/quizQuestionText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/quizScoreText" />
+        app:layout_constraintTop_toBottomOf="@+id/quizScore" />
 
     <TextView
         android:id="@+id/quizQuestionText"

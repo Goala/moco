@@ -141,7 +141,7 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
             score -= 10;
         }
         database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(game).child(scoreOfPlayer).setValue(score);
-        ((TextView) findViewById(R.id.quizScore)).setText(String.valueOf(score));
+        ((TextView) findViewById(R.id.quizScore)).setText("Punkte: " + String.valueOf(score));
         checkGameIsOver();
     }
 
