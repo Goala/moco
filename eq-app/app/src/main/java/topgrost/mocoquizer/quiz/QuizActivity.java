@@ -96,8 +96,9 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
                     ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
                     progressBar.setProgress(remainingTime.intValue());
 
-                    if (remainingTime >= progressBar.getMax()) {
-                        findViewById(R.id.quizSendAnswer).callOnClick();
+                    View btnSendAnswer = findViewById(R.id.quizSendAnswer);
+                    if (remainingTime >= progressBar.getMax() && btnSendAnswer.isEnabled()) {
+                        btnSendAnswer.callOnClick();
                     }
                 }
 
