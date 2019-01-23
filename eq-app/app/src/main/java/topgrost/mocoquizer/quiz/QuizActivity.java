@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import topgrost.mocoquizer.BaseActivity;
+import topgrost.mocoquizer.MainActivity;
 import topgrost.mocoquizer.R;
 import topgrost.mocoquizer.browser.GameBrowserActivity;
 import topgrost.mocoquizer.lobby.LobbyActivity;
@@ -194,7 +195,7 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
                 .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getApplicationContext(), GameBrowserActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                     }
 

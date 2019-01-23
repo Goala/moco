@@ -47,4 +47,11 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        //In der Main Activity soll man den Zurück Button nicht betätigen können, um nicht wieder
+        //In das Spiel geworfen zu werden
+    }
 }
