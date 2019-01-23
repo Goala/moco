@@ -73,7 +73,7 @@ public class QuizResultActivity extends BaseActivity implements View.OnClickList
     private void loadResults() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY));
-        gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        gameRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Game game = dataSnapshot.getValue(Game.class);
@@ -106,5 +106,11 @@ public class QuizResultActivity extends BaseActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         startActivity(new Intent(this, MainActivity.class));
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent myIntent = new Intent(this, MainActivity.class);
+        startActivity(myIntent);
     }
 }

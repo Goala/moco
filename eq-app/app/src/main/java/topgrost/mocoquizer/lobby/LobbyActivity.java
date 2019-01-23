@@ -211,12 +211,15 @@ public class LobbyActivity extends BaseActivity {
                         if (dataSnapshot.child("player2").exists()) {
                             gameRef.child("player1").setValue(game.getPlayer2());
                             dataSnapshot.child("player2").getRef().removeValue();
+                            playerNumber = 1;
                         } else if (dataSnapshot.child("player3").exists()) {
                             gameRef.child("player1").setValue(game.getPlayer3());
                             dataSnapshot.child("player3").getRef().removeValue();
+                            playerNumber = 1;
                         } else if (dataSnapshot.child("player4").exists()) {
                             gameRef.child("player1").setValue(game.getPlayer4());
                             dataSnapshot.child("player4").getRef().removeValue();
+                            playerNumber = 1;
                         }
                     } else if (game.getPlayer2().equals(user)) {
                         dataSnapshot.child("player2").getRef().removeValue();
