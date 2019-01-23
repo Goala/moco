@@ -32,6 +32,7 @@ public class RegisterFragment extends Fragment {
     private EditText mPasswordField;
     private EditText mPasswordField2;
     private EditText mAliasField;
+    private List <String> awardedUsernames;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class RegisterFragment extends Fragment {
         mPasswordField2 = view.findViewById(R.id.etPassword2_R);
         mAliasField = view.findViewById(R.id.etAlias);
 
-
+        awardedUsernames = getAwardedUsernames();
         Button button = view.findViewById(R.id.btnRegister);
         button.setOnClickListener(new View.OnClickListener()
         {
@@ -65,15 +66,20 @@ public class RegisterFragment extends Fragment {
         boolean valid = true;
 
         String alias = mAliasField.getText().toString();
+        boolean userNameAwarded = checkIfUsernameExists(alias, awardedUsernames);
         if (TextUtils.isEmpty(alias) || alias.trim().equals("")) {
             mAliasField.setError("Username erforderlich!");
             valid = false;
         }else if(alias.trim().length()< 4) {
             mAliasField.setError("Der Username muss mindestens 4 Zeichen enthalten");
             valid= false;
-        }else{
-            mEmailField.setError(null);
+        }else if(userNameAwarded != false) {
+            mAliasField.setError("Der Username ist bereits vergeben");
+            valid= false;
+        } else {
+                mEmailField.setError(null);
         }
+
 
         String email = mEmailField.getText().toString();
         if (TextUtils.isEmpty(email)) {
@@ -97,6 +103,34 @@ public class RegisterFragment extends Fragment {
             valid = false;
         }
         return valid;
+    }
+
+    private List<String> getAwardedUsernames(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final List<String> userNames = new ArrayList<>();
+        final DatabaseReference userRef = database.getReference(User.class.getSimpleName().toLowerCase() + "s");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot user : dataSnapshot.getChildren()) {
+                    userNames.add(user.child("name").getValue().toString().trim());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return userNames;
+
+    }
+
+    private boolean checkIfUsernameExists(String userName, List<String> existingUsernames){
+        if(existingUsernames.contains(userName.trim())){
+            return true;
+        }
+        return false;
     }
 
 
