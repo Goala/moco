@@ -46,9 +46,6 @@ public class LobbyActivity extends BaseActivity {
     private String user;
     private FirebaseDatabase database;
     private Button btnStartGame;
-    private int playerNumber;
-
-    //Todo Event Listener zusammenfassen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,16 +150,12 @@ public class LobbyActivity extends BaseActivity {
                     }
                     if (!dataSnapshot.child("player1").exists()) {
                         gameRef.child("player1").setValue(user);
-                        playerNumber = 1;
                         btnStartGame.setEnabled(true);
                     } else if (!dataSnapshot.child("player2").exists()) {
-                        playerNumber = 2;
                         gameRef.child("player2").setValue(user);
                     } else if (!dataSnapshot.child("player3").exists()) {
-                        playerNumber = 3;
                         gameRef.child("player3").setValue(user);
                     } else if (!dataSnapshot.child("player4").exists()) {
-                        playerNumber = 4;
                         gameRef.child("player4").setValue(user);
                     }
                 }catch(Exception e){
@@ -211,15 +204,12 @@ public class LobbyActivity extends BaseActivity {
                         if (dataSnapshot.child("player2").exists()) {
                             gameRef.child("player1").setValue(game.getPlayer2());
                             dataSnapshot.child("player2").getRef().removeValue();
-                            playerNumber = 1;
                         } else if (dataSnapshot.child("player3").exists()) {
                             gameRef.child("player1").setValue(game.getPlayer3());
                             dataSnapshot.child("player3").getRef().removeValue();
-                            playerNumber = 1;
                         } else if (dataSnapshot.child("player4").exists()) {
                             gameRef.child("player1").setValue(game.getPlayer4());
                             dataSnapshot.child("player4").getRef().removeValue();
-                            playerNumber = 1;
                         }
                     } else if (game.getPlayer2().equals(user)) {
                         dataSnapshot.child("player2").getRef().removeValue();
@@ -276,6 +266,9 @@ public class LobbyActivity extends BaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
+                    final SortableTableView<String> tableView = findViewById(R.id.lobbyTable);
+                    int playerNumber = tableView.getDataAdapter().getData().indexOf(user) + 1;
+
                     Quiz quiz = dataSnapshot.getChildren().iterator().next().getValue(Quiz.class);
                     Intent intent = new Intent(getApplicationContext(), QuizActivity.class);
                     intent.putExtra(Quiz.class.getSimpleName().toLowerCase(), quiz);

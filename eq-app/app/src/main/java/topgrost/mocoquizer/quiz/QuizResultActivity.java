@@ -32,9 +32,10 @@ import topgrost.mocoquizer.quiz.view.QuizResultListAdapter;
 import topgrost.mocoquizer.quiz.view.QuizResultNameComparator;
 import topgrost.mocoquizer.quiz.view.QuizResultScoreComparator;
 
-public class QuizResultActivity extends BaseActivity implements View.OnClickListener {
+public class QuizResultActivity extends BaseActivity implements View.OnClickListener, ValueEventListener {
 
     private static final String[] TABLE_HEADERS = {"Name", "Punkte"};
+    private DatabaseReference gameRef;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +47,13 @@ public class QuizResultActivity extends BaseActivity implements View.OnClickList
         loadResults();
 
         findViewById(R.id.quizResultClose).setOnClickListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        gameRef.removeEventListener(this);
+
+        super.onDestroy();
     }
 
     private void initTable() {
@@ -72,35 +80,35 @@ public class QuizResultActivity extends BaseActivity implements View.OnClickList
 
     private void loadResults() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY));
-        gameRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Game game = dataSnapshot.getValue(Game.class);
+        gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY));
+        gameRef.addValueEventListener(this);
+    }
 
-                List<Pair> playerScores = new LinkedList<>();
-                addPlayerScoreContainer(game.getPlayer1(), game.getScore1(), playerScores);
-                addPlayerScoreContainer(game.getPlayer2(), game.getScore2(), playerScores);
-                addPlayerScoreContainer(game.getPlayer3(), game.getScore3(), playerScores);
-                addPlayerScoreContainer(game.getPlayer4(), game.getScore4(), playerScores);
+    @Override
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        Game game = dataSnapshot.getValue(Game.class);
 
-                final SortableTableView<Pair> tableView = findViewById(R.id.quizResultTable);
-                tableView.setDataAdapter(new QuizResultListAdapter(getBaseContext(), playerScores));
-            }
+        List<Pair> playerScores = new LinkedList<>();
+        addPlayerScoreContainer(game.getPlayer1(), game.getScore1(), playerScores);
+        addPlayerScoreContainer(game.getPlayer2(), game.getScore2(), playerScores);
+        addPlayerScoreContainer(game.getPlayer3(), game.getScore3(), playerScores);
+        addPlayerScoreContainer(game.getPlayer4(), game.getScore4(), playerScores);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(QuizResultActivity.this, "Fehler beim Aktualisieren der Highscore", Toast.LENGTH_LONG).show();
-                Log.d(QuizResultActivity.class.getSimpleName(), databaseError.getMessage());
-            }
+        final SortableTableView<Pair> tableView = findViewById(R.id.quizResultTable);
+        tableView.setDataAdapter(new QuizResultListAdapter(getBaseContext(), playerScores));
+    }
 
-            private void addPlayerScoreContainer(String playerName, int score, List<Pair> playerScores) {
-                if (playerName == null || playerName.trim().isEmpty()) {
-                    return;
-                }
-                playerScores.add(new Pair<>(playerName, Integer.valueOf(score)));
-            }
-        });
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+        Toast.makeText(QuizResultActivity.this, "Fehler beim Aktualisieren der Highscore", Toast.LENGTH_LONG).show();
+        Log.d(QuizResultActivity.class.getSimpleName(), databaseError.getMessage());
+    }
+
+    private void addPlayerScoreContainer(String playerName, int score, List<Pair> playerScores) {
+        if (playerName == null || playerName.trim().isEmpty()) {
+            return;
+        }
+        playerScores.add(new Pair<>(playerName, Integer.valueOf(score)));
     }
 
     @Override
