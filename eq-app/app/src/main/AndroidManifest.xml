@@ -14,20 +14,25 @@
         android:windowSoftInputMode="adjustResize"
         android:theme="@style/Theme.AppCompat">
         <activity android:name=".browser.GameBrowserActivity" />
-        <activity android:name=".quiz.QuizActivity" />
-        <activity android:name=".quiz.QuizEditorActivity" />
+        <activity android:name=".quiz.QuizActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".quiz.QuizEditorActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".quiz.QuizResultActivity" />
         <activity android:name=".lobby.LobbyActivity" />
-        <activity android:name=".lobby.LobbySetupActivity" />
+        <activity android:name=".lobby.LobbySetupActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".login.LoginActivity">
+        <activity android:name=".login.LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 </manifest>
