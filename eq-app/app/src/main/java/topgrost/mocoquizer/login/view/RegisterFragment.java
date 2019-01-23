@@ -112,14 +112,20 @@ public class RegisterFragment extends Fragment {
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot user : dataSnapshot.getChildren()) {
-                    userNames.add(user.child("name").getValue().toString().trim());
+                try {
+                    for (DataSnapshot user : dataSnapshot.getChildren()) {
+                        userNames.add(user.child("name").getValue().toString().trim());
+                    }
+                }catch(Exception e){
+                    Toast.makeText(getContext(), "Fehler beim Verlassen der Lobby", Toast.LENGTH_LONG).show();
+                    Log.d(RegisterFragment.class.getSimpleName(), e.getMessage());
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(getContext(), "Fehler beim Verlassen der Lobby", Toast.LENGTH_LONG).show();
+                Log.d(RegisterFragment.class.getSimpleName(), databaseError.getMessage());
             }
         });
         return userNames;

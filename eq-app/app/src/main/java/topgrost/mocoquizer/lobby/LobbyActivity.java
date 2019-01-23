@@ -131,22 +131,43 @@ public class LobbyActivity extends BaseActivity {
 
     private void savePlayer() {
         final DatabaseReference gameRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(fireBaseGameKey);
+        final List <String>  playersInlobby = new ArrayList<>();
         gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.child("player1").exists()) {
-                    gameRef.child("player1").setValue(user);
-                    playerNumber = 1;
-                    btnStartGame.setEnabled(true);
-                } else if (!dataSnapshot.child("player2").exists()) {
-                    playerNumber = 2;
-                    gameRef.child("player2").setValue(user);
-                } else if (!dataSnapshot.child("player3").exists()) {
-                    playerNumber = 3;
-                    gameRef.child("player3").setValue(user);
-                } else if (!dataSnapshot.child("player4").exists()) {
-                    playerNumber = 4;
-                    gameRef.child("player4").setValue(user);
+                try {
+                    if (dataSnapshot.child("player1").exists()) {
+                        playersInlobby.add(dataSnapshot.child("player1").getValue().toString());
+                    }
+                    if (dataSnapshot.child("player2").exists()) {
+                        playersInlobby.add(dataSnapshot.child("player2").getValue().toString());
+                    }
+                    if (dataSnapshot.child("player3").exists()) {
+                        playersInlobby.add(dataSnapshot.child("player3").getValue().toString());
+                    }
+                    if (dataSnapshot.child("player4").exists()) {
+                        playersInlobby.add(dataSnapshot.child("player4").getValue().toString());
+                    }
+                    if(playersInlobby.contains(user)){
+                        return;
+                    }
+                    if (!dataSnapshot.child("player1").exists()) {
+                        gameRef.child("player1").setValue(user);
+                        playerNumber = 1;
+                        btnStartGame.setEnabled(true);
+                    } else if (!dataSnapshot.child("player2").exists()) {
+                        playerNumber = 2;
+                        gameRef.child("player2").setValue(user);
+                    } else if (!dataSnapshot.child("player3").exists()) {
+                        playerNumber = 3;
+                        gameRef.child("player3").setValue(user);
+                    } else if (!dataSnapshot.child("player4").exists()) {
+                        playerNumber = 4;
+                        gameRef.child("player4").setValue(user);
+                    }
+                }catch(Exception e){
+                    Toast.makeText(LobbyActivity.this, "Fehler Betreten der Lobby", Toast.LENGTH_LONG).show();
+                    Log.d(LobbyActivity.class.getSimpleName(), e.getMessage());
                 }
             }
 
