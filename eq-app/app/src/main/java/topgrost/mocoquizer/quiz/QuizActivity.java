@@ -34,6 +34,9 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
     private int score = 0;
     private Question currentQuestion;
     private Quiz quiz;
+    private int playerNumber;
+    private int questionCount;
+    private String gameId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,11 +48,16 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
         String user = sharedPref.getString("user", "NoUser");
 
         findViewById(R.id.quizSendAnswer).setOnClickListener(this);
-        ((TextView) findViewById(R.id.quizPlayerText)).setText("Spieler" + getIntent().getIntExtra(LobbyActivity.PLAYER_NUMBER_KEY, 0) + ": " + user);
+
+        playerNumber = getIntent().getIntExtra(LobbyActivity.PLAYER_NUMBER_KEY, 0);
+        questionCount = getIntent().getIntExtra(LobbyActivity.QUESTION_TIME_KEY, 0);
+        gameId = getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY);
+
+        ((TextView) findViewById(R.id.quizPlayerText)).setText("Spieler" + playerNumber + ": " + user);
 
         quiz = (Quiz) getIntent().getSerializableExtra(Quiz.class.getSimpleName().toLowerCase());
         ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
-        progressBar.setMax(getIntent().getIntExtra(LobbyActivity.QUESTION_TIME_KEY, 0));
+        progressBar.setMax(questionCount);
 
         registerListeners();
     }
@@ -62,7 +70,7 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
     private void registerListeners() {
         try {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference questionNrRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY)).child("questionNr");
+            DatabaseReference questionNrRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(gameId).child("questionNr");
             questionNrRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -90,7 +98,7 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
                 }
             });
 
-            DatabaseReference timeLeftRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY)).child("currentTime");
+            DatabaseReference timeLeftRef = database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(gameId).child("currentTime");
             timeLeftRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -132,18 +140,17 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
         }
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        String game = getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY);
-        String scoreOfPlayer = "score" + getIntent().getIntExtra(LobbyActivity.PLAYER_NUMBER_KEY, 0);
+        String scoreOfPlayer = "score" + playerNumber;
         if(correctAnswer) {
             Toast.makeText(QuizActivity.this, "Richtig!", Toast.LENGTH_SHORT).show();
             score += 30;
         } else {
-            String player = "feed" + getIntent().getIntExtra(LobbyActivity.PLAYER_NUMBER_KEY, 0);
-            database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(game).child(player).setValue(true);
+            String player = "feed" + playerNumber;
+            database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(gameId).child(player).setValue(true);
             Toast.makeText(QuizActivity.this, "Falsch!", Toast.LENGTH_SHORT).show();
             score -= 10;
         }
-        database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(game).child(scoreOfPlayer).setValue(score);
+        database.getReference(Game.class.getSimpleName().toLowerCase() + "s").child(gameId).child(scoreOfPlayer).setValue(score);
         ((TextView) findViewById(R.id.quizScore)).setText("Punkte: " + String.valueOf(score));
         checkGameIsOver();
     }
@@ -157,7 +164,7 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void updateQuestionData(int questionNumber) {
-        ((TextView) findViewById(R.id.quizQuestionCount)).setText("Frage " + questionNumber + " von " + getIntent().getIntExtra(LobbyActivity.QUESTION_COUNT_KEY, 0));
+        ((TextView) findViewById(R.id.quizQuestionCount)).setText("Frage " + questionNumber + " von " + questionCount);
         ((TextView) findViewById(R.id.quizQuestionText)).setText(currentQuestion.getText());
 
         ((TextView) findViewById(R.id.quizAnswerText1)).setText(currentQuestion.getAnswers().get(0).getText());
