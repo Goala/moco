@@ -69,7 +69,9 @@ public class LobbySetupActivity extends BaseActivity implements View.OnClickList
 
                 for (DataSnapshot deviceDataSnapshot : dataSnapshot.getChildren()) {
                     Device device = deviceDataSnapshot.getValue(Device.class);
-                    devices.add(device.getName());
+                    if(device.isAvailable()) {
+                        devices.add(device.getName());
+                    }
                 }
 
                 String[] primDevices = new String[devices.size()];
