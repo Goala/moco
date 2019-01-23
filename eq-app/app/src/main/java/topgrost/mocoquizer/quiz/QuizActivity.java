@@ -50,14 +50,14 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
         findViewById(R.id.quizSendAnswer).setOnClickListener(this);
 
         playerNumber = getIntent().getIntExtra(LobbyActivity.PLAYER_NUMBER_KEY, 0);
-        questionCount = getIntent().getIntExtra(LobbyActivity.QUESTION_TIME_KEY, 0);
+        questionCount = getIntent().getIntExtra(LobbyActivity.QUESTION_COUNT_KEY, 0);
         gameId = getIntent().getStringExtra(LobbyActivity.GAME_ID_KEY);
 
         ((TextView) findViewById(R.id.quizPlayerText)).setText("Spieler" + playerNumber + ": " + user);
 
         quiz = (Quiz) getIntent().getSerializableExtra(Quiz.class.getSimpleName().toLowerCase());
         ProgressBar progressBar = findViewById(R.id.quizTimeProgressBar);
-        progressBar.setMax(questionCount);
+        progressBar.setMax(getIntent().getIntExtra(LobbyActivity.QUESTION_TIME_KEY, 0));
 
         registerListeners();
     }
