@@ -188,7 +188,9 @@ void loop() {
           questionNr = value.get<int>("questionNr");
           Serial.print("Node is linked to: ");
           Serial.println(value.get<String>("name"));
-          Firebase.setBool(devicePath, false);
+          if (devicePath.length() > 1) {
+            Firebase.setBool(devicePath, false);
+          }
         }
       }
       delay(2000);
@@ -210,7 +212,7 @@ void loop() {
         String eventType = event.getString("type");
         eventType.toLowerCase();
         // read feedback fields as soon as something changes in game
-        if (eventType == "put") {
+        if (eventType == "put" && gameRef.length() > 0) {
           FirebaseObject currentGame = Firebase.get(gameRef);
           Serial.println("Ready to (schock)");
           boolean player1 = currentGame.getBool("feed1");
@@ -253,7 +255,7 @@ void loop() {
 
         //keep alive to maintain stream conncetion
         int ms = millis();
-        if (ms - lastKeepAlive > 30000) {
+        if (ms - lastKeepAlive > 30000 && gameRef.length() > 1) {
           digitalWrite(KEEP_ALIVE, HIGH);
           Firebase.getString(gameRef + "/name");
           lastKeepAlive = ms;
@@ -268,7 +270,7 @@ void loop() {
           startTime = millis();
         }
 
-        if (questionNr < questionCount) {
+        if (questionNr < questionCount && gameRef.length() > 1) {
           currentTime = millis();
           currentSecond = (currentTime - startTime) / 1000;
 
@@ -277,6 +279,7 @@ void loop() {
           }
 
           if (currentTime - startTime >= questionTimeInMs && questionTimeInMs / 1000 < currentSecond) {
+            Firebase.setInt(gameRef + "/currentTime", questionTimeInMs / 1000);
             startTime = currentTime;
             ++questionNr;
             if (questionNr < questionCount) {
@@ -285,22 +288,22 @@ void loop() {
             Firebase.setInt(gameRef + "/currentTime", 0);
           }
 
-
         } else {
           // restarts the node and sets it available again
           Serial.println("Game finished!");
           delay(5000);
           Firebase.setBool(devicePath, true);
-          Firebase.setBool(gameRef + "/feed1", false);
-          analogWrite(PLAYER_1, 0);
-          Firebase.setBool(gameRef + "/feed2", false);
-          analogWrite(PLAYER_2, 0);
-          Firebase.setBool(gameRef + "/feed3", false);
-          analogWrite(PLAYER_3, 0);
-          Firebase.setBool(gameRef + "/feed4", false);
-          analogWrite(PLAYER_4, 0);
+          if (gameRef.length() > 1 ) {
+            Firebase.setBool(gameRef + "/feed1", false);
+            analogWrite(PLAYER_1, 0);
+            Firebase.setBool(gameRef + "/feed2", false);
+            analogWrite(PLAYER_2, 0);
+            Firebase.setBool(gameRef + "/feed3", false);
+            analogWrite(PLAYER_3, 0);
+            Firebase.setBool(gameRef + "/feed4", false);
+            analogWrite(PLAYER_4, 0);
+          }
           ESP.reset();
-
         }
       } else {
         Serial.println("Waiting for game to start...");
