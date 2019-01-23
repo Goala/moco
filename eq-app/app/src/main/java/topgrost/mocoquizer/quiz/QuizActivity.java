@@ -1,5 +1,7 @@
 package topgrost.mocoquizer.quiz;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import topgrost.mocoquizer.BaseActivity;
 import topgrost.mocoquizer.R;
+import topgrost.mocoquizer.browser.GameBrowserActivity;
 import topgrost.mocoquizer.lobby.LobbyActivity;
 import topgrost.mocoquizer.model.Game;
 import topgrost.mocoquizer.model.Question;
@@ -172,5 +175,24 @@ public class QuizActivity extends BaseActivity implements View.OnClickListener {
         findViewById(R.id.quizAnswer2).setEnabled(enable);
         findViewById(R.id.quizAnswer3).setEnabled(enable);
         findViewById(R.id.quizSendAnswer).setEnabled(enable);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Exit Game")
+                .setMessage("Möchten Sie die das Spiel verlassen?")
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), GameBrowserActivity.class);
+                        startActivity(intent);
+                    }
+
+                })
+                .setNegativeButton("Nein", null)
+                .show();
     }
 }
