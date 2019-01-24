@@ -279,6 +279,7 @@ void loop() {
           }
 
           if (currentTime - startTime >= questionTimeInMs && questionTimeInMs / 1000 < currentSecond) {
+            // Set timelimit for currentTime to signal the client that the current question is over
             Firebase.setInt(gameRef + "/currentTime", questionTimeInMs / 1000);
             startTime = currentTime;
             ++questionNr;
@@ -292,18 +293,9 @@ void loop() {
           // restarts the node and sets it available again
           Serial.println("Game finished!");
           delay(5000);
-          Firebase.setBool(devicePath, true);
-          if (gameRef.length() > 1 ) {
-            Firebase.setBool(gameRef + "/feed1", false);
-            analogWrite(PLAYER_1, 0);
-            Firebase.setBool(gameRef + "/feed2", false);
-            analogWrite(PLAYER_2, 0);
-            Firebase.setBool(gameRef + "/feed3", false);
-            analogWrite(PLAYER_3, 0);
-            Firebase.setBool(gameRef + "/feed4", false);
-            analogWrite(PLAYER_4, 0);
+          if (devicePath.length() > 10) {
+            Firebase.setBool(devicePath, true);
           }
-          ESP.reset();
         }
       } else {
         Serial.println("Waiting for game to start...");
